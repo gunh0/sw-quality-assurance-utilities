@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'test.ui'
-#
-# Created by: PyQt5 UI code generator 5.14.1
-#
-# WARNING! All changes made in this file will be lost!
-
-import syss
+import sys
+import os
+import json
+import csv
 import urllib.request
 from urllib.parse import quote_plus
 from bs4 import BeautifulSoup
@@ -17,6 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 url_col = []
 keyword_col = []
 ranking_col = []
+searchCnt = 0
 
 
 class Ui_Dialog(object):
@@ -54,6 +50,7 @@ class Ui_Dialog(object):
         self.Download = QtWidgets.QPushButton(self.Basic_Tab)
         self.Download.setGeometry(QtCore.QRect(520, 150, 121, 23))
         self.Download.setObjectName("Download")
+        self.Download.clicked.connect(self.DownloadBtnClicked)
 
         self.ResultTable = QtWidgets.QTableWidget(self.Basic_Tab)
         self.ResultTable.setGeometry(QtCore.QRect(20, 180, 621, 581))
@@ -140,12 +137,12 @@ class Ui_Dialog(object):
             for urls in divData:
                 rank += 1
                 print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                if(searchUrl==urls.get_text()):
-                    findFlag=1
+                if(searchUrl == urls.get_text()):
+                    findFlag = 1
                     url_col.append(searchUrl)
                     keyword_col.append(keyword)
                     ranking_col.append(str(rank))
-            if(findFlag==0):
+            if(findFlag == 0):
                 url_col.append(searchUrl)
                 keyword_col.append(keyword)
                 ranking_col.append("None")
@@ -163,6 +160,38 @@ class Ui_Dialog(object):
                 item = QTableWidgetItem(val)
                 self.ResultTable.setItem(row, col, item)
 
+        self.ResultTable.resizeColumnsToContents()
+        self.ResultTable.resizeRowsToContents()
+
+    def DownloadBtnClicked(self):
+        tableTempData = {
+            'URL': url_col,
+            'KEYWORD': keyword_col,
+            'RANKING': ranking_col
+        }
+        print(tableTempData)
+
+        current_path = os.path.dirname(os.path.realpath(__file__))
+        download_path = current_path + r'\SearchResults'
+        if not os.path.exists(download_path):
+            os.makedirs(download_path)
+
+        global searchCnt
+        searchCnt += 1
+        output_file_name = download_path + '\SearchResult' + str(searchCnt) + quote_plus(".csv")
+
+        output_file = open(output_file_name, 'w')
+        csv_writer = csv.writer(output_file)
+        for tdata in tableTempData:
+            csv_writer.writerow(tdata)
+        output_file.close()
+
+        url_col.clear()
+        keyword_col.clear()
+        ranking_col.clear()
+
+        self.ResultTable.setRowCount(0)
+        self.ResultTable.setRowCount(25)
         self.ResultTable.resizeColumnsToContents()
         self.ResultTable.resizeRowsToContents()
 
