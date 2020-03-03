@@ -12,7 +12,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 url_col = []
 keyword_col = []
 ranking_col = []
-searchCnt = 0
+download1Cnt = 0
+download2Cnt = 0
 searchBtnCnt = 0
 url_col2 = []
 keyword_col2 = []
@@ -20,7 +21,7 @@ ranking_col2 = []
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
-        Dialog.setObjectName("Power Link Ranking Program")
+        Dialog.setObjectName("PowerLink Ranking Program")
         Dialog.resize(692, 892)
         self.tabWidget = QtWidgets.QTabWidget(Dialog)
         self.tabWidget.setGeometry(QtCore.QRect(10, 10, 671, 861))
@@ -89,7 +90,7 @@ class Ui_Dialog(object):
         self.Download2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Download2.setGeometry(QtCore.QRect(510, 130, 121, 23))
         self.Download2.setObjectName("Download2")
-        self.Download.clicked.connect(self.Download2BtnClicked)
+        self.Download2.clicked.connect(self.Download2BtnClicked)
 
         self.Previous2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Previous2.setGeometry(QtCore.QRect(230, 790, 75, 23))
@@ -244,9 +245,9 @@ class Ui_Dialog(object):
         if not os.path.exists(download_path):
             os.makedirs(download_path)
 
-        global searchCnt, searchBtnCnt
-        searchCnt += 1
-        output_file_name = download_path + '\SearchResults' + str(searchCnt) + quote_plus(".csv")
+        global download1Cnt, searchBtnCnt
+        download1Cnt += 1
+        output_file_name = download_path + '\SearchResults' + str(download1Cnt) + quote_plus(".csv")
         output_file = open(output_file_name, 'w+', newline='')
         csv_writer = csv.writer(output_file)
         csv_writer.writerow(tableTempData)
@@ -276,21 +277,23 @@ class Ui_Dialog(object):
             'KEYWORD': keyword_col2,
             'RANKING': ranking_col2
         }
-        print(tableTempData)
+        #print(tableTempData)
 
         current_path = os.path.dirname(os.path.realpath(__file__))
-        download_path = current_path + r'\SearchResults'
+        download_path = current_path + r'\MultiSearchResults'
         if not os.path.exists(download_path):
             os.makedirs(download_path)
-
-        output_file_name = download_path + '\SearchResults' + str(searchCnt) + quote_plus(".csv")
+        
+        global download2Cnt, searchBtnCnt
+        download2Cnt += 1
+        output_file_name = download_path + '\MultiSearchResults' + str(download2Cnt) + quote_plus(".csv")
         output_file = open(output_file_name, 'w+', newline='')
         csv_writer = csv.writer(output_file)
         csv_writer.writerow(tableTempData)
         rulList = tableTempData['URL']
         keywordList = tableTempData['KEYWORD']
         rankingList = tableTempData['RANKING']
-        for i in range(0,searchBtnCnt):
+        for i in range(0,len(rulList)):
             tmpRowData=[]
             tmpRowData.append(rulList[i])
             tmpRowData.append(keywordList[i])
@@ -302,7 +305,6 @@ class Ui_Dialog(object):
         keyword_col2.clear()
         ranking_col2.clear()
         self.ResultTable2.setRowCount(0)
-        searchBtnCnt=0
         self.ResultTable2.setRowCount(25)
         self.ResultTable2.resizeColumnsToContents()
         self.ResultTable2.resizeRowsToContents()
