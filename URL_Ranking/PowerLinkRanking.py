@@ -93,10 +93,13 @@ class Ui_Dialog(object):
         self.Download2.clicked.connect(self.Download2BtnClicked)
 
         self.Previous2 = QtWidgets.QPushButton(self.Multi_Tab)
-        self.Previous2.setGeometry(QtCore.QRect(230, 790, 75, 23))
+        self.Previous2.setGeometry(QtCore.QRect(200, 790, 20, 20))
         self.Previous2.setObjectName("Previous2")
+        self.pageLabel2 = QtWidgets.QLabel(self.Multi_Tab)
+        self.pageLabel2.setGeometry(QtCore.QRect(295, 790, 75, 23))
+        self.pageLabel2.setObjectName("pageLabel2")
         self.Next2 = QtWidgets.QPushButton(self.Multi_Tab)
-        self.Next2.setGeometry(QtCore.QRect(360, 790, 75, 23))
+        self.Next2.setGeometry(QtCore.QRect(420, 790, 20, 20))
         self.Next2.setObjectName("Next2")
 
         self.ResultTable2 = QtWidgets.QTableWidget(self.Multi_Tab)
@@ -120,15 +123,16 @@ class Ui_Dialog(object):
         self.label_URL.setText(_translate("Dialog", "Search URL"))
         self.Search.setText(_translate("Dialog", "Search"))
         self.Download.setText(_translate("Dialog", "Download (Excel)"))
-        self.Next.setText(_translate("Dialog", "Next"))
-        self.Previous.setText(_translate("Dialog", "Previous"))
+        self.Next.setText(_translate("Dialog", ">"))
+        self.Previous.setText(_translate("Dialog", "<"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(
             self.Basic_Tab), _translate("Dialog", "Basic"))
         self.Upload_btn.setText(_translate("Dialog", "Upload"))
         self.Search2.setText(_translate("Dialog", "Search"))
         self.Download2.setText(_translate("Dialog", "Download (Excel)"))
-        self.Previous2.setText(_translate("Dialog", "Previous"))
-        self.Next2.setText(_translate("Dialog", "Next"))
+        self.Next2.setText(_translate("Dialog", ">"))
+        self.pageLabel2.setText(_translate("Dialog", "1"))
+        self.Previous2.setText(_translate("Dialog", "<"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(
             self.Multi_Tab), _translate("Dialog", "Multi"))
 
@@ -184,10 +188,12 @@ class Ui_Dialog(object):
         except OSError:
             print('cannot open : ',multiSearchFilePath)
         else:
+            lineCnt=0
             reading = csv.reader(f)
             for line in reading:
                 if(line[0]=='URL')&(line[1]=='KEYWORD'):
                     continue
+                lineCnt+=1
                 searchUrl = line[0]
                 keyword = line[1]
                 if keyword != '':
@@ -213,6 +219,14 @@ class Ui_Dialog(object):
                         keyword_col2.append(keyword)
                         ranking_col2.append("None")
                 #print(line)
+            print(lineCnt)
+
+            PageCntStr = '1 '
+            if(lineCnt//25>1):
+                for i in range(2,lineCnt//25+2):
+                    PageCntStr += str(i)
+                    PageCntStr += str(' ')
+            print(PageCntStr)
 
             tableTempData = {
                 'url_col': url_col2,
