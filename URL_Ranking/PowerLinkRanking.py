@@ -14,6 +14,9 @@ keyword_col = []
 ranking_col = []
 searchCnt = 0
 searchBtnCnt = 0
+url_col2 = []
+keyword_col2 = []
+ranking_col2 = []
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -69,24 +72,32 @@ class Ui_Dialog(object):
         self.tabWidget.addTab(self.Basic_Tab, "")
         self.Multi_Tab = QtWidgets.QWidget()
         self.Multi_Tab.setObjectName("Multi_Tab")
-        self.Upload_btn = QtWidgets.QPushButton(self.Multi_Tab)
+        self.Upload_btn = QtWidgets.QLabel(self.Multi_Tab)
         self.Upload_btn.setGeometry(QtCore.QRect(40, 50, 75, 23))
-        self.Upload_btn.setObjectName("Upload_btn")
+        self.Upload_btn.setObjectName("Upload")
         self.LocalPath = QtWidgets.QLineEdit(self.Multi_Tab)
         self.LocalPath.setGeometry(QtCore.QRect(130, 40, 501, 31))
         self.LocalPath.setObjectName("LocalPath")
+        #self.LocalPath.setText("Input CSV file Absolute Path...")
+        self.LocalPath.setText(r"D:\Devgun_Repo\URL_Ranking\MultiSearch\MultiSearchSample.csv")
+
         self.Search2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Search2.setGeometry(QtCore.QRect(510, 100, 121, 23))
         self.Search2.setObjectName("Search2")
+        self.Search2.clicked.connect(self.Search2BtnClicked)
+        
         self.Download2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Download2.setGeometry(QtCore.QRect(510, 130, 121, 23))
         self.Download2.setObjectName("Download2")
+        self.Download.clicked.connect(self.Download2BtnClicked)
+
         self.Previous2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Previous2.setGeometry(QtCore.QRect(230, 790, 75, 23))
         self.Previous2.setObjectName("Previous2")
         self.Next2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Next2.setGeometry(QtCore.QRect(360, 790, 75, 23))
         self.Next2.setObjectName("Next2")
+
         self.ResultTable2 = QtWidgets.QTableWidget(self.Multi_Tab)
         self.ResultTable2.setGeometry(QtCore.QRect(20, 190, 621, 581))
         self.ResultTable2.setObjectName("ResultTable2")
@@ -138,7 +149,7 @@ class Ui_Dialog(object):
             findFlag = 0
             for urls in divData:
                 rank += 1
-                print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
                 if(searchUrl == urls.get_text()):
                     findFlag = 1
                     url_col.append(searchUrl)
@@ -165,14 +176,68 @@ class Ui_Dialog(object):
         self.ResultTable.resizeColumnsToContents()
         self.ResultTable.resizeRowsToContents()
 
+    def Search2BtnClicked(self):
+        multiSearchFilePath = self.LocalPath.text()
+        try:
+            f = open(multiSearchFilePath, 'r', encoding='utf-8')
+        except OSError:
+            print('cannot open : ',multiSearchFilePath)
+        else:
+            reading = csv.reader(f)
+            for line in reading:
+                if(line[0]=='URL')&(line[1]=='KEYWORD'):
+                    continue
+                searchUrl = line[0]
+                keyword = line[1]
+                if keyword != '':
+                    baseurl = 'https://ad.search.naver.com/search.naver?where=ad&query='
+                    url = baseurl + quote_plus(keyword)
+                    req = urllib.request.urlopen(url)
+                    res = req.read()
+
+                    soup = BeautifulSoup(res, 'html.parser')
+                    divData = soup.find_all('a', class_='url')
+                    rank = 0
+                    findFlag = 0
+                    for urls in divData:
+                        rank += 1
+                        #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                        if(searchUrl == urls.get_text()):
+                            findFlag = 1
+                            url_col2.append(searchUrl)
+                            keyword_col2.append(keyword)
+                            ranking_col2.append(str(rank))
+                    if(findFlag == 0):
+                        url_col2.append(searchUrl)
+                        keyword_col2.append(keyword)
+                        ranking_col2.append("None")
+                #print(line)
+
+            tableTempData = {
+                'url_col': url_col2,
+                'keyword_col': keyword_col2,
+                'ranking_col': ranking_col2
+            }
+            column_idx_lookup = {'url_col': 0, 'keyword_col': 1, 'ranking_col': 2}
+
+            for k, v in tableTempData.items():
+                col = column_idx_lookup[k]
+                for row, val in enumerate(v):
+                    item = QTableWidgetItem(val)
+                    self.ResultTable2.setItem(row, col, item)
+
+            self.ResultTable2.resizeColumnsToContents()
+            self.ResultTable2.resizeRowsToContents()
+            
+            f.close()
+
     def DownloadBtnClicked(self):
         tableTempData = {
             'URL': url_col,
             'KEYWORD': keyword_col,
             'RANKING': ranking_col
         }
-        column_idx_lookup = {'URL': 0, 'KEYWORD': 1, 'RANKING': 2}
-        print(tableTempData)
+        #print(tableTempData)
 
         current_path = os.path.dirname(os.path.realpath(__file__))
         download_path = current_path + r'\SearchResults'
@@ -205,6 +270,42 @@ class Ui_Dialog(object):
         self.ResultTable.resizeColumnsToContents()
         self.ResultTable.resizeRowsToContents()
 
+    def Download2BtnClicked(self):
+        tableTempData = {
+            'URL': url_col2,
+            'KEYWORD': keyword_col2,
+            'RANKING': ranking_col2
+        }
+        print(tableTempData)
+
+        current_path = os.path.dirname(os.path.realpath(__file__))
+        download_path = current_path + r'\SearchResults'
+        if not os.path.exists(download_path):
+            os.makedirs(download_path)
+
+        output_file_name = download_path + '\SearchResults' + str(searchCnt) + quote_plus(".csv")
+        output_file = open(output_file_name, 'w+', newline='')
+        csv_writer = csv.writer(output_file)
+        csv_writer.writerow(tableTempData)
+        rulList = tableTempData['URL']
+        keywordList = tableTempData['KEYWORD']
+        rankingList = tableTempData['RANKING']
+        for i in range(0,searchBtnCnt):
+            tmpRowData=[]
+            tmpRowData.append(rulList[i])
+            tmpRowData.append(keywordList[i])
+            tmpRowData.append(rankingList[i])
+            csv_writer.writerow(tmpRowData)
+        output_file.close()
+
+        url_col2.clear()
+        keyword_col2.clear()
+        ranking_col2.clear()
+        self.ResultTable2.setRowCount(0)
+        searchBtnCnt=0
+        self.ResultTable2.setRowCount(25)
+        self.ResultTable2.resizeColumnsToContents()
+        self.ResultTable2.resizeRowsToContents()
 
 if __name__ == "__main__":
     import sys
