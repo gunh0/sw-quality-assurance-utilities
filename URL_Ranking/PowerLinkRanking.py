@@ -13,7 +13,7 @@ url_col = []
 keyword_col = []
 ranking_col = []
 searchCnt = 0
-
+searchBtnCnt = 0
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -121,6 +121,8 @@ class Ui_Dialog(object):
             self.Multi_Tab), _translate("Dialog", "Multi"))
 
     def SearchBtnClicked(self):
+        global searchBtnCnt
+        searchBtnCnt+=1
         keyword = self.Input_Keyword.text()
         searchUrl = self.Input_URL.text()
 
@@ -169,6 +171,7 @@ class Ui_Dialog(object):
             'KEYWORD': keyword_col,
             'RANKING': ranking_col
         }
+        column_idx_lookup = {'URL': 0, 'KEYWORD': 1, 'RANKING': 2}
         print(tableTempData)
 
         current_path = os.path.dirname(os.path.realpath(__file__))
@@ -176,21 +179,28 @@ class Ui_Dialog(object):
         if not os.path.exists(download_path):
             os.makedirs(download_path)
 
-        global searchCnt
+        global searchCnt, searchBtnCnt
         searchCnt += 1
-        output_file_name = download_path + '\SearchResult' + str(searchCnt) + quote_plus(".csv")
-
-        output_file = open(output_file_name, 'w')
+        output_file_name = download_path + '\SearchResults' + str(searchCnt) + quote_plus(".csv")
+        output_file = open(output_file_name, 'w+', newline='')
         csv_writer = csv.writer(output_file)
-        for tdata in tableTempData:
-            csv_writer.writerow(tdata)
+        csv_writer.writerow(tableTempData)
+        rulList = tableTempData['URL']
+        keywordList = tableTempData['KEYWORD']
+        rankingList = tableTempData['RANKING']
+        for i in range(0,searchBtnCnt):
+            tmpRowData=[]
+            tmpRowData.append(rulList[i])
+            tmpRowData.append(keywordList[i])
+            tmpRowData.append(rankingList[i])
+            csv_writer.writerow(tmpRowData)
         output_file.close()
 
         url_col.clear()
         keyword_col.clear()
         ranking_col.clear()
-
         self.ResultTable.setRowCount(0)
+        searchBtnCnt=0
         self.ResultTable.setRowCount(25)
         self.ResultTable.resizeColumnsToContents()
         self.ResultTable.resizeRowsToContents()
