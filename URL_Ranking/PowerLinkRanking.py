@@ -35,6 +35,9 @@ class Ui_Dialog(object):
         self.label_Keyword = QtWidgets.QLabel(self.Basic_Tab)
         self.label_Keyword.setGeometry(QtCore.QRect(70, 70, 56, 20))
         self.label_Keyword.setObjectName("label_Keyword")
+        self.label_URL = QtWidgets.QLabel(self.Basic_Tab)
+        self.label_URL.setGeometry(QtCore.QRect(60, 30, 71, 21))
+        self.label_URL.setObjectName("label_URL")
 
         self.Input_URL = QtWidgets.QLineEdit(self.Basic_Tab)
         self.Input_URL.setGeometry(QtCore.QRect(150, 20, 491, 31))
@@ -46,19 +49,10 @@ class Ui_Dialog(object):
         self.Input_Keyword.setObjectName("Input_Keyword")
         self.Input_Keyword.setText("Input Search Keyword...")
 
-        self.label_URL = QtWidgets.QLabel(self.Basic_Tab)
-        self.label_URL.setGeometry(QtCore.QRect(60, 30, 71, 21))
-        self.label_URL.setObjectName("label_URL")
-
         self.Search = QtWidgets.QPushButton(self.Basic_Tab)
         self.Search.setGeometry(QtCore.QRect(520, 120, 121, 23))
         self.Search.setObjectName("Search")
         self.Search.clicked.connect(self.SearchBtnClicked)
-
-        self.Download = QtWidgets.QPushButton(self.Basic_Tab)
-        self.Download.setGeometry(QtCore.QRect(520, 150, 121, 23))
-        self.Download.setObjectName("Download")
-        self.Download.clicked.connect(self.DownloadBtnClicked)
 
         self.ResultTable = QtWidgets.QTableWidget(self.Basic_Tab)
         self.ResultTable.setGeometry(QtCore.QRect(20, 180, 621, 581))
@@ -69,6 +63,11 @@ class Ui_Dialog(object):
         self.ResultTable.setHorizontalHeaderLabels(column_headers)
         self.ResultTable.resizeColumnsToContents()
         self.ResultTable.resizeRowsToContents()
+
+        self.Download = QtWidgets.QPushButton(self.Basic_Tab)
+        self.Download.setGeometry(QtCore.QRect(520, 150, 121, 23))
+        self.Download.setObjectName("Download")
+        self.Download.clicked.connect(self.DownloadBtnClicked)
 
         self.Next = QtWidgets.QPushButton(self.Basic_Tab)
         self.Next.setGeometry(QtCore.QRect(420, 790, 20, 20))
@@ -139,7 +138,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate(
-            "Dialog", "Power Link Ranking Program"))
+            "Dialog", "Naver PowerLink Ranking Program"))
         self.label_Keyword.setText(_translate("Dialog", "Keyword"))
         self.label_URL.setText(_translate("Dialog", "Search URL"))
         self.Search.setText(_translate("Dialog", "Search"))
