@@ -13,14 +13,15 @@ url_col = []
 keyword_col = []
 ranking_col = []
 download1Cnt = 0
-download2Cnt = 0
 searchBtnCnt = 0
+PageCnt = 1
+
+lineCnt = 0     # CSV Data Line Counter
+multiPageCnt = 1
 url_col2 = []
 keyword_col2 = []
 ranking_col2 = []
-
-lineCnt = 0
-multiPageCnt=1
+download2Cnt = 0
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -66,14 +67,24 @@ class Ui_Dialog(object):
         self.ResultTable.setRowCount(25)
         column_headers = ['URL', 'Keyword', 'Ranking']
         self.ResultTable.setHorizontalHeaderLabels(column_headers)
+        self.ResultTable.resizeColumnsToContents()
+        self.ResultTable.resizeRowsToContents()
 
         self.Next = QtWidgets.QPushButton(self.Basic_Tab)
-        self.Next.setGeometry(QtCore.QRect(360, 780, 75, 23))
+        self.Next.setGeometry(QtCore.QRect(420, 790, 20, 20))
         self.Next.setObjectName("Next")
+        self.Next.clicked.connect(self.NextBtnClicked)
+
+        self.pageLabel = QtWidgets.QLabel(self.Basic_Tab)
+        self.pageLabel.setGeometry(QtCore.QRect(295, 790, 75, 23))
+        self.pageLabel.setObjectName("pageLabel1")
         self.Previous = QtWidgets.QPushButton(self.Basic_Tab)
-        self.Previous.setGeometry(QtCore.QRect(230, 780, 75, 23))
+        self.Previous.setGeometry(QtCore.QRect(200, 790, 20, 20))
         self.Previous.setObjectName("Previous")
+        self.Previous.clicked.connect(self.PreviousBtnClicked)
         self.tabWidget.addTab(self.Basic_Tab, "")
+
+        # Multi_Tab
         self.Multi_Tab = QtWidgets.QWidget()
         self.Multi_Tab.setObjectName("Multi_Tab")
         self.Upload_btn = QtWidgets.QLabel(self.Multi_Tab)
@@ -82,14 +93,15 @@ class Ui_Dialog(object):
         self.LocalPath = QtWidgets.QLineEdit(self.Multi_Tab)
         self.LocalPath.setGeometry(QtCore.QRect(130, 40, 501, 31))
         self.LocalPath.setObjectName("LocalPath")
-        #self.LocalPath.setText("Input CSV file Absolute Path...")
-        self.LocalPath.setText(r"D:\Devgun_Repo\URL_Ranking\MultiSearch\MultiSearchSample.csv")
+        self.LocalPath.setText("Input CSV file Absolute Path...")
+        # Test File Path
+        #self.LocalPath.setText(r"D:\Devgun_Repo\URL_Ranking\MultiSearch\MultiSearchSample.csv")
 
         self.Search2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Search2.setGeometry(QtCore.QRect(510, 100, 121, 23))
         self.Search2.setObjectName("Search2")
         self.Search2.clicked.connect(self.Search2BtnClicked)
-        
+
         self.Download2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Download2.setGeometry(QtCore.QRect(510, 130, 121, 23))
         self.Download2.setObjectName("Download2")
@@ -115,6 +127,8 @@ class Ui_Dialog(object):
         self.ResultTable2.setColumnCount(3)
         self.ResultTable2.setRowCount(25)
         self.ResultTable2.setHorizontalHeaderLabels(column_headers)
+        self.ResultTable2.resizeColumnsToContents()
+        self.ResultTable2.resizeRowsToContents()
 
         self.tabWidget.addTab(self.Multi_Tab, "")
 
@@ -131,6 +145,7 @@ class Ui_Dialog(object):
         self.Search.setText(_translate("Dialog", "Search"))
         self.Download.setText(_translate("Dialog", "Download (Excel)"))
         self.Next.setText(_translate("Dialog", ">"))
+        self.pageLabel.setText(_translate("Dialog", "1"))
         self.Previous.setText(_translate("Dialog", "<"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(
             self.Basic_Tab), _translate("Dialog", "Basic"))
@@ -144,8 +159,21 @@ class Ui_Dialog(object):
             self.Multi_Tab), _translate("Dialog", "Multi"))
 
     def SearchBtnClicked(self):
-        global searchBtnCnt
-        searchBtnCnt+=1
+        global searchBtnCnt, PageCnt
+        searchBtnCnt += 1
+        #print(searchBtnCnt, PageCnt)    # Debuging Point
+
+        PageCntStr = ''
+        if (searchBtnCnt%25==0):
+            for i in range(1,searchBtnCnt//25+1):
+                PageCntStr += str(i)
+                PageCntStr += str(' ')
+        else:
+            for i in range(1, searchBtnCnt//25+2):
+                PageCntStr += str(i)
+                PageCntStr += str(' ')
+        self.pageLabel.setText(PageCntStr)
+
         keyword = self.Input_Keyword.text()
         searchUrl = self.Input_URL.text()
 
@@ -179,12 +207,14 @@ class Ui_Dialog(object):
         }
         column_idx_lookup = {'url_col': 0, 'keyword_col': 1, 'ranking_col': 2}
 
+        self.ResultTable.setRowCount(0)
+        self.ResultTable.setRowCount(25)
         for k, v in tableTempData.items():
             col = column_idx_lookup[k]
             for row, val in enumerate(v):
-                item = QTableWidgetItem(val)
-                self.ResultTable.setItem(row, col, item)
-
+                    if(row >= (PageCnt-1)*25):
+                        item = QTableWidgetItem(val)
+                        self.ResultTable.setItem(row-(PageCnt-1)*25, col, item)
         self.ResultTable.resizeColumnsToContents()
         self.ResultTable.resizeRowsToContents()
 
@@ -200,15 +230,15 @@ class Ui_Dialog(object):
         try:
             f = open(multiSearchFilePath, 'r', encoding='utf-8')
         except OSError:
-            print('cannot open : ',multiSearchFilePath)
+            print('cannot open : ', multiSearchFilePath)
         else:
             global lineCnt
-            lineCnt=0
+            lineCnt = 0
             reading = csv.reader(f)
             for line in reading:
-                if(line[0]=='URL')&(line[1]=='KEYWORD'):
+                if(line[0] == 'URL')&(line[1] =='KEYWORD'):
                     continue
-                lineCnt+=1
+                lineCnt += 1
                 searchUrl = line[0]
                 keyword = line[1]
                 if keyword != '':
@@ -237,8 +267,8 @@ class Ui_Dialog(object):
             print(lineCnt)
 
             PageCntStr = '1 '
-            if((lineCnt//25)>0):
-                for i in range(2,lineCnt//25+2):
+            if((lineCnt//25) > 0):
+                for i in range(2, lineCnt//25+2):
                     PageCntStr += str(i)
                     PageCntStr += str(' ')
             #print(PageCntStr)
@@ -249,7 +279,8 @@ class Ui_Dialog(object):
                 'keyword_col': keyword_col2,
                 'ranking_col': ranking_col2
             }
-            column_idx_lookup = {'url_col': 0, 'keyword_col': 1, 'ranking_col': 2}
+            column_idx_lookup = {'url_col': 0,
+                                 'keyword_col': 1, 'ranking_col': 2}
 
             for k, v in tableTempData.items():
                 col = column_idx_lookup[k]
@@ -259,7 +290,7 @@ class Ui_Dialog(object):
 
             self.ResultTable2.resizeColumnsToContents()
             self.ResultTable2.resizeRowsToContents()
-            
+
             f.close()
 
     def DownloadBtnClicked(self):
@@ -275,17 +306,18 @@ class Ui_Dialog(object):
         if not os.path.exists(download_path):
             os.makedirs(download_path)
 
-        global download1Cnt, searchBtnCnt
+        global download1Cnt, searchBtnCnt, PageCnt
         download1Cnt += 1
-        output_file_name = download_path + '\SearchResults' + str(download1Cnt) + quote_plus(".csv")
+        output_file_name = download_path + '\SearchResults' + \
+            str(download1Cnt) + quote_plus(".csv")
         output_file = open(output_file_name, 'w+', newline='')
         csv_writer = csv.writer(output_file)
         csv_writer.writerow(tableTempData)
         rulList = tableTempData['URL']
         keywordList = tableTempData['KEYWORD']
         rankingList = tableTempData['RANKING']
-        for i in range(0,searchBtnCnt):
-            tmpRowData=[]
+        for i in range(0, searchBtnCnt):
+            tmpRowData = []
             tmpRowData.append(rulList[i])
             tmpRowData.append(keywordList[i])
             tmpRowData.append(rankingList[i])
@@ -296,7 +328,13 @@ class Ui_Dialog(object):
         keyword_col.clear()
         ranking_col.clear()
         self.ResultTable.setRowCount(0)
-        searchBtnCnt=0
+        searchBtnCnt = 0
+        PageCnt = 1
+        PageCntStr = ''
+        for i in range(1, searchBtnCnt//25+2):
+            PageCntStr += str(i)
+            PageCntStr += str(' ')
+        self.pageLabel.setText(PageCntStr)
         self.ResultTable.setRowCount(25)
         self.ResultTable.resizeColumnsToContents()
         self.ResultTable.resizeRowsToContents()
@@ -313,18 +351,19 @@ class Ui_Dialog(object):
         download_path = current_path + r'\MultiSearchResults'
         if not os.path.exists(download_path):
             os.makedirs(download_path)
-        
+
         global download2Cnt, searchBtnCnt
         download2Cnt += 1
-        output_file_name = download_path + '\MultiSearchResults' + str(download2Cnt) + quote_plus(".csv")
+        output_file_name = download_path + '\MultiSearchResults' + \
+            str(download2Cnt) + quote_plus(".csv")
         output_file = open(output_file_name, 'w+', newline='')
         csv_writer = csv.writer(output_file)
         csv_writer.writerow(tableTempData)
         rulList = tableTempData['URL']
         keywordList = tableTempData['KEYWORD']
         rankingList = tableTempData['RANKING']
-        for i in range(0,len(rulList)):
-            tmpRowData=[]
+        for i in range(0, len(rulList)):
+            tmpRowData = []
             tmpRowData.append(rulList[i])
             tmpRowData.append(keywordList[i])
             tmpRowData.append(rankingList[i])
@@ -339,9 +378,32 @@ class Ui_Dialog(object):
         self.ResultTable2.resizeColumnsToContents()
         self.ResultTable2.resizeRowsToContents()
 
+    def NextBtnClicked(self):
+        global PageCnt
+        if(searchBtnCnt > (25*PageCnt)):
+            self.ResultTable.setRowCount(0)
+            self.ResultTable.setRowCount(25)
+            tableTempData = {
+                'url_col': url_col,
+                'keyword_col': keyword_col,
+                'ranking_col': ranking_col
+            }
+            column_idx_lookup = {'url_col': 0,
+                                 'keyword_col': 1, 'ranking_col': 2}
+
+            for k, v in tableTempData.items():
+                col = column_idx_lookup[k]
+                for row, val in enumerate(v):
+                    if(row >= (25*PageCnt)):
+                        item = QTableWidgetItem(val)
+                        self.ResultTable.setItem(row-PageCnt*25, col, item)
+            self.ResultTable.resizeColumnsToContents()
+            self.ResultTable.resizeRowsToContents()
+            PageCnt += 1
+
     def Next2BtnClicked(self):
         global multiPageCnt
-        if(lineCnt>(25*multiPageCnt)):
+        if(lineCnt > (25*multiPageCnt)):
             self.ResultTable2.setRowCount(0)
             self.ResultTable2.setRowCount(25)
             tableTempData = {
@@ -349,22 +411,47 @@ class Ui_Dialog(object):
                 'keyword_col': keyword_col2,
                 'ranking_col': ranking_col2
             }
-            column_idx_lookup = {'url_col': 0, 'keyword_col': 1, 'ranking_col': 2}
+            column_idx_lookup = {'url_col': 0,
+                                 'keyword_col': 1, 'ranking_col': 2}
 
             for k, v in tableTempData.items():
                 col = column_idx_lookup[k]
                 for row, val in enumerate(v):
-                    if(row>=(25*multiPageCnt)):
+                    if(row >= (25*multiPageCnt)):
                         item = QTableWidgetItem(val)
-                        self.ResultTable2.setItem(row-multiPageCnt*25, col, item)
+                        self.ResultTable2.setItem(
+                            row-multiPageCnt*25, col, item)
             self.ResultTable2.resizeColumnsToContents()
             self.ResultTable2.resizeRowsToContents()
-            multiPageCnt+=1
+            multiPageCnt += 1
+
+    def PreviousBtnClicked(self):
+        global PageCnt
+        if(PageCnt != 1):
+            PageCnt -= 1
+            self.ResultTable.setRowCount(0)
+            self.ResultTable.setRowCount(25)
+            tableTempData = {
+                'url_col': url_col,
+                'keyword_col': keyword_col,
+                'ranking_col': ranking_col
+            }
+            column_idx_lookup = {'url_col': 0,
+                                 'keyword_col': 1, 'ranking_col': 2}
+
+            for k, v in tableTempData.items():
+                col = column_idx_lookup[k]
+                for row, val in enumerate(v):
+                    if(row >= (PageCnt-1)*25):
+                        item = QTableWidgetItem(val)
+                        self.ResultTable.setItem(row-(PageCnt-1)*25, col, item)
+            self.ResultTable.resizeColumnsToContents()
+            self.ResultTable.resizeRowsToContents()
 
     def Previous2BtnClicked(self):
         global multiPageCnt
-        if(multiPageCnt!=1):
-            multiPageCnt-=1
+        if(multiPageCnt != 1):
+            multiPageCnt -= 1
             self.ResultTable2.setRowCount(0)
             self.ResultTable2.setRowCount(25)
             tableTempData = {
@@ -372,17 +459,19 @@ class Ui_Dialog(object):
                 'keyword_col': keyword_col2,
                 'ranking_col': ranking_col2
             }
-            column_idx_lookup = {'url_col': 0, 'keyword_col': 1, 'ranking_col': 2}
+            column_idx_lookup = {'url_col': 0,
+                                 'keyword_col': 1, 'ranking_col': 2}
 
             for k, v in tableTempData.items():
                 col = column_idx_lookup[k]
                 for row, val in enumerate(v):
-                    if(row>=(multiPageCnt-1)*25):
+                    if(row >= (multiPageCnt-1)*25):
                         item = QTableWidgetItem(val)
-                        self.ResultTable2.setItem(row-(multiPageCnt-1)*25, col, item)
+                        self.ResultTable2.setItem(
+                            row-(multiPageCnt-1)*25, col, item)
             self.ResultTable2.resizeColumnsToContents()
             self.ResultTable2.resizeRowsToContents()
-            
+
 
 if __name__ == "__main__":
     import sys
