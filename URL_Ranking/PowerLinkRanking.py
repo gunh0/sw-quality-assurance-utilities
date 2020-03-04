@@ -19,6 +19,9 @@ url_col2 = []
 keyword_col2 = []
 ranking_col2 = []
 
+lineCnt = 0
+multiPageCnt=1
+
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("PowerLink Ranking Program")
@@ -95,12 +98,16 @@ class Ui_Dialog(object):
         self.Previous2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Previous2.setGeometry(QtCore.QRect(200, 790, 20, 20))
         self.Previous2.setObjectName("Previous2")
+        self.Previous2.clicked.connect(self.Previous2BtnClicked)
+
         self.pageLabel2 = QtWidgets.QLabel(self.Multi_Tab)
         self.pageLabel2.setGeometry(QtCore.QRect(295, 790, 75, 23))
         self.pageLabel2.setObjectName("pageLabel2")
+
         self.Next2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Next2.setGeometry(QtCore.QRect(420, 790, 20, 20))
         self.Next2.setObjectName("Next2")
+        self.Next2.clicked.connect(self.Next2BtnClicked)
 
         self.ResultTable2 = QtWidgets.QTableWidget(self.Multi_Tab)
         self.ResultTable2.setGeometry(QtCore.QRect(20, 190, 621, 581))
@@ -182,12 +189,20 @@ class Ui_Dialog(object):
         self.ResultTable.resizeRowsToContents()
 
     def Search2BtnClicked(self):
+        keyword_col2.clear()
+        ranking_col2.clear()
+        url_col2.clear()
+        self.ResultTable2.setRowCount(0)
+        self.ResultTable2.setRowCount(25)
+        self.ResultTable2.resizeColumnsToContents()
+        self.ResultTable2.resizeRowsToContents()
         multiSearchFilePath = self.LocalPath.text()
         try:
             f = open(multiSearchFilePath, 'r', encoding='utf-8')
         except OSError:
             print('cannot open : ',multiSearchFilePath)
         else:
+            global lineCnt
             lineCnt=0
             reading = csv.reader(f)
             for line in reading:
@@ -222,11 +237,12 @@ class Ui_Dialog(object):
             print(lineCnt)
 
             PageCntStr = '1 '
-            if(lineCnt//25>1):
+            if((lineCnt//25)>0):
                 for i in range(2,lineCnt//25+2):
                     PageCntStr += str(i)
                     PageCntStr += str(' ')
-            print(PageCntStr)
+            #print(PageCntStr)
+            self.pageLabel2.setText(PageCntStr)
 
             tableTempData = {
                 'url_col': url_col2,
@@ -322,6 +338,51 @@ class Ui_Dialog(object):
         self.ResultTable2.setRowCount(25)
         self.ResultTable2.resizeColumnsToContents()
         self.ResultTable2.resizeRowsToContents()
+
+    def Next2BtnClicked(self):
+        global multiPageCnt
+        if(lineCnt>(25*multiPageCnt)):
+            self.ResultTable2.setRowCount(0)
+            self.ResultTable2.setRowCount(25)
+            tableTempData = {
+                'url_col': url_col2,
+                'keyword_col': keyword_col2,
+                'ranking_col': ranking_col2
+            }
+            column_idx_lookup = {'url_col': 0, 'keyword_col': 1, 'ranking_col': 2}
+
+            for k, v in tableTempData.items():
+                col = column_idx_lookup[k]
+                for row, val in enumerate(v):
+                    if(row>=(25*multiPageCnt)):
+                        item = QTableWidgetItem(val)
+                        self.ResultTable2.setItem(row-multiPageCnt*25, col, item)
+            self.ResultTable2.resizeColumnsToContents()
+            self.ResultTable2.resizeRowsToContents()
+            multiPageCnt+=1
+
+    def Previous2BtnClicked(self):
+        global multiPageCnt
+        if(multiPageCnt!=1):
+            multiPageCnt-=1
+            self.ResultTable2.setRowCount(0)
+            self.ResultTable2.setRowCount(25)
+            tableTempData = {
+                'url_col': url_col2,
+                'keyword_col': keyword_col2,
+                'ranking_col': ranking_col2
+            }
+            column_idx_lookup = {'url_col': 0, 'keyword_col': 1, 'ranking_col': 2}
+
+            for k, v in tableTempData.items():
+                col = column_idx_lookup[k]
+                for row, val in enumerate(v):
+                    if(row>=(multiPageCnt-1)*25):
+                        item = QTableWidgetItem(val)
+                        self.ResultTable2.setItem(row-(multiPageCnt-1)*25, col, item)
+            self.ResultTable2.resizeColumnsToContents()
+            self.ResultTable2.resizeRowsToContents()
+            
 
 if __name__ == "__main__":
     import sys
