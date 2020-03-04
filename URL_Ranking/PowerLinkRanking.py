@@ -3,6 +3,7 @@ import os
 import json
 import csv
 import urllib.request
+import re
 from urllib.parse import quote_plus
 from bs4 import BeautifulSoup
 from PyQt5.QtWidgets import *
@@ -195,6 +196,29 @@ class Ui_Dialog(object):
                     keyword_col.append(keyword)
                     ranking_col.append(str(rank))
             if(findFlag == 0):
+                httpPat = '^http://'
+                httpsPat = '^https://'
+                if re.search(httpPat, searchUrl) is None:
+                    httpTransUrl = 'http://' + searchUrl
+                    for urls in divData:
+                        rank += 1
+                        #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                        if(httpTransUrl == urls.get_text()):
+                            findFlag = 1
+                            url_col.append(httpTransUrl)
+                            keyword_col.append(keyword)
+                            ranking_col.append(str(rank))
+                if(findFlag == 0):
+                    if re.search(httpsPat, searchUrl) is None:
+                        httpsTransUrl = 'https://' + searchUrl
+                        for urls in divData:
+                            rank += 1
+                            #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                            if(httpsTransUrl == urls.get_text()):
+                                findFlag = 1
+                                url_col.append(httpsTransUrl)
+                                keyword_col.append(keyword)
+                                ranking_col.append(str(rank))
                 url_col.append(searchUrl)
                 keyword_col.append(keyword)
                 ranking_col.append("None")
