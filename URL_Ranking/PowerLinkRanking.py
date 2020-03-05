@@ -56,7 +56,7 @@ class Ui_Dialog(object):
         self.Search.clicked.connect(self.SearchBtnClicked)
 
         self.ResultTable = QtWidgets.QTableWidget(self.Basic_Tab)
-        self.ResultTable.setGeometry(QtCore.QRect(20, 180, 621, 581))
+        self.ResultTable.setGeometry(QtCore.QRect(20, 190, 621, 581))
         self.ResultTable.setObjectName("ResultTable")
         self.ResultTable.setColumnCount(3)
         self.ResultTable.setRowCount(25)
@@ -84,6 +84,11 @@ class Ui_Dialog(object):
         self.Previous.clicked.connect(self.PreviousBtnClicked)
         self.tabWidget.addTab(self.Basic_Tab, "")
 
+        self.resetTable = QtWidgets.QPushButton(self.Basic_Tab)
+        self.resetTable.setGeometry(QtCore.QRect(390, 150, 121, 23))
+        self.resetTable.setObjectName("Reset")
+        self.resetTable.clicked.connect(self.ResetBtnClicked)
+
         # Multi_Tab
         self.Multi_Tab = QtWidgets.QWidget()
         self.Multi_Tab.setObjectName("Multi_Tab")
@@ -98,12 +103,12 @@ class Ui_Dialog(object):
         #self.LocalPath.setText(r"D:\Devgun_Repo\URL_Ranking\MultiSearch\MultiSearchSample.csv")
 
         self.Search2 = QtWidgets.QPushButton(self.Multi_Tab)
-        self.Search2.setGeometry(QtCore.QRect(510, 100, 121, 23))
+        self.Search2.setGeometry(QtCore.QRect(520, 120, 121, 23))
         self.Search2.setObjectName("Search2")
         self.Search2.clicked.connect(self.Search2BtnClicked)
 
         self.Download2 = QtWidgets.QPushButton(self.Multi_Tab)
-        self.Download2.setGeometry(QtCore.QRect(510, 130, 121, 23))
+        self.Download2.setGeometry(QtCore.QRect(520, 150, 121, 23))
         self.Download2.setObjectName("Download2")
         self.Download2.clicked.connect(self.Download2BtnClicked)
 
@@ -130,6 +135,11 @@ class Ui_Dialog(object):
         self.ResultTable2.resizeColumnsToContents()
         self.ResultTable2.resizeRowsToContents()
 
+        self.resetTable2 = QtWidgets.QPushButton(self.Multi_Tab)
+        self.resetTable2.setGeometry(QtCore.QRect(390, 150, 121, 23))
+        self.resetTable2.setObjectName("Reset2")
+        self.resetTable2.clicked.connect(self.ResetBtn2Clicked)
+
         self.tabWidget.addTab(self.Multi_Tab, "")
 
         self.retranslateUi(Dialog)
@@ -147,6 +157,7 @@ class Ui_Dialog(object):
         self.Next.setText(_translate("Dialog", ">"))
         self.pageLabel.setText(_translate("Dialog", "1"))
         self.Previous.setText(_translate("Dialog", "<"))
+        self.resetTable.setText(_translate("Dialog", "Reset Table"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(
             self.Basic_Tab), _translate("Dialog", "Basic"))
         self.Upload_btn.setText(_translate("Dialog", "Upload"))
@@ -155,6 +166,7 @@ class Ui_Dialog(object):
         self.Next2.setText(_translate("Dialog", ">"))
         self.pageLabel2.setText(_translate("Dialog", "1"))
         self.Previous2.setText(_translate("Dialog", "<"))
+        self.resetTable2.setText(_translate("Dialog","Reset Table"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(
             self.Multi_Tab), _translate("Dialog", "Multi"))
 
@@ -200,6 +212,7 @@ class Ui_Dialog(object):
                 httpsPat = '^https://'
                 if re.search(httpPat, searchUrl) is None:
                     httpTransUrl = 'http://' + searchUrl
+                    rank=0
                     for urls in divData:
                         rank += 1
                         #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
@@ -211,6 +224,7 @@ class Ui_Dialog(object):
                 if(findFlag == 0):
                     if re.search(httpsPat, searchUrl) is None:
                         httpsTransUrl = 'https://' + searchUrl
+                        rank=0
                         for urls in divData:
                             rank += 1
                             #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
@@ -219,9 +233,10 @@ class Ui_Dialog(object):
                                 url_col.append(httpsTransUrl)
                                 keyword_col.append(keyword)
                                 ranking_col.append(str(rank))
-                url_col.append(searchUrl)
-                keyword_col.append(keyword)
-                ranking_col.append("None")
+                if(findFlag == 0):                
+                    url_col.append(searchUrl)
+                    keyword_col.append(keyword)
+                    ranking_col.append("None")
 
         tableTempData = {
             'url_col': url_col,
@@ -283,9 +298,35 @@ class Ui_Dialog(object):
                             keyword_col2.append(keyword)
                             ranking_col2.append(str(rank))
                     if(findFlag == 0):
-                        url_col2.append(searchUrl)
-                        keyword_col2.append(keyword)
-                        ranking_col2.append("None")
+                        httpPat = '^http://'
+                        httpsPat = '^https://'
+                        if re.search(httpPat, searchUrl) is None:
+                            httpTransUrl = 'http://' + searchUrl
+                            rank=0
+                            for urls in divData:
+                                rank += 1
+                                #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                                if(httpTransUrl == urls.get_text()):
+                                    findFlag = 1
+                                    url_col2.append(httpTransUrl)
+                                    keyword_col2.append(keyword)
+                                    ranking_col2.append(str(rank))
+                        if(findFlag == 0):
+                            if re.search(httpsPat, searchUrl) is None:
+                                httpsTransUrl = 'https://' + searchUrl
+                                rank=0
+                                for urls in divData:
+                                    rank += 1
+                                    #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                                    if(httpsTransUrl == urls.get_text()):
+                                        findFlag = 1
+                                        url_col2.append(httpsTransUrl)
+                                        keyword_col2.append(keyword)
+                                        ranking_col2.append(str(rank))
+                        if(findFlag == 0):                
+                            url_col2.append(searchUrl)
+                            keyword_col2.append(keyword)
+                            ranking_col2.append("None")
                 #print(line)
             print(lineCnt)
 
@@ -495,6 +536,33 @@ class Ui_Dialog(object):
             self.ResultTable2.resizeColumnsToContents()
             self.ResultTable2.resizeRowsToContents()
 
+    def ResetBtnClicked(self):
+        self.ResultTable.setRowCount(0)
+        self.ResultTable.setRowCount(25)
+        self.ResultTable.resizeColumnsToContents()
+        self.ResultTable.resizeRowsToContents()
+        global download1Cnt, searchBtnCnt, PageCnt
+        global url_col, keyword_col, ranking_col
+        url_col.clear()
+        keyword_col.clear()
+        ranking_col.clear()
+        download1Cnt = 0
+        searchBtnCnt = 0
+        PageCnt = 1
+
+    def ResetBtn2Clicked(self):
+        self.ResultTable2.setRowCount(0)
+        self.ResultTable2.setRowCount(25)
+        self.ResultTable2.resizeColumnsToContents()
+        self.ResultTable2.resizeRowsToContents()
+        global download2Cnt, multiPageCnt, lineCnt
+        global url_col2, keyword_col2, ranking_col2
+        url_col2.clear()
+        keyword_col2.clear()
+        ranking_col2.clear()
+        download2Cnt = 0
+        lineCnt=0
+        multiPageCnt = 1
 
 if __name__ == "__main__":
     import sys
