@@ -3,8 +3,10 @@ import os
 import json
 import csv
 import re
+import chardet
 
 import ErrorPopup_Tkinter as ePopup
+import FileOpen_easygui as fopen
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -28,6 +30,7 @@ keyword_col2 = []
 ranking_col2 = []
 download2Cnt = 0
 
+
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("PowerLink Ranking Program")
@@ -35,10 +38,12 @@ class Ui_Dialog(object):
         self.tabWidget = QtWidgets.QTabWidget(Dialog)
         self.tabWidget.setGeometry(QtCore.QRect(10, 10, 671, 861))
         self.tabWidget.setObjectName("tabWidget")
+        
+        # Basic Tab
         self.Basic_Tab = QtWidgets.QWidget()
         self.Basic_Tab.setObjectName("Basic_Tab")
         self.label_Keyword = QtWidgets.QLabel(self.Basic_Tab)
-        self.label_Keyword.setGeometry(QtCore.QRect(70, 70, 56, 20))
+        self.label_Keyword.setGeometry(QtCore.QRect(50, 70, 70, 20))
         self.label_Keyword.setObjectName("label_Keyword")
         self.label_URL = QtWidgets.QLabel(self.Basic_Tab)
         self.label_URL.setGeometry(QtCore.QRect(60, 30, 71, 21))
@@ -64,7 +69,7 @@ class Ui_Dialog(object):
         self.ResultTable.setObjectName("ResultTable")
         self.ResultTable.setColumnCount(3)
         self.ResultTable.setRowCount(25)
-        column_headers = ['URL', 'Keyword', 'Ranking']
+        column_headers = ['URL 주소', '키워드', '순위']
         self.ResultTable.setHorizontalHeaderLabels(column_headers)
         self.ResultTable.resizeColumnsToContents()
         self.ResultTable.resizeRowsToContents()
@@ -96,15 +101,20 @@ class Ui_Dialog(object):
         # Multi_Tab
         self.Multi_Tab = QtWidgets.QWidget()
         self.Multi_Tab.setObjectName("Multi_Tab")
-        self.Upload_btn = QtWidgets.QLabel(self.Multi_Tab)
-        self.Upload_btn.setGeometry(QtCore.QRect(40, 50, 75, 23))
-        self.Upload_btn.setObjectName("Upload")
+        self.UploadLabel = QtWidgets.QLabel(self.Multi_Tab)
+        self.UploadLabel.setGeometry(QtCore.QRect(40, 50, 75, 23))
+        self.UploadLabel.setObjectName("Upload")
         self.LocalPath = QtWidgets.QLineEdit(self.Multi_Tab)
         self.LocalPath.setGeometry(QtCore.QRect(130, 40, 501, 31))
         self.LocalPath.setObjectName("LocalPath")
         self.LocalPath.setText("Input CSV file Absolute Path...")
         # Test File Path
         #self.LocalPath.setText(r"D:\Devgun_Repo\URL_Ranking\MultiSearch\MultiSearchSample.csv")
+
+        self.FileOpen = QtWidgets.QPushButton(self.Multi_Tab)
+        self.FileOpen.setGeometry(QtCore.QRect(520, 90, 121, 23))
+        self.FileOpen.setObjectName("FileOpen")
+        self.FileOpen.clicked.connect(self.FileOpenBtnClicked)
 
         self.Search2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Search2.setGeometry(QtCore.QRect(520, 120, 121, 23))
@@ -119,7 +129,7 @@ class Ui_Dialog(object):
         self.Previous2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Previous2.setGeometry(QtCore.QRect(200, 790, 20, 20))
         self.Previous2.setObjectName("Previous2")
-        self.Previous2.clicked.connect(self.Previous2BtnClicked)
+        #self.Previous2.clicked.connect(self.Previous2BtnClicked)
 
         self.pageLabel2 = QtWidgets.QLabel(self.Multi_Tab)
         self.pageLabel2.setGeometry(QtCore.QRect(295, 790, 75, 23))
@@ -129,6 +139,15 @@ class Ui_Dialog(object):
         self.Next2.setGeometry(QtCore.QRect(420, 790, 20, 20))
         self.Next2.setObjectName("Next2")
         self.Next2.clicked.connect(self.Next2BtnClicked)
+
+        self.Next22 = QtWidgets.QPushButton(self.Multi_Tab)
+        self.Next22.setGeometry(QtCore.QRect(400, 790, 20, 20))
+        self.Next22.setObjectName("Next22")
+        self.Next22.clicked.connect(self.Next2BtnClicked)
+
+        self.ProgressBar = QtWidgets.QProgressBar(self.Multi_Tab)
+        self.ProgressBar.setGeometry(QtCore.QRect(420, 790, 20, 20))
+        self.ProgressBar.setObjectName("ProgressBar")
 
         self.ResultTable2 = QtWidgets.QTableWidget(self.Multi_Tab)
         self.ResultTable2.setGeometry(QtCore.QRect(20, 190, 621, 581))
@@ -154,25 +173,26 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate(
             "Dialog", "네이버 파워링크 순위 검색"))
-        self.label_Keyword.setText(_translate("Dialog", "Keyword"))
-        self.label_URL.setText(_translate("Dialog", "Search URL"))
-        self.Search.setText(_translate("Dialog", "Search"))
-        self.Download.setText(_translate("Dialog", "Download (Excel)"))
+        self.label_Keyword.setText(_translate("Dialog", "검색 키워드"))
+        self.label_URL.setText(_translate("Dialog", "URL 주소"))
+        self.Search.setText(_translate("Dialog", "검색"))
+        self.Download.setText(_translate("Dialog", "다운로드 (.csv)"))
         self.Next.setText(_translate("Dialog", ">"))
         self.pageLabel.setText(_translate("Dialog", "1"))
         self.Previous.setText(_translate("Dialog", "<"))
-        self.resetTable.setText(_translate("Dialog", "Reset Table"))
+        self.resetTable.setText(_translate("Dialog", "초기화"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(
-            self.Basic_Tab), _translate("Dialog", "Basic"))
-        self.Upload_btn.setText(_translate("Dialog", "Upload"))
-        self.Search2.setText(_translate("Dialog", "Search"))
-        self.Download2.setText(_translate("Dialog", "Download (Excel)"))
+            self.Basic_Tab), _translate("Dialog", "기본"))
+        self.UploadLabel.setText(_translate("Dialog", "파일 경로"))
+        self.Search2.setText(_translate("Dialog", "검색"))
+        self.Download2.setText(_translate("Dialog", "다운로드 (.csv)"))
         self.Next2.setText(_translate("Dialog", ">"))
         self.pageLabel2.setText(_translate("Dialog", "1"))
         self.Previous2.setText(_translate("Dialog", "<"))
-        self.resetTable2.setText(_translate("Dialog","Reset Table"))
+        self.resetTable2.setText(_translate("Dialog", "초기화"))
+        self.FileOpen.setText(_translate("Dialog","열기"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(
-            self.Multi_Tab), _translate("Dialog", "Multi"))
+            self.Multi_Tab), _translate("Dialog", "대량조회"))
 
     def SearchBtnClicked(self):
         global searchBtnCnt, PageCnt
@@ -180,8 +200,8 @@ class Ui_Dialog(object):
         #print(searchBtnCnt, PageCnt)    # Debuging Point
 
         PageCntStr = ''
-        if (searchBtnCnt%25==0):
-            for i in range(1,searchBtnCnt//25+1):
+        if (searchBtnCnt % 25 == 0):
+            for i in range(1, searchBtnCnt//25+1):
                 PageCntStr += str(i)
                 PageCntStr += str(' ')
         else:
@@ -216,7 +236,7 @@ class Ui_Dialog(object):
                 httpsPat = '^https://'
                 if re.search(httpPat, searchUrl) is None:
                     httpTransUrl = 'http://' + searchUrl
-                    rank=0
+                    rank = 0
                     for urls in divData:
                         rank += 1
                         #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
@@ -228,7 +248,7 @@ class Ui_Dialog(object):
                 if(findFlag == 0):
                     if re.search(httpsPat, searchUrl) is None:
                         httpsTransUrl = 'https://' + searchUrl
-                        rank=0
+                        rank = 0
                         for urls in divData:
                             rank += 1
                             #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
@@ -237,7 +257,7 @@ class Ui_Dialog(object):
                                 url_col.append(httpsTransUrl)
                                 keyword_col.append(keyword)
                                 ranking_col.append(str(rank))
-                if(findFlag == 0):                
+                if(findFlag == 0):
                     url_col.append(searchUrl)
                     keyword_col.append(keyword)
                     ranking_col.append("None")
@@ -254,11 +274,15 @@ class Ui_Dialog(object):
         for k, v in tableTempData.items():
             col = column_idx_lookup[k]
             for row, val in enumerate(v):
-                    if(row >= (PageCnt-1)*25):
-                        item = QTableWidgetItem(val)
-                        self.ResultTable.setItem(row-(PageCnt-1)*25, col, item)
+                if(row >= (PageCnt-1)*25):
+                    item = QTableWidgetItem(val)
+                    self.ResultTable.setItem(row-(PageCnt-1)*25, col, item)
         self.ResultTable.resizeColumnsToContents()
         self.ResultTable.resizeRowsToContents()
+
+    def FileOpenBtnClicked(self):
+        absPath = fopen.OpenWinFileExplorer()
+        self.LocalPath.setText(absPath)
 
     def Search2BtnClicked(self):
         keyword_col2.clear()
@@ -270,10 +294,9 @@ class Ui_Dialog(object):
         self.ResultTable2.resizeRowsToContents()
         multiSearchFilePath = self.LocalPath.text()
         try:
-            open(multiSearchFilePath, 'r', encoding='euc-kr')
-            ePopup.loadWrongPath(multiSearchFilePath)
-            f = open(multiSearchFilePath, 'r', encoding='euc-kr')
+            f = open(multiSearchFilePath, 'r', encoding='utf-8')
         except OSError:
+            print('cannot open : ', multiSearchFilePath)
             ePopup.loadWrongPath(multiSearchFilePath)
             pass
         else:
@@ -281,60 +304,65 @@ class Ui_Dialog(object):
             lineCnt = 0
             reading = csv.reader(f)
             for line in reading:
-                if(line[0] == 'URL')&(line[1] =='KEYWORD'):
-                    continue
-                lineCnt += 1
-                searchUrl = line[0]
-                keyword = line[1]
-                if keyword != '':
-                    baseurl = 'https://ad.search.naver.com/search.naver?where=ad&query='
-                    url = baseurl + quote_plus(keyword)
-                    req = urllib.request.urlopen(url)
-                    res = req.read()
+                try:
+                    if (line[0] == 'URL') & (line[1] == 'KEYWORD'):
+                        continue
+                except:
+                    ePopup.loadWrongForm(multiSearchFilePath)
+                    break
+                else:
+                    lineCnt += 1
+                    searchUrl = line[0]
+                    keyword = line[1]
+                    if keyword != '':
+                        baseurl = 'https://ad.search.naver.com/search.naver?where=ad&query='
+                        url = baseurl + quote_plus(keyword)
+                        req = urllib.request.urlopen(url)
+                        res = req.read()
 
-                    soup = BeautifulSoup(res, 'html.parser')
-                    divData = soup.find_all('a', class_='url')
-                    rank = 0
-                    findFlag = 0
-                    for urls in divData:
-                        rank += 1
-                        #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                        if(searchUrl == urls.get_text()):
-                            findFlag = 1
-                            url_col2.append(searchUrl)
-                            keyword_col2.append(keyword)
-                            ranking_col2.append(str(rank))
-                    if(findFlag == 0):
-                        httpPat = '^http://'
-                        httpsPat = '^https://'
-                        if re.search(httpPat, searchUrl) is None:
-                            httpTransUrl = 'http://' + searchUrl
-                            rank=0
-                            for urls in divData:
-                                rank += 1
-                                #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                                if(httpTransUrl == urls.get_text()):
-                                    findFlag = 1
-                                    url_col2.append(httpTransUrl)
-                                    keyword_col2.append(keyword)
-                                    ranking_col2.append(str(rank))
+                        soup = BeautifulSoup(res, 'html.parser')
+                        divData = soup.find_all('a', class_='url')
+                        rank = 0
+                        findFlag = 0
+                        for urls in divData:
+                            rank += 1
+                            #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                            if(searchUrl == urls.get_text()):
+                                findFlag = 1
+                                url_col2.append(searchUrl)
+                                keyword_col2.append(keyword)
+                                ranking_col2.append(str(rank))
                         if(findFlag == 0):
-                            if re.search(httpsPat, searchUrl) is None:
-                                httpsTransUrl = 'https://' + searchUrl
-                                rank=0
+                            httpPat = '^http://'
+                            httpsPat = '^https://'
+                            if re.search(httpPat, searchUrl) is None:
+                                httpTransUrl = 'http://' + searchUrl
+                                rank = 0
                                 for urls in divData:
                                     rank += 1
                                     #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                                    if(httpsTransUrl == urls.get_text()):
+                                    if(httpTransUrl == urls.get_text()):
                                         findFlag = 1
-                                        url_col2.append(httpsTransUrl)
+                                        url_col2.append(httpTransUrl)
                                         keyword_col2.append(keyword)
                                         ranking_col2.append(str(rank))
-                        if(findFlag == 0):                
-                            url_col2.append(searchUrl)
-                            keyword_col2.append(keyword)
-                            ranking_col2.append("None")
-                #print(line)
+                            if(findFlag == 0):
+                                if re.search(httpsPat, searchUrl) is None:
+                                    httpsTransUrl = 'https://' + searchUrl
+                                    rank = 0
+                                    for urls in divData:
+                                        rank += 1
+                                        #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                                        if(httpsTransUrl == urls.get_text()):
+                                            findFlag = 1
+                                            url_col2.append(httpsTransUrl)
+                                            keyword_col2.append(keyword)
+                                            ranking_col2.append(str(rank))
+                            if(findFlag == 0):
+                                url_col2.append(searchUrl)
+                                keyword_col2.append(keyword)
+                                ranking_col2.append("None")
+                    #print(line)
             print(lineCnt)
 
             PageCntStr = '1 '
@@ -378,37 +406,40 @@ class Ui_Dialog(object):
             os.makedirs(download_path)
 
         global download1Cnt, searchBtnCnt, PageCnt
-        download1Cnt += 1
-        output_file_name = download_path + '\SearchResults' + \
-            str(download1Cnt) + quote_plus(".csv")
-        output_file = open(output_file_name, 'w+', newline='')
-        csv_writer = csv.writer(output_file)
-        csv_writer.writerow(tableTempData)
-        rulList = tableTempData['URL']
-        keywordList = tableTempData['KEYWORD']
-        rankingList = tableTempData['RANKING']
-        for i in range(0, searchBtnCnt):
-            tmpRowData = []
-            tmpRowData.append(rulList[i])
-            tmpRowData.append(keywordList[i])
-            tmpRowData.append(rankingList[i])
-            csv_writer.writerow(tmpRowData)
-        output_file.close()
+        if(searchBtnCnt==0):
+            ePopup.NoneTableData()
+        else:
+            download1Cnt += 1
+            output_file_name = download_path + '\SearchResults' + \
+                str(download1Cnt) + quote_plus(".csv")
+            output_file = open(output_file_name, 'w+', newline='')
+            csv_writer = csv.writer(output_file)
+            csv_writer.writerow(tableTempData)
+            rulList = tableTempData['URL']
+            keywordList = tableTempData['KEYWORD']
+            rankingList = tableTempData['RANKING']
+            for i in range(0, searchBtnCnt):
+                tmpRowData = []
+                tmpRowData.append(rulList[i])
+                tmpRowData.append(keywordList[i])
+                tmpRowData.append(rankingList[i])
+                csv_writer.writerow(tmpRowData)
+            output_file.close()
 
-        url_col.clear()
-        keyword_col.clear()
-        ranking_col.clear()
-        self.ResultTable.setRowCount(0)
-        searchBtnCnt = 0
-        PageCnt = 1
-        PageCntStr = ''
-        for i in range(1, searchBtnCnt//25+2):
-            PageCntStr += str(i)
-            PageCntStr += str(' ')
-        self.pageLabel.setText(PageCntStr)
-        self.ResultTable.setRowCount(25)
-        self.ResultTable.resizeColumnsToContents()
-        self.ResultTable.resizeRowsToContents()
+            url_col.clear()
+            keyword_col.clear()
+            ranking_col.clear()
+            self.ResultTable.setRowCount(0)
+            searchBtnCnt = 0
+            PageCnt = 1
+            PageCntStr = ''
+            for i in range(1, searchBtnCnt//25+2):
+                PageCntStr += str(i)
+                PageCntStr += str(' ')
+            self.pageLabel.setText(PageCntStr)
+            self.ResultTable.setRowCount(25)
+            self.ResultTable.resizeColumnsToContents()
+            self.ResultTable.resizeRowsToContents()
 
     def Download2BtnClicked(self):
         tableTempData = {
@@ -423,23 +454,26 @@ class Ui_Dialog(object):
         if not os.path.exists(download_path):
             os.makedirs(download_path)
 
-        global download2Cnt, searchBtnCnt
-        download2Cnt += 1
-        output_file_name = download_path + '\MultiSearchResults' + \
-            str(download2Cnt) + quote_plus(".csv")
-        output_file = open(output_file_name, 'w+', newline='')
-        csv_writer = csv.writer(output_file)
-        csv_writer.writerow(tableTempData)
-        rulList = tableTempData['URL']
-        keywordList = tableTempData['KEYWORD']
-        rankingList = tableTempData['RANKING']
-        for i in range(0, len(rulList)):
-            tmpRowData = []
-            tmpRowData.append(rulList[i])
-            tmpRowData.append(keywordList[i])
-            tmpRowData.append(rankingList[i])
-            csv_writer.writerow(tmpRowData)
-        output_file.close()
+        global download2Cnt, lineCnt
+        if(lineCnt==0):
+            ePopup.NoneTableData()
+        else:
+            download2Cnt += 1
+            output_file_name = download_path + '\MultiSearchResults' + \
+                str(download2Cnt) + quote_plus(".csv")
+            output_file = open(output_file_name, 'w+', newline='')
+            csv_writer = csv.writer(output_file)
+            csv_writer.writerow(tableTempData)
+            rulList = tableTempData['URL']
+            keywordList = tableTempData['KEYWORD']
+            rankingList = tableTempData['RANKING']
+            for i in range(0, len(rulList)):
+                tmpRowData = []
+                tmpRowData.append(rulList[i])
+                tmpRowData.append(keywordList[i])
+                tmpRowData.append(rankingList[i])
+                csv_writer.writerow(tmpRowData)
+            output_file.close()
 
         url_col2.clear()
         keyword_col2.clear()
@@ -471,6 +505,8 @@ class Ui_Dialog(object):
             self.ResultTable.resizeColumnsToContents()
             self.ResultTable.resizeRowsToContents()
             PageCnt += 1
+        else:
+            ePopup.PageBtnError()
 
     def Next2BtnClicked(self):
         global multiPageCnt
@@ -495,6 +531,8 @@ class Ui_Dialog(object):
             self.ResultTable2.resizeColumnsToContents()
             self.ResultTable2.resizeRowsToContents()
             multiPageCnt += 1
+        else:
+            ePopup.PageBtnError()
 
     def PreviousBtnClicked(self):
         global PageCnt
@@ -518,8 +556,8 @@ class Ui_Dialog(object):
                         self.ResultTable.setItem(row-(PageCnt-1)*25, col, item)
             self.ResultTable.resizeColumnsToContents()
             self.ResultTable.resizeRowsToContents()
-        else :
-            ePopup.PreviousBtnError()
+        else:
+            ePopup.PageBtnError()
 
     def Previous2BtnClicked(self):
         global multiPageCnt
@@ -544,8 +582,8 @@ class Ui_Dialog(object):
                             row-(multiPageCnt-1)*25, col, item)
             self.ResultTable2.resizeColumnsToContents()
             self.ResultTable2.resizeRowsToContents()
-        else :
-            ePopup.PreviousBtnError()
+        else:
+            ePopup.PageBtnError()
 
     def ResetBtnClicked(self):
         self.ResultTable.setRowCount(0)
@@ -572,8 +610,9 @@ class Ui_Dialog(object):
         keyword_col2.clear()
         ranking_col2.clear()
         download2Cnt = 0
-        lineCnt=0
+        lineCnt = 0
         multiPageCnt = 1
+
 
 if __name__ == "__main__":
     import sys
