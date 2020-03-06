@@ -2,13 +2,17 @@ import sys
 import os
 import json
 import csv
-import urllib.request
 import re
-from urllib.parse import quote_plus
-from bs4 import BeautifulSoup
+
+import ErrorPopup_Tkinter as ePopup
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+import urllib.request
+from bs4 import BeautifulSoup
+from urllib.parse import quote_plus
 
 url_col = []
 keyword_col = []
@@ -149,7 +153,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate(
-            "Dialog", "Naver PowerLink Ranking Program"))
+            "Dialog", "네이버 파워링크 순위 검색"))
         self.label_Keyword.setText(_translate("Dialog", "Keyword"))
         self.label_URL.setText(_translate("Dialog", "Search URL"))
         self.Search.setText(_translate("Dialog", "Search"))
@@ -266,9 +270,12 @@ class Ui_Dialog(object):
         self.ResultTable2.resizeRowsToContents()
         multiSearchFilePath = self.LocalPath.text()
         try:
-            f = open(multiSearchFilePath, 'r', encoding='utf-8')
+            open(multiSearchFilePath, 'r', encoding='euc-kr')
+            ePopup.loadWrongPath(multiSearchFilePath)
+            f = open(multiSearchFilePath, 'r', encoding='euc-kr')
         except OSError:
-            print('cannot open : ', multiSearchFilePath)
+            ePopup.loadWrongPath(multiSearchFilePath)
+            pass
         else:
             global lineCnt
             lineCnt = 0
@@ -511,6 +518,8 @@ class Ui_Dialog(object):
                         self.ResultTable.setItem(row-(PageCnt-1)*25, col, item)
             self.ResultTable.resizeColumnsToContents()
             self.ResultTable.resizeRowsToContents()
+        else :
+            ePopup.PreviousBtnError()
 
     def Previous2BtnClicked(self):
         global multiPageCnt
@@ -535,6 +544,8 @@ class Ui_Dialog(object):
                             row-(multiPageCnt-1)*25, col, item)
             self.ResultTable2.resizeColumnsToContents()
             self.ResultTable2.resizeRowsToContents()
+        else :
+            ePopup.PreviousBtnError()
 
     def ResetBtnClicked(self):
         self.ResultTable.setRowCount(0)
