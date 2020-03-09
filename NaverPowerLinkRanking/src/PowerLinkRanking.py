@@ -286,6 +286,16 @@ class Ui_Dialog(object):
 
     def FileOpenBtnClicked(self):
         absPath = fopen.OpenWinFileExplorer()
+        fileExtension = os.path.splitext(absPath)[1]
+        print(fileExtension)
+        if (fileExtension=='.csv'):
+            print("Load Ok!")
+        elif (fileExtension=='.xlsx'):
+            print("Load Ok!")
+        elif (fileExtension=='.xls'):
+            print("Load Ok!")
+        else:
+            ePopup.FileLoadError()
         self.LocalPath.setText(absPath)
 
     def Search2BtnClicked(self):

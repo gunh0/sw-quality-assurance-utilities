@@ -52,3 +52,16 @@ def PageBtnError():
     btn.grid(row=3, column=1)
 
     win.mainloop()
+
+def FileLoadError():
+    win = Tk()
+    win.title("오류")
+
+    errorText = "지원하지 않는 파일형식입니다."
+    lbl = Label(win, text=errorText)
+    lbl.grid(row=2, column=1)
+
+    btn = Button(win, text="확인", width=8, command=win.destroy)
+    btn.grid(row=3, column=1)
+
+    win.mainloop()
