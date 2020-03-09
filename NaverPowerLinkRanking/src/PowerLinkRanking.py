@@ -104,6 +104,7 @@ class Ui_Dialog(object):
         self.UploadLabel = QtWidgets.QLabel(self.Multi_Tab)
         self.UploadLabel.setGeometry(QtCore.QRect(40, 50, 75, 23))
         self.UploadLabel.setObjectName("Upload")
+
         self.LocalPath = QtWidgets.QLineEdit(self.Multi_Tab)
         self.LocalPath.setGeometry(QtCore.QRect(130, 40, 501, 31))
         self.LocalPath.setObjectName("LocalPath")
@@ -129,25 +130,16 @@ class Ui_Dialog(object):
         self.Previous2 = QtWidgets.QPushButton(self.Multi_Tab)
         self.Previous2.setGeometry(QtCore.QRect(200, 790, 20, 20))
         self.Previous2.setObjectName("Previous2")
-        #self.Previous2.clicked.connect(self.Previous2BtnClicked)
+        self.Previous2.clicked.connect(self.Previous2BtnClicked)
 
         self.pageLabel2 = QtWidgets.QLabel(self.Multi_Tab)
         self.pageLabel2.setGeometry(QtCore.QRect(295, 790, 75, 23))
         self.pageLabel2.setObjectName("pageLabel2")
 
-        self.Next2 = QtWidgets.QPushButton(self.Multi_Tab)
-        self.Next2.setGeometry(QtCore.QRect(420, 790, 20, 20))
-        self.Next2.setObjectName("Next2")
-        self.Next2.clicked.connect(self.Next2BtnClicked)
-
         self.Next22 = QtWidgets.QPushButton(self.Multi_Tab)
-        self.Next22.setGeometry(QtCore.QRect(400, 790, 20, 20))
+        self.Next22.setGeometry(QtCore.QRect(420, 790, 20, 20))
         self.Next22.setObjectName("Next22")
         self.Next22.clicked.connect(self.Next2BtnClicked)
-
-        self.ProgressBar = QtWidgets.QProgressBar(self.Multi_Tab)
-        self.ProgressBar.setGeometry(QtCore.QRect(420, 790, 20, 20))
-        self.ProgressBar.setObjectName("ProgressBar")
 
         self.ResultTable2 = QtWidgets.QTableWidget(self.Multi_Tab)
         self.ResultTable2.setGeometry(QtCore.QRect(20, 190, 621, 581))
@@ -162,6 +154,16 @@ class Ui_Dialog(object):
         self.resetTable2.setGeometry(QtCore.QRect(390, 150, 121, 23))
         self.resetTable2.setObjectName("Reset2")
         self.resetTable2.clicked.connect(self.ResetBtn2Clicked)
+
+        self.ProgressLabel = QtWidgets.QLabel(self.Multi_Tab)
+        self.ProgressLabel.setGeometry(QtCore.QRect(40, 90, 75, 23))
+        self.ProgressLabel.setObjectName("ProgressLabel")
+        self.Progress = QProgressBar(self.Multi_Tab)
+        self.Progress.setGeometry(100,90,300,25)
+        self.Progress.setMaximum(100)
+        self.ProgressCntLabel = QtWidgets.QLabel(self.Multi_Tab)
+        self.ProgressCntLabel.setGeometry(QtCore.QRect(100, 130, 75, 23))
+        self.ProgressCntLabel.setObjectName("ProgressCntLabel")
 
         self.tabWidget.addTab(self.Multi_Tab, "")
 
@@ -186,11 +188,13 @@ class Ui_Dialog(object):
         self.UploadLabel.setText(_translate("Dialog", "파일 경로"))
         self.Search2.setText(_translate("Dialog", "검색"))
         self.Download2.setText(_translate("Dialog", "다운로드 (.csv)"))
-        self.Next2.setText(_translate("Dialog", ">"))
+        self.Next22.setText(_translate("Dialog", ">"))
         self.pageLabel2.setText(_translate("Dialog", "1"))
         self.Previous2.setText(_translate("Dialog", "<"))
         self.resetTable2.setText(_translate("Dialog", "초기화"))
         self.FileOpen.setText(_translate("Dialog","열기"))
+        self.ProgressLabel.setText(_translate("Dialog","진행률"))
+        self.ProgressCntLabel.setText(_translate("Dialog","( 0/0 )"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(
             self.Multi_Tab), _translate("Dialog", "대량조회"))
 
@@ -509,6 +513,7 @@ class Ui_Dialog(object):
             ePopup.PageBtnError()
 
     def Next2BtnClicked(self):
+        print("Next2BtnClicked")
         global multiPageCnt
         if(lineCnt > (25*multiPageCnt)):
             self.ResultTable2.setRowCount(0)
@@ -560,6 +565,7 @@ class Ui_Dialog(object):
             ePopup.PageBtnError()
 
     def Previous2BtnClicked(self):
+        print("Previous2BtnClicked")
         global multiPageCnt
         if(multiPageCnt != 1):
             multiPageCnt -= 1
