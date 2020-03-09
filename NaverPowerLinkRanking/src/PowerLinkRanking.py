@@ -6,6 +6,7 @@ import re
 import chardet
 import time
 import threading
+from time import sleep
 
 import ErrorPopup_Tkinter as ePopup
 import FileOpen_easygui as fopen
@@ -35,7 +36,8 @@ url_col2 = []
 keyword_col2 = []
 ranking_col2 = []
 download2Cnt = 0
-Search2BtnChecker = 0
+totalLines = 0
+multiSearchFilePath = ''
 
 
 class Ui_Dialog(object):
@@ -294,10 +296,6 @@ class Ui_Dialog(object):
         self.LocalPath.setText(absPath)
 
     def Search2BtnClicked(self):
-        global Search2BtnChecker
-        Search2BtnChecker=1
-        if(Search2BtnChecker==1):
-            ProgressChanger()
         keyword_col2.clear()
         ranking_col2.clear()
         url_col2.clear()
@@ -305,6 +303,7 @@ class Ui_Dialog(object):
         self.ResultTable2.setRowCount(25)
         self.ResultTable2.resizeColumnsToContents()
         self.ResultTable2.resizeRowsToContents()
+        global multiSearchFilePath
         multiSearchFilePath = self.LocalPath.text()
         global lineCnt
         if (os.path.splitext(multiSearchFilePath)[1] == '.csv'):
@@ -406,73 +405,9 @@ class Ui_Dialog(object):
 
                 f.close()
         else:
-            load_wb = load_workbook(multiSearchFilePath, data_only=True)
-            sheet = load_wb.worksheets[0]
-            lineCnt = 0
-            xlData = []
-            for row in sheet.rows:
-                xlData.append([row[0].value, row[1].value])
-            for i, dt in enumerate(xlData):
-                if(i==0)&((dt[0]!='URL')|(dt[1]!='KEYWORD')):
-                    print("Wrong Form!")
-                    ePopup.loadWrongForm(multiSearchFilePath)
-                    xlData.clear()
-                else:
-                    del xlData[0]
-                    break
-            for i, dt in enumerate(xlData):
-                lineCnt=i
-                print(i+1, dt[0], dt[1])
-                searchUrl = dt[0]
-                keyword = dt[1]
-                if keyword != '':
-                    baseurl = 'https://ad.search.naver.com/search.naver?where=ad&query='
-                    url = baseurl + quote_plus(keyword)
-                    req = urllib.request.urlopen(url)
-                    res = req.read()
+            ProgressApp = tkApp()
+            ProgressApp.mainloop()
 
-                    soup = BeautifulSoup(res, 'html.parser')
-                    divData = soup.find_all('a', class_='url')
-                    rank = 0
-                    findFlag = 0
-                    for urls in divData:
-                        rank += 1
-                        #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                        if(searchUrl == urls.get_text()):
-                            findFlag = 1
-                            url_col2.append(searchUrl)
-                            keyword_col2.append(keyword)
-                            ranking_col2.append(str(rank))
-                    if(findFlag == 0):
-                        httpPat = '^http://'
-                        httpsPat = '^https://'
-                        if re.search(httpPat, searchUrl) is None:
-                            httpTransUrl = 'http://' + searchUrl
-                            rank = 0
-                            for urls in divData:
-                                rank += 1
-                                #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                                if(httpTransUrl == urls.get_text()):
-                                    findFlag = 1
-                                    url_col2.append(httpTransUrl)
-                                    keyword_col2.append(keyword)
-                                    ranking_col2.append(str(rank))
-                        if(findFlag == 0):
-                            if re.search(httpsPat, searchUrl) is None:
-                                httpsTransUrl = 'https://' + searchUrl
-                                rank = 0
-                                for urls in divData:
-                                    rank += 1
-                                    #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                                    if(httpsTransUrl == urls.get_text()):
-                                        findFlag = 1
-                                        url_col2.append(httpsTransUrl)
-                                        keyword_col2.append(keyword)
-                                        ranking_col2.append(str(rank))
-                        if(findFlag == 0):
-                            url_col2.append(searchUrl)
-                            keyword_col2.append(keyword)
-                            ranking_col2.append("None")
             PageCntStr = '1 '
             if((lineCnt//25) > 0):
                 for i in range(2, lineCnt//25+2):
@@ -487,7 +422,7 @@ class Ui_Dialog(object):
                 'ranking_col': ranking_col2
             }
             column_idx_lookup = {'url_col': 0,
-                                    'keyword_col': 1, 'ranking_col': 2}
+                                 'keyword_col': 1, 'ranking_col': 2}
 
             for k, v in tableTempData.items():
                 col = column_idx_lookup[k]
@@ -497,7 +432,6 @@ class Ui_Dialog(object):
 
             self.ResultTable2.resizeColumnsToContents()
             self.ResultTable2.resizeRowsToContents()
-            Search2BtnChecker=0
 
     def DownloadBtnClicked(self):
         tableTempData = {
@@ -722,20 +656,103 @@ class Ui_Dialog(object):
         lineCnt = 0
         multiPageCnt = 1
 
+
 # Progress Check Thread
-def ProgressChanger():
-    global Search2BtnChecker, lineCnt
-    if (Search2BtnChecker == 1):
-        global lineCnt, root
-        root = Tk()
-        root.geometry('{}x{}'.format(400, 100))
-        theLabel = Label(root, text="Sample text to show")
-        theLabel.pack()
-        progressbar = tkinter.ttk.Progressbar(root, variable=lineCnt, maximum=100)
-        progressbar.pack(fill=X, expand=1)
-        root.update_idletasks()
-        root.mainloop()
-        root.after(ProgressChanger)
+progress_var = 0
+
+
+class tkApp(Tk):
+    global totalLines
+
+    def __init__(self):
+        super().__init__()
+        self.geometry('{}x{}'.format(400, 100))
+        self.theLabel = Label(self, text="진행")
+        self.theLabel.pack()
+        self.progress = tkinter.ttk.Progressbar(
+            self, variable=progress_var, mode="determinate")
+        self.progress.pack(fill=X, expand=1)
+
+        self.PgChanger()
+
+    def PgChanger(self):
+        global lineCnt, multiSearchFilePath
+        load_wb = load_workbook(multiSearchFilePath, data_only=True)
+        sheet = load_wb.worksheets[0]
+        lineCnt = 0
+        xlData = []
+
+        for row in sheet.rows:
+            xlData.append([row[0].value, row[1].value])
+        for i, dt in enumerate(xlData):
+            if(i == 0) & ((dt[0] != 'URL') | (dt[1] != 'KEYWORD')):
+                print("Wrong Form!")
+                ePopup.loadWrongForm(multiSearchFilePath)
+                xlData.clear()
+            else:
+                del xlData[0]
+                break
+        totalLines = len(xlData)
+        self.progress['maximum'] = totalLines-1
+
+        global progress_var
+        for i, dt in enumerate(xlData):
+            lineCnt = i
+            print(i+1, dt[0], dt[1])
+            searchUrl = dt[0]
+            keyword = dt[1]
+            if keyword != '':
+                baseurl = 'https://ad.search.naver.com/search.naver?where=ad&query='
+                url = baseurl + quote_plus(keyword)
+                req = urllib.request.urlopen(url)
+                res = req.read()
+
+                soup = BeautifulSoup(res, 'html.parser')
+                divData = soup.find_all('a', class_='url')
+                rank = 0
+                findFlag = 0
+                for urls in divData:
+                    rank += 1
+                    #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                    if(searchUrl == urls.get_text()):
+                        findFlag = 1
+                        url_col2.append(searchUrl)
+                        keyword_col2.append(keyword)
+                        ranking_col2.append(str(rank))
+                if(findFlag == 0):
+                    httpPat = '^http://'
+                    httpsPat = '^https://'
+                    if re.search(httpPat, searchUrl) is None:
+                        httpTransUrl = 'http://' + searchUrl
+                        rank = 0
+                        for urls in divData:
+                            rank += 1
+                            #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                            if(httpTransUrl == urls.get_text()):
+                                findFlag = 1
+                                url_col2.append(httpTransUrl)
+                                keyword_col2.append(keyword)
+                                ranking_col2.append(str(rank))
+                    if(findFlag == 0):
+                        if re.search(httpsPat, searchUrl) is None:
+                            httpsTransUrl = 'https://' + searchUrl
+                            rank = 0
+                            for urls in divData:
+                                rank += 1
+                                #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                                if(httpsTransUrl == urls.get_text()):
+                                    findFlag = 1
+                                    url_col2.append(httpsTransUrl)
+                                    keyword_col2.append(keyword)
+                                    ranking_col2.append(str(rank))
+                    if(findFlag == 0):
+                        url_col2.append(searchUrl)
+                        keyword_col2.append(keyword)
+                        ranking_col2.append("None")
+            progress_var = lineCnt
+            self.progress['value'] = progress_var
+            self.progress.update()
+
 
 if __name__ == "__main__":
     import sys
@@ -747,5 +764,5 @@ if __name__ == "__main__":
 
     sys.exit(app.exec_())
 
-t=threading.Thread(target=main)
+t = threading.Thread(target=main)
 t.start()
