@@ -21,7 +21,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import urllib.request
 from bs4 import BeautifulSoup
 from urllib.parse import quote_plus
-from openpyxl import *
+from openpyxl import load_workbook as load_workbook
 
 url_col = []
 keyword_col = []
@@ -453,6 +453,7 @@ class Ui_Dialog(object):
             download1Cnt += 1
             output_file_name = download_path + '\SearchResults' + \
                 str(download1Cnt) + quote_plus(".csv")
+            import csv
             output_file = open(output_file_name, 'w+', newline='')
             csv_writer = csv.writer(output_file)
             csv_writer.writerow(tableTempData)
@@ -502,6 +503,7 @@ class Ui_Dialog(object):
             download2Cnt += 1
             output_file_name = download_path + '\MultiSearchResults' + \
                 str(download2Cnt) + quote_plus(".csv")
+            import csv
             output_file = open(output_file_name, 'w+', newline='')
             csv_writer = csv.writer(output_file)
             csv_writer.writerow(tableTempData)
@@ -660,14 +662,17 @@ class Ui_Dialog(object):
 # Progress Check Thread
 progress_var = 0
 
-
 class tkApp(Tk):
+
     global totalLines
 
     def __init__(self):
         super().__init__()
+        self.title("진행상황")
         self.geometry('{}x{}'.format(400, 100))
-        self.theLabel = Label(self, text="진행")
+        self.pgText = tkinter.StringVar()
+        self.pgText.set("\n진행 : ( 0/0 )")
+        self.theLabel = Label(self, textvariable=self.pgText)
         self.theLabel.pack()
         self.progress = tkinter.ttk.Progressbar(
             self, variable=progress_var, mode="determinate")
@@ -677,81 +682,88 @@ class tkApp(Tk):
 
     def PgChanger(self):
         global lineCnt, multiSearchFilePath
-        load_wb = load_workbook(multiSearchFilePath, data_only=True)
-        sheet = load_wb.worksheets[0]
-        lineCnt = 0
-        xlData = []
+        try:
+            load_wb = load_workbook(multiSearchFilePath, data_only=True)
+        except:
+            print('cannot open : ', multiSearchFilePath)
+            ePopup.loadWrongPath(multiSearchFilePath)
+        else:
+            sheet = load_wb.worksheets[0]
+            lineCnt = 0
+            xlData = []
+            for row in sheet.rows:
+                xlData.append([row[0].value, row[1].value])
+            for i, dt in enumerate(xlData):
+                if(i == 0) & ((dt[0] != 'URL') | (dt[1] != 'KEYWORD')):
+                    print("Wrong Form!")
+                    ePopup.loadWrongForm(multiSearchFilePath)
+                    xlData.clear()
+                else:
+                    del xlData[0]
+                    break
+            totalLines = len(xlData)
+            self.progress['maximum'] = totalLines-1
 
-        for row in sheet.rows:
-            xlData.append([row[0].value, row[1].value])
-        for i, dt in enumerate(xlData):
-            if(i == 0) & ((dt[0] != 'URL') | (dt[1] != 'KEYWORD')):
-                print("Wrong Form!")
-                ePopup.loadWrongForm(multiSearchFilePath)
-                xlData.clear()
-            else:
-                del xlData[0]
-                break
-        totalLines = len(xlData)
-        self.progress['maximum'] = totalLines-1
+            global progress_var
+            for i, dt in enumerate(xlData):
+                lineCnt = i
+                print(i+1, dt[0], dt[1])
+                searchUrl = dt[0]
+                keyword = dt[1]
+                if keyword != '':
+                    baseurl = 'https://ad.search.naver.com/search.naver?where=ad&query='
+                    url = baseurl + quote_plus(keyword)
+                    req = urllib.request.urlopen(url)
+                    res = req.read()
 
-        global progress_var
-        for i, dt in enumerate(xlData):
-            lineCnt = i
-            print(i+1, dt[0], dt[1])
-            searchUrl = dt[0]
-            keyword = dt[1]
-            if keyword != '':
-                baseurl = 'https://ad.search.naver.com/search.naver?where=ad&query='
-                url = baseurl + quote_plus(keyword)
-                req = urllib.request.urlopen(url)
-                res = req.read()
-
-                soup = BeautifulSoup(res, 'html.parser')
-                divData = soup.find_all('a', class_='url')
-                rank = 0
-                findFlag = 0
-                for urls in divData:
-                    rank += 1
-                    #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                    if(searchUrl == urls.get_text()):
-                        findFlag = 1
-                        url_col2.append(searchUrl)
-                        keyword_col2.append(keyword)
-                        ranking_col2.append(str(rank))
-                if(findFlag == 0):
-                    httpPat = '^http://'
-                    httpsPat = '^https://'
-                    if re.search(httpPat, searchUrl) is None:
-                        httpTransUrl = 'http://' + searchUrl
-                        rank = 0
-                        for urls in divData:
-                            rank += 1
-                            #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                            if(httpTransUrl == urls.get_text()):
-                                findFlag = 1
-                                url_col2.append(httpTransUrl)
-                                keyword_col2.append(keyword)
-                                ranking_col2.append(str(rank))
+                    soup = BeautifulSoup(res, 'html.parser')
+                    divData = soup.find_all('a', class_='url')
+                    rank = 0
+                    findFlag = 0
+                    for urls in divData:
+                        rank += 1
+                        #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                        if(searchUrl == urls.get_text()):
+                            findFlag = 1
+                            url_col2.append(searchUrl)
+                            keyword_col2.append(keyword)
+                            ranking_col2.append(str(rank))
                     if(findFlag == 0):
-                        if re.search(httpsPat, searchUrl) is None:
-                            httpsTransUrl = 'https://' + searchUrl
+                        httpPat = '^http://'
+                        httpsPat = '^https://'
+                        if re.search(httpPat, searchUrl) is None:
+                            httpTransUrl = 'http://' + searchUrl
                             rank = 0
                             for urls in divData:
                                 rank += 1
                                 #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                                if(httpsTransUrl == urls.get_text()):
+                                if(httpTransUrl == urls.get_text()):
                                     findFlag = 1
-                                    url_col2.append(httpsTransUrl)
+                                    url_col2.append(httpTransUrl)
                                     keyword_col2.append(keyword)
                                     ranking_col2.append(str(rank))
-                    if(findFlag == 0):
-                        url_col2.append(searchUrl)
-                        keyword_col2.append(keyword)
-                        ranking_col2.append("None")
-            progress_var = lineCnt
-            self.progress['value'] = progress_var
-            self.progress.update()
+                        if(findFlag == 0):
+                            if re.search(httpsPat, searchUrl) is None:
+                                httpsTransUrl = 'https://' + searchUrl
+                                rank = 0
+                                for urls in divData:
+                                    rank += 1
+                                    #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                                    if(httpsTransUrl == urls.get_text()):
+                                        findFlag = 1
+                                        url_col2.append(httpsTransUrl)
+                                        keyword_col2.append(keyword)
+                                        ranking_col2.append(str(rank))
+                        if(findFlag == 0):
+                            url_col2.append(searchUrl)
+                            keyword_col2.append(keyword)
+                            ranking_col2.append("None")
+                progress_var = lineCnt
+                self.progress['value'] = progress_var
+                progressText = '\n진행 : ('+str(lineCnt+1)+'/'+str(totalLines)+')'
+                self.pgText.set(progressText)
+                self.progress.update()
+            load_wb.close()
 
 
 if __name__ == "__main__":
