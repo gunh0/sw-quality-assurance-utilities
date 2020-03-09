@@ -674,13 +674,20 @@ class tkApp(Tk):
         self.pgText.set("\n진행 : ( 0/0 )")
         self.theLabel = Label(self, textvariable=self.pgText)
         self.theLabel.pack()
+        self.timeText = tkinter.StringVar()
+        self.timeText.set("진행시간 : ")
+        self.theLabel = Label(self, textvariable=self.timeText)
+        self.theLabel.pack()
+
         self.progress = tkinter.ttk.Progressbar(
             self, variable=progress_var, mode="determinate")
         self.progress.pack(fill=X, expand=1)
 
         self.PgChanger()
+        self.Timer()
 
     def PgChanger(self):
+        startTime = time.time()
         global lineCnt, multiSearchFilePath
         try:
             load_wb = load_workbook(multiSearchFilePath, data_only=True)
@@ -761,6 +768,10 @@ class tkApp(Tk):
                 progress_var = lineCnt
                 self.progress['value'] = progress_var
                 progressText = '\n진행 : ('+str(lineCnt+1)+'/'+str(totalLines)+')'
+                endTime = time.time() - startTime
+                endTime = round(endTime,2)
+                tempTimeText = '진행시간 : ' + str(endTime)+' 초'
+                self.timeText.set(tempTimeText)
                 self.pgText.set(progressText)
                 self.progress.update()
             load_wb.close()
