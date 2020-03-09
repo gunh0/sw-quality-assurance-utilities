@@ -28,3 +28,15 @@
 - easygui
 - tkinter
 
+
+
+---
+
+
+
+### Multi Search Form
+
+- .csv : only utf-8
+- .xls : Not supported
+- .xlsx : Support
+

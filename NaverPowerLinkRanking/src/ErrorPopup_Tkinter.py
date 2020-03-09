@@ -18,7 +18,7 @@ def loadWrongForm(absPath):
     win = Tk()
     win.title("오류")
 
-    errorText = "\n" + absPath + "\n\n양식에 맞지 않은 파일입니다.\n"
+    errorText = "\n" + absPath + "\n\n양식에 맞지 않은 파일입니다.\n\nA1[URL], B1[KEYWORD] 양식을 맞춰주세요.\n\n"
     lbl = Label(win, text=errorText)
     lbl.grid(row=2, column=1)
 
