@@ -61,12 +61,12 @@ class Ui_Dialog(object):
         self.Input_URL = QtWidgets.QLineEdit(self.Basic_Tab)
         self.Input_URL.setGeometry(QtCore.QRect(150, 20, 491, 31))
         self.Input_URL.setObjectName("Input_URL")
-        self.Input_URL.setText("Input Search URL...")
+        self.Input_URL.setText("검색하려는 URL을 입력해주세요.")
 
         self.Input_Keyword = QtWidgets.QLineEdit(self.Basic_Tab)
         self.Input_Keyword.setGeometry(QtCore.QRect(150, 70, 491, 31))
         self.Input_Keyword.setObjectName("Input_Keyword")
-        self.Input_Keyword.setText("Input Search Keyword...")
+        self.Input_Keyword.setText("해당 URL이 조회되기 위한 키워드를 입력해주세요.")
 
         self.Search = QtWidgets.QPushButton(self.Basic_Tab)
         self.Search.setGeometry(QtCore.QRect(520, 120, 121, 23))
@@ -117,7 +117,7 @@ class Ui_Dialog(object):
         self.LocalPath = QtWidgets.QLineEdit(self.Multi_Tab)
         self.LocalPath.setGeometry(QtCore.QRect(130, 40, 501, 31))
         self.LocalPath.setObjectName("LocalPath")
-        self.LocalPath.setText("Input CSV file Absolute Path...")
+        self.LocalPath.setText(".xlsx 파일의 절대주소를 적어주세요.")
         # Test File Path
         #self.LocalPath.setText(r"D:\Devgun_Repo\URL_Ranking\MultiSearch\MultiSearchSample.csv")
 
@@ -286,11 +286,13 @@ class Ui_Dialog(object):
         fileExtension = os.path.splitext(absPath)[1]
         #print(fileExtension)
         if (fileExtension == '.csv'):
-            #print("Load Ok!")
+            print("Load Ok!")
+            pass
         elif (fileExtension == '.xlsx'):
-            #print("Load Ok!")
+            print("Load Ok!")
+            pass
         elif (fileExtension == '.xls'):
-            #print("Load Ok!")
+            print("Load Ok!")
         else:
             ePopup.FileLoadError()
         self.LocalPath.setText(absPath)
