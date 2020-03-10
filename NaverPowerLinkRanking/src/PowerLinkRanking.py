@@ -284,13 +284,13 @@ class Ui_Dialog(object):
     def FileOpenBtnClicked(self):
         absPath = fopen.OpenWinFileExplorer()
         fileExtension = os.path.splitext(absPath)[1]
-        print(fileExtension)
+        #print(fileExtension)
         if (fileExtension == '.csv'):
-            print("Load Ok!")
+            #print("Load Ok!")
         elif (fileExtension == '.xlsx'):
-            print("Load Ok!")
+            #print("Load Ok!")
         elif (fileExtension == '.xls'):
-            print("Load Ok!")
+            #print("Load Ok!")
         else:
             ePopup.FileLoadError()
         self.LocalPath.setText(absPath)
@@ -310,7 +310,7 @@ class Ui_Dialog(object):
             try:
                 f = open(multiSearchFilePath, 'r', encoding='utf-8')
             except OSError:
-                print('cannot open : ', multiSearchFilePath)
+                #print('cannot open : ', multiSearchFilePath)
                 ePopup.loadWrongPath(multiSearchFilePath)
                 pass
             else:
@@ -376,7 +376,7 @@ class Ui_Dialog(object):
                                     keyword_col2.append(keyword)
                                     ranking_col2.append("None")
                         #print(line)
-                print(lineCnt)
+                #print(lineCnt)
 
                 PageCntStr = '1 '
                 if((lineCnt//25) > 0):
@@ -552,7 +552,7 @@ class Ui_Dialog(object):
             ePopup.PageBtnError()
 
     def Next2BtnClicked(self):
-        print("Next2BtnClicked")
+        #print("Next2BtnClicked")
         global multiPageCnt
         if(lineCnt > (25*multiPageCnt)):
             self.ResultTable2.setRowCount(0)
@@ -604,7 +604,7 @@ class Ui_Dialog(object):
             ePopup.PageBtnError()
 
     def Previous2BtnClicked(self):
-        print("Previous2BtnClicked")
+        #print("Previous2BtnClicked")
         global multiPageCnt
         if(multiPageCnt != 1):
             multiPageCnt -= 1
@@ -676,23 +676,25 @@ class tkApp(Tk):
         self.theLabel.pack()
         self.timeText = tkinter.StringVar()
         self.timeText.set("진행시간 : ")
-        self.theLabel = Label(self, textvariable=self.timeText)
-        self.theLabel.pack()
+        self.timeLabel = Label(self, textvariable=self.timeText)
+        self.timeLabel.pack()
+        self.checkBtn = Button(self, text='확인', state='disabled', takefocus=False, command=self.destroy)
+        self.checkBtn.pack()
 
         self.progress = tkinter.ttk.Progressbar(
             self, variable=progress_var, mode="determinate")
         self.progress.pack(fill=X, expand=1)
 
         self.PgChanger()
-        self.Timer()
 
     def PgChanger(self):
+        wrongFormError=0
         startTime = time.time()
         global lineCnt, multiSearchFilePath
         try:
             load_wb = load_workbook(multiSearchFilePath, data_only=True)
         except:
-            print('cannot open : ', multiSearchFilePath)
+            #print('cannot open : ', multiSearchFilePath)
             ePopup.loadWrongPath(multiSearchFilePath)
         else:
             sheet = load_wb.worksheets[0]
@@ -702,21 +704,28 @@ class tkApp(Tk):
                 xlData.append([row[0].value, row[1].value])
             for i, dt in enumerate(xlData):
                 if(i == 0) & ((dt[0] != 'URL') | (dt[1] != 'KEYWORD')):
-                    print("Wrong Form!")
+                    #print("Wrong Form!")
+                    self.checkBtn['takefocus']=TRUE
+                    self.checkBtn['state']='active'
+                    self.update()
+                    wrongFormError=1
                     ePopup.loadWrongForm(multiSearchFilePath)
                     xlData.clear()
+                    break
                 else:
                     del xlData[0]
                     break
             totalLines = len(xlData)
-            self.progress['maximum'] = totalLines-1
+            if(totalLines!=0):
+                self.progress['maximum'] = totalLines-1
 
             global progress_var
             for i, dt in enumerate(xlData):
                 lineCnt = i
-                print(i+1, dt[0], dt[1])
+                #print(i+1, dt[0], dt[1])    # check
                 searchUrl = dt[0]
                 keyword = dt[1]
+                #print(keyword)     # check
                 if keyword != '':
                     baseurl = 'https://ad.search.naver.com/search.naver?where=ad&query='
                     url = baseurl + quote_plus(keyword)
@@ -729,7 +738,7 @@ class tkApp(Tk):
                     findFlag = 0
                     for urls in divData:
                         rank += 1
-                        #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                        #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())     # check
                         if(searchUrl == urls.get_text()):
                             findFlag = 1
                             url_col2.append(searchUrl)
@@ -743,7 +752,7 @@ class tkApp(Tk):
                             rank = 0
                             for urls in divData:
                                 rank += 1
-                                #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                                #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())     # check
                                 if(httpTransUrl == urls.get_text()):
                                     findFlag = 1
                                     url_col2.append(httpTransUrl)
@@ -755,7 +764,7 @@ class tkApp(Tk):
                                 rank = 0
                                 for urls in divData:
                                     rank += 1
-                                    #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
+                                    #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())     # check
                                     if(httpsTransUrl == urls.get_text()):
                                         findFlag = 1
                                         url_col2.append(httpsTransUrl)
@@ -775,6 +784,9 @@ class tkApp(Tk):
                 self.pgText.set(progressText)
                 self.progress.update()
             load_wb.close()
+            if(wrongFormError!=1):
+                self.checkBtn['takefocus']=TRUE
+                self.checkBtn['state']='active'
 
 
 if __name__ == "__main__":
