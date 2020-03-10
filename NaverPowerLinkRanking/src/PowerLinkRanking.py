@@ -117,7 +117,7 @@ class Ui_Dialog(object):
         self.LocalPath = QtWidgets.QLineEdit(self.Multi_Tab)
         self.LocalPath.setGeometry(QtCore.QRect(130, 40, 501, 31))
         self.LocalPath.setObjectName("LocalPath")
-        self.LocalPath.setText(".xlsx 파일의 절대주소를 적어주세요.")
+        self.LocalPath.setText(".xlsx 파일의 절대주소를 입력해주세요.")
         # Test File Path
         #self.LocalPath.setText(r"D:\Devgun_Repo\URL_Ranking\MultiSearch\MultiSearchSample.csv")
 
@@ -291,8 +291,6 @@ class Ui_Dialog(object):
         elif (fileExtension == '.xlsx'):
             print("Load Ok!")
             pass
-        elif (fileExtension == '.xls'):
-            print("Load Ok!")
         else:
             ePopup.FileLoadError()
         self.LocalPath.setText(absPath)
@@ -664,6 +662,7 @@ class Ui_Dialog(object):
 # Progress Check Thread
 progress_var = 0
 
+
 class tkApp(Tk):
 
     global totalLines
@@ -680,7 +679,8 @@ class tkApp(Tk):
         self.timeText.set("진행시간 : ")
         self.timeLabel = Label(self, textvariable=self.timeText)
         self.timeLabel.pack()
-        self.checkBtn = Button(self, text='확인', state='disabled', takefocus=False, command=self.destroy)
+        self.checkBtn = Button(
+            self, text='확인', state='disabled', takefocus=False, command=self.destroy)
         self.checkBtn.pack()
 
         self.progress = tkinter.ttk.Progressbar(
@@ -690,7 +690,7 @@ class tkApp(Tk):
         self.PgChanger()
 
     def PgChanger(self):
-        wrongFormError=0
+        wrongFormError = 0
         startTime = time.time()
         global lineCnt, multiSearchFilePath
         try:
@@ -707,10 +707,10 @@ class tkApp(Tk):
             for i, dt in enumerate(xlData):
                 if(i == 0) & ((dt[0] != 'URL') | (dt[1] != 'KEYWORD')):
                     #print("Wrong Form!")
-                    self.checkBtn['takefocus']=TRUE
-                    self.checkBtn['state']='active'
+                    self.checkBtn['takefocus'] = TRUE
+                    self.checkBtn['state'] = 'active'
                     self.update()
-                    wrongFormError=1
+                    wrongFormError = 1
                     ePopup.loadWrongForm(multiSearchFilePath)
                     xlData.clear()
                     break
@@ -718,7 +718,7 @@ class tkApp(Tk):
                     del xlData[0]
                     break
             totalLines = len(xlData)
-            if(totalLines!=0):
+            if(totalLines != 0):
                 self.progress['maximum'] = totalLines-1
 
             global progress_var
@@ -778,17 +778,18 @@ class tkApp(Tk):
                             ranking_col2.append("None")
                 progress_var = lineCnt
                 self.progress['value'] = progress_var
-                progressText = '\n진행 : ('+str(lineCnt+1)+'/'+str(totalLines)+')'
+                progressText = '\n진행 : ('+str(lineCnt+1) + \
+                    '/'+str(totalLines)+')'
                 endTime = time.time() - startTime
-                endTime = round(endTime,2)
+                endTime = round(endTime, 2)
                 tempTimeText = '진행시간 : ' + str(endTime)+' 초'
                 self.timeText.set(tempTimeText)
                 self.pgText.set(progressText)
                 self.progress.update()
             load_wb.close()
-            if(wrongFormError!=1):
-                self.checkBtn['takefocus']=TRUE
-                self.checkBtn['state']='active'
+            if(wrongFormError != 1):
+                self.checkBtn['takefocus'] = TRUE
+                self.checkBtn['state'] = 'active'
 
 
 if __name__ == "__main__":
