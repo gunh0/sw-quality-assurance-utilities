@@ -35,7 +35,7 @@
 
 
 
-### Useage Python Library
+### Python Library List
 
 - easygui
   - http://easygui.sourceforge.net/#
