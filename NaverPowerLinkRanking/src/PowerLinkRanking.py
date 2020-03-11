@@ -662,11 +662,8 @@ class Ui_Dialog(object):
 # Progress Check Thread
 progress_var = 0
 
-
 class tkApp(Tk):
-
     global totalLines
-
     def __init__(self):
         super().__init__()
         self.title("진행상황")
