@@ -1,8 +1,33 @@
-# PowerLinkRanking
+# PowerLinkRanking v2.0
 
 ![image](https://user-images.githubusercontent.com/41619898/75845179-b01c6400-5e1b-11ea-8497-76099d395573.png)
 
-![image](https://user-images.githubusercontent.com/41619898/75845236-d0e4b980-5e1b-11ea-9a68-b3ec12a9a24a.png)
+
+
+**Users can view the Naver Click Choice Ads by entering the search term in NAVER.**
+
+**This program is designed to determine the ranking of URLs to look up in relation to keywords in Powerlink when searching NAVER.**
+
+
+
+### NAVER AD Servieces
+
+- https://saedu.naver.com/adguide/eng.nhn
+- ![image](https://user-images.githubusercontent.com/41619898/76375166-7c47be00-6388-11ea-91f8-32a428b8553a.png)
+
+---
+
+
+
+### Basic Search Tab
+
+![image](https://user-images.githubusercontent.com/41619898/76370964-f32a8a00-637b-11ea-9cef-29182d89a8ee.png)
+
+
+
+### Multi Search Tab (using by .xlsx)
+
+![image](https://user-images.githubusercontent.com/41619898/76371081-72b85900-637c-11ea-8f80-9d103efc453a.png)
 
 
 
@@ -10,23 +35,12 @@
 
 
 
-- **10000 EA**
-- **Open**
-- **한글**
-- **csv 한글 인코딩**
-- **Popup**
-- **Download Popup**
-
-
-
----
-
-
-
-### Useage
+### Useage Python Library
 
 - easygui
+  - http://easygui.sourceforge.net/#
 - tkinter
+  - https://docs.python.org/3/library/tkinter.html
 
 
 
