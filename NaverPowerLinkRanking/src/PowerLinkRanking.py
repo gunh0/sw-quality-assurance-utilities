@@ -658,7 +658,6 @@ class Ui_Dialog(object):
         lineCnt = 0
         multiPageCnt = 1
 
-
 # Progress Check Thread
 progress_var = 0
 

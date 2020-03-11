@@ -13,7 +13,8 @@
 ### NAVER AD Servieces
 
 - https://saedu.naver.com/adguide/eng.nhn
-- ![image](https://user-images.githubusercontent.com/41619898/76375166-7c47be00-6388-11ea-91f8-32a428b8553a.png)
+
+  ![image](https://user-images.githubusercontent.com/41619898/76375166-7c47be00-6388-11ea-91f8-32a428b8553a.png)
 
 ---
 
