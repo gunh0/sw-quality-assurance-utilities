@@ -1,3 +1,6 @@
+# pyinstaller
+#   pyinstaller --clean --onefile --noconsole --icon=icon.ico main.py
+
 import sys
 import os
 import json
