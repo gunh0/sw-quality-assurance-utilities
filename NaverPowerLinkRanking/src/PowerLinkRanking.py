@@ -10,6 +10,8 @@ from time import sleep
 
 import ErrorPopup_Tkinter as ePopup
 import FileOpen_easygui as fopen
+import URL_KeywordParser as urlParser
+
 from tkinter import *
 from tkinter.ttk import *
 import tkinter.messagebox
@@ -213,55 +215,11 @@ class Ui_Dialog(object):
 
         keyword = self.Input_Keyword.text()
         searchUrl = self.Input_URL.text()
-
-        if keyword != '':
-            baseurl = 'https://ad.search.naver.com/search.naver?where=ad&query='
-            url = baseurl + quote_plus(keyword)
-            req = urllib.request.urlopen(url)
-            res = req.read()
-
-            soup = BeautifulSoup(res, 'html.parser')
-            divData = soup.find_all('a', class_='url')
-            rank = 0
-            findFlag = 0
-            for urls in divData:
-                rank += 1
-                #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                if(searchUrl == urls.get_text()):
-                    findFlag = 1
-                    url_col.append(searchUrl)
-                    keyword_col.append(keyword)
-                    ranking_col.append(str(rank))
-            if(findFlag == 0):
-                httpPat = '^http://'
-                httpsPat = '^https://'
-                if re.search(httpPat, searchUrl) is None:
-                    httpTransUrl = 'http://' + searchUrl
-                    rank = 0
-                    for urls in divData:
-                        rank += 1
-                        #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                        if(httpTransUrl == urls.get_text()):
-                            findFlag = 1
-                            url_col.append(httpTransUrl)
-                            keyword_col.append(keyword)
-                            ranking_col.append(str(rank))
-                if(findFlag == 0):
-                    if re.search(httpsPat, searchUrl) is None:
-                        httpsTransUrl = 'https://' + searchUrl
-                        rank = 0
-                        for urls in divData:
-                            rank += 1
-                            #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                            if(httpsTransUrl == urls.get_text()):
-                                findFlag = 1
-                                url_col.append(httpsTransUrl)
-                                keyword_col.append(keyword)
-                                ranking_col.append(str(rank))
-                if(findFlag == 0):
-                    url_col.append(searchUrl)
-                    keyword_col.append(keyword)
-                    ranking_col.append("None")
+        urlResult, keywordResult, rankingResult = urlParser.PowerLinkPaser(
+            searchUrl, keyword)
+        url_col.extend(urlResult)
+        keyword_col.extend(keywordResult)
+        ranking_col.extend(rankingResult)
 
         tableTempData = {
             'url_col': url_col,
@@ -658,11 +616,14 @@ class Ui_Dialog(object):
         lineCnt = 0
         multiPageCnt = 1
 
+
 # Progress Check Thread
 progress_var = 0
 
+
 class tkApp(Tk):
     global totalLines
+
     def __init__(self):
         super().__init__()
         self.title("진행상황")
