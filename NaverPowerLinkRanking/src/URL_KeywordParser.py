@@ -3,10 +3,8 @@ import urllib.request
 from urllib.parse import quote_plus
 from bs4 import BeautifulSoup
 
-
 urlTempList = []
 rank = 1
-
 
 def PowerLinkPaser(SearchURL, Keyword):
     url_list = []
@@ -15,12 +13,14 @@ def PowerLinkPaser(SearchURL, Keyword):
     nextBtn = ['init']
     pageIndex = 1
     global rank
+    rank=1
+    urlTempList.clear()
     if Keyword != '':
         while len(nextBtn) == 1:     # 다음페이지 버튼이 존재하는 경우
             baseurl = 'https://ad.search.naver.com/search.naver?where=ad&query='
             url = baseurl + quote_plus(Keyword) + \
                 '&pagingIndex=' + str(pageIndex)
-            print('Parser Module : ', url)
+            #print('Parser Module : ', url)
             req = urllib.request.urlopen(url)
             res = req.read()
             soup = BeautifulSoup(res, 'html.parser')
@@ -30,7 +30,7 @@ def PowerLinkPaser(SearchURL, Keyword):
                 rank += 1
             nextBtn = soup.find_all('a', class_='next')
             pageIndex += 1
-        print('Parser Module : ', urlTempList)
+        #print('Parser Module : ', urlTempList)
         SearchRanking = SearchURL_Function(SearchURL)
         keyword_list.append(Keyword)
         if SearchRanking is None:
@@ -38,8 +38,8 @@ def PowerLinkPaser(SearchURL, Keyword):
             ranking_list.append("None")
         else:
             url_list.append(SearchRanking[1])
-            ranking_list.append(SearchRanking[0])
-
+            ranking_list.append(str(SearchRanking[0]))
+    #print('Parser Module : ', url_list, keyword_list, ranking_list)
     return(url_list, keyword_list, ranking_list)
 
 

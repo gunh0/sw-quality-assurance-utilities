@@ -1,7 +1,6 @@
 import sys
 import os
 import json
-import csv
 import re
 import chardet
 import time
@@ -11,6 +10,7 @@ from time import sleep
 import ErrorPopup_Tkinter as ePopup
 import FileOpen_easygui as fopen
 import URL_KeywordParser as urlParser
+import MakeCSV
 
 from tkinter import *
 from tkinter.ttk import *
@@ -20,8 +20,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-import urllib.request
-from bs4 import BeautifulSoup
 from urllib.parse import quote_plus
 from openpyxl import load_workbook as load_workbook
 
@@ -120,8 +118,6 @@ class Ui_Dialog(object):
         self.LocalPath.setGeometry(QtCore.QRect(130, 40, 501, 31))
         self.LocalPath.setObjectName("LocalPath")
         self.LocalPath.setText(".xlsx 파일의 절대주소를 입력해주세요.")
-        # Test File Path
-        #self.LocalPath.setText(r"D:\Devgun_Repo\URL_Ranking\MultiSearch\MultiSearchSample.csv")
 
         self.FileOpen = QtWidgets.QPushButton(self.Multi_Tab)
         self.FileOpen.setGeometry(QtCore.QRect(520, 90, 121, 23))
@@ -285,55 +281,11 @@ class Ui_Dialog(object):
                         lineCnt += 1
                         searchUrl = line[0]
                         keyword = line[1]
-                        if keyword != '':
-                            baseurl = 'https://ad.search.naver.com/search.naver?where=ad&query='
-                            url = baseurl + quote_plus(keyword)
-                            req = urllib.request.urlopen(url)
-                            res = req.read()
-
-                            soup = BeautifulSoup(res, 'html.parser')
-                            divData = soup.find_all('a', class_='url')
-                            rank = 0
-                            findFlag = 0
-                            for urls in divData:
-                                rank += 1
-                                #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                                if(searchUrl == urls.get_text()):
-                                    findFlag = 1
-                                    url_col2.append(searchUrl)
-                                    keyword_col2.append(keyword)
-                                    ranking_col2.append(str(rank))
-                            if(findFlag == 0):
-                                httpPat = '^http://'
-                                httpsPat = '^https://'
-                                if re.search(httpPat, searchUrl) is None:
-                                    httpTransUrl = 'http://' + searchUrl
-                                    rank = 0
-                                    for urls in divData:
-                                        rank += 1
-                                        #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                                        if(httpTransUrl == urls.get_text()):
-                                            findFlag = 1
-                                            url_col2.append(httpTransUrl)
-                                            keyword_col2.append(keyword)
-                                            ranking_col2.append(str(rank))
-                                if(findFlag == 0):
-                                    if re.search(httpsPat, searchUrl) is None:
-                                        httpsTransUrl = 'https://' + searchUrl
-                                        rank = 0
-                                        for urls in divData:
-                                            rank += 1
-                                            #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())
-                                            if(httpsTransUrl == urls.get_text()):
-                                                findFlag = 1
-                                                url_col2.append(httpsTransUrl)
-                                                keyword_col2.append(keyword)
-                                                ranking_col2.append(str(rank))
-                                if(findFlag == 0):
-                                    url_col2.append(searchUrl)
-                                    keyword_col2.append(keyword)
-                                    ranking_col2.append("None")
-                        #print(line)
+                        urlResult, keywordResult, rankingResult = urlParser.PowerLinkPaser(
+                            searchUrl, keyword)
+                        url_col2.extend(urlResult)
+                        keyword_col2.extend(keywordResult)
+                        ranking_col2.extend(rankingResult)
                 #print(lineCnt)
 
                 PageCntStr = '1 '
@@ -356,6 +308,7 @@ class Ui_Dialog(object):
                     col = column_idx_lookup[k]
                     for row, val in enumerate(v):
                         item = QTableWidgetItem(val)
+                        print(row,col,item)
                         self.ResultTable2.setItem(row, col, item)
 
                 self.ResultTable2.resizeColumnsToContents()
@@ -387,7 +340,6 @@ class Ui_Dialog(object):
                 for row, val in enumerate(v):
                     item = QTableWidgetItem(val)
                     self.ResultTable2.setItem(row, col, item)
-
             self.ResultTable2.resizeColumnsToContents()
             self.ResultTable2.resizeRowsToContents()
 
@@ -411,21 +363,7 @@ class Ui_Dialog(object):
             download1Cnt += 1
             output_file_name = download_path + '\SearchResults' + \
                 str(download1Cnt) + quote_plus(".csv")
-            import csv
-            output_file = open(output_file_name, 'w+', newline='')
-            csv_writer = csv.writer(output_file)
-            csv_writer.writerow(tableTempData)
-            rulList = tableTempData['URL']
-            keywordList = tableTempData['KEYWORD']
-            rankingList = tableTempData['RANKING']
-            for i in range(0, searchBtnCnt):
-                tmpRowData = []
-                tmpRowData.append(rulList[i])
-                tmpRowData.append(keywordList[i])
-                tmpRowData.append(rankingList[i])
-                csv_writer.writerow(tmpRowData)
-            output_file.close()
-
+            MakeCSV.MakeDownloadCSV(output_file_name, tableTempData)
             url_col.clear()
             keyword_col.clear()
             ranking_col.clear()
@@ -461,21 +399,7 @@ class Ui_Dialog(object):
             download2Cnt += 1
             output_file_name = download_path + '\MultiSearchResults' + \
                 str(download2Cnt) + quote_plus(".csv")
-            import csv
-            output_file = open(output_file_name, 'w+', newline='')
-            csv_writer = csv.writer(output_file)
-            csv_writer.writerow(tableTempData)
-            rulList = tableTempData['URL']
-            keywordList = tableTempData['KEYWORD']
-            rankingList = tableTempData['RANKING']
-            for i in range(0, len(rulList)):
-                tmpRowData = []
-                tmpRowData.append(rulList[i])
-                tmpRowData.append(keywordList[i])
-                tmpRowData.append(rankingList[i])
-                csv_writer.writerow(tmpRowData)
-            output_file.close()
-
+            MakeCSV.MakeDownloadCSV(output_file_name, tableTempData)
         url_col2.clear()
         keyword_col2.clear()
         ranking_col2.clear()
@@ -627,7 +551,11 @@ class tkApp(Tk):
     def __init__(self):
         super().__init__()
         self.title("진행상황")
-        self.geometry('{}x{}'.format(400, 100))
+        self.geometry('{}x{}'.format(400, 150))
+        self.cautionText = tkinter.StringVar()
+        self.cautionText.set("\n검색 진행 중 종료하지 마세요.\n")
+        self.cautionLabel = Label(self, textvariable=self.cautionText)
+        self.cautionLabel.pack()
         self.pgText = tkinter.StringVar()
         self.pgText.set("\n진행 : ( 0/0 )")
         self.theLabel = Label(self, textvariable=self.pgText)
@@ -682,57 +610,12 @@ class tkApp(Tk):
             for i, dt in enumerate(xlData):
                 lineCnt = i
                 #print(i+1, dt[0], dt[1])    # check
-                searchUrl = dt[0]
-                keyword = dt[1]
-                #print(keyword)     # check
-                if keyword != '':
-                    baseurl = 'https://ad.search.naver.com/search.naver?where=ad&query='
-                    url = baseurl + quote_plus(keyword)
-                    req = urllib.request.urlopen(url)
-                    res = req.read()
+                urlResult, keywordResult, rankingResult = urlParser.PowerLinkPaser(
+                    dt[0], dt[1])
+                url_col2.extend(urlResult)
+                keyword_col2.extend(keywordResult)
+                ranking_col2.extend(rankingResult)
 
-                    soup = BeautifulSoup(res, 'html.parser')
-                    divData = soup.find_all('a', class_='url')
-                    rank = 0
-                    findFlag = 0
-                    for urls in divData:
-                        rank += 1
-                        #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())     # check
-                        if(searchUrl == urls.get_text()):
-                            findFlag = 1
-                            url_col2.append(searchUrl)
-                            keyword_col2.append(keyword)
-                            ranking_col2.append(str(rank))
-                    if(findFlag == 0):
-                        httpPat = '^http://'
-                        httpsPat = '^https://'
-                        if re.search(httpPat, searchUrl) is None:
-                            httpTransUrl = 'http://' + searchUrl
-                            rank = 0
-                            for urls in divData:
-                                rank += 1
-                                #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())     # check
-                                if(httpTransUrl == urls.get_text()):
-                                    findFlag = 1
-                                    url_col2.append(httpTransUrl)
-                                    keyword_col2.append(keyword)
-                                    ranking_col2.append(str(rank))
-                        if(findFlag == 0):
-                            if re.search(httpsPat, searchUrl) is None:
-                                httpsTransUrl = 'https://' + searchUrl
-                                rank = 0
-                                for urls in divData:
-                                    rank += 1
-                                    #print(keyword, "|", searchUrl, "-", rank, ":", urls.get_text())     # check
-                                    if(httpsTransUrl == urls.get_text()):
-                                        findFlag = 1
-                                        url_col2.append(httpsTransUrl)
-                                        keyword_col2.append(keyword)
-                                        ranking_col2.append(str(rank))
-                        if(findFlag == 0):
-                            url_col2.append(searchUrl)
-                            keyword_col2.append(keyword)
-                            ranking_col2.append("None")
                 progress_var = lineCnt
                 self.progress['value'] = progress_var
                 progressText = '\n진행 : ('+str(lineCnt+1) + \
