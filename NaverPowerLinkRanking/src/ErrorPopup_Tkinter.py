@@ -1,3 +1,11 @@
+'''
+Python Tkinter 를 사용하여 Tk GUI 툴킷을 바인딩
+
+https://docs.python.org/3/library/tkinter.html
+
+여러 예외 상황에 대해 사용자에게 오류 문구 출력
+'''
+
 from tkinter import *
 import tkinter.messagebox
 
