@@ -1,5 +1,5 @@
 # pyinstaller
-#   pyinstaller --clean --onefile --noconsole --icon=icon.ico main.py
+# pyinstaller --clean --onefile --noconsole --icon=icon.ico main.py
 
 import sys
 import os
@@ -26,19 +26,19 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from urllib.parse import quote_plus
 from openpyxl import load_workbook as load_workbook
 
-url_col = []
-keyword_col = []
-ranking_col = []
-download1Cnt = 0
-searchBtnCnt = 0
-PageCnt = 1
+# '기본' 탭에서 사용됨.
+url_col = []        # 테이블에 보여줄 URL주소를 저장
+keyword_col = []    # 테이블에 보여줄 키워드를 저장
+ranking_col = []    # 테이블에 보여줄 순위를 저장
+searchBtnCnt = 0    # 검색 버튼이 몇회 눌렸는지 카운팅
+PageCnt = 1         # '기본' 탭에서 현재 페이지 수를 표시
 
-lineCnt = 0     # CSV Data Line Counter
-multiPageCnt = 1
-url_col2 = []
-keyword_col2 = []
-ranking_col2 = []
-download2Cnt = 0
+# '대량조회' 탭에서 사용됨.
+url_col2 = []       # 테이블에 보여줄 URL주소를 저장
+keyword_col2 = []   # 테이블에 보여줄 키워드를 저장
+ranking_col2 = []   # 테이블에 보여줄 순위를 저장
+lineCnt = 0         # CSV Data Line Counter
+multiPageCnt = 1    # '대량조회' 탭에서 현재 페이지 수를 표시
 totalLines = 0
 multiSearchFilePath = ''
 
@@ -311,7 +311,7 @@ class Ui_Dialog(object):
                     col = column_idx_lookup[k]
                     for row, val in enumerate(v):
                         item = QTableWidgetItem(val)
-                        print(row,col,item)
+                        print(row, col, item)
                         self.ResultTable2.setItem(row, col, item)
 
                 self.ResultTable2.resizeColumnsToContents()
@@ -359,13 +359,13 @@ class Ui_Dialog(object):
         if not os.path.exists(download_path):
             os.makedirs(download_path)
 
-        global download1Cnt, searchBtnCnt, PageCnt
+        global searchBtnCnt, PageCnt
         if(searchBtnCnt == 0):
             ePopup.NoneTableData()
         else:
-            download1Cnt += 1
-            output_file_name = download_path + '\SearchResults' + \
-                str(download1Cnt) + quote_plus(".csv")
+            output_file_name = download_path + '\SearchResults_' + \
+                str(time.strftime('%y'+'-'+'%m'+'-'+'%d'+'_' +
+                                  '%H'+'-'+'%M'+'-'+'%S')) + quote_plus(".csv")
             MakeCSV.MakeDownloadCSV(output_file_name, tableTempData)
             url_col.clear()
             keyword_col.clear()
@@ -395,13 +395,13 @@ class Ui_Dialog(object):
         if not os.path.exists(download_path):
             os.makedirs(download_path)
 
-        global download2Cnt, lineCnt
+        global lineCnt
         if(lineCnt == 0):
             ePopup.NoneTableData()
         else:
-            download2Cnt += 1
             output_file_name = download_path + '\MultiSearchResults' + \
-                str(download2Cnt) + quote_plus(".csv")
+                str(time.strftime('%y'+'-'+'%m'+'-'+'%d'+'_' +
+                                  '%H'+'-'+'%M'+'-'+'%S')) + quote_plus(".csv")
             MakeCSV.MakeDownloadCSV(output_file_name, tableTempData)
         url_col2.clear()
         keyword_col2.clear()
@@ -520,12 +520,11 @@ class Ui_Dialog(object):
         self.ResultTable.setRowCount(25)
         self.ResultTable.resizeColumnsToContents()
         self.ResultTable.resizeRowsToContents()
-        global download1Cnt, searchBtnCnt, PageCnt
+        global searchBtnCnt, PageCnt
         global url_col, keyword_col, ranking_col
         url_col.clear()
         keyword_col.clear()
         ranking_col.clear()
-        download1Cnt = 0
         searchBtnCnt = 0
         PageCnt = 1
 
@@ -534,12 +533,11 @@ class Ui_Dialog(object):
         self.ResultTable2.setRowCount(25)
         self.ResultTable2.resizeColumnsToContents()
         self.ResultTable2.resizeRowsToContents()
-        global download2Cnt, multiPageCnt, lineCnt
+        global multiPageCnt, lineCnt
         global url_col2, keyword_col2, ranking_col2
         url_col2.clear()
         keyword_col2.clear()
         ranking_col2.clear()
-        download2Cnt = 0
         lineCnt = 0
         multiPageCnt = 1
 
