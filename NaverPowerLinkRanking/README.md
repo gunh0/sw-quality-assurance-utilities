@@ -55,3 +55,27 @@
 - .xls : Not supported
 - .xlsx : Support
 
+
+
+![image](https://user-images.githubusercontent.com/41619898/77394526-f6456180-6de2-11ea-949a-6ba2d3bbd0f7.png)
+
+
+
+---
+
+
+
+### Make .exe File
+
+1. pyinstaller --clean --onefile --noconsole --icon=icon.ico main.py
+
+2. ```
+   [.spec]
+   import sys
+   sys.setrecursionlimit(5000)
+   
+   [compt.py]
+   out = out.decode(encoding, errors='ignore')
+   ```
+
+3. pyinstaller --clean --onefile --noconsole --icon=icon.ico main.spec
