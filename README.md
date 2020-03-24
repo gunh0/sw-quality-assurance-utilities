@@ -1,2 +1,2 @@
-# LSware SideProject Repo.
+# LSware SideProject Repository
 

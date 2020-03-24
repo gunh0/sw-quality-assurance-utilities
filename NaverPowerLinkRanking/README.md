@@ -22,13 +22,13 @@
 
 ### Basic Search Tab
 
-![image](https://user-images.githubusercontent.com/41619898/76370964-f32a8a00-637b-11ea-9cef-29182d89a8ee.png)
+
 
 
 
 ### Multi Search Tab (using by .xlsx)
 
-![image](https://user-images.githubusercontent.com/41619898/76371081-72b85900-637c-11ea-8f80-9d103efc453a.png)
+
 
 
 
