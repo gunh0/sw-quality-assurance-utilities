@@ -1,7 +1,7 @@
 # pyinstaller
 # pyinstaller --clean --onefile --noconsole --icon=icon/icon.ico main.py
 
-''' 
+'''
 [.spec]
 import sys
 sys.setrecursionlimit(1500)
@@ -305,66 +305,6 @@ class Ui_Dialog(object):
         global multiSearchFilePath
         multiSearchFilePath = self.LocalPath.text()
         global lineCnt
-
-        '''
-        if (os.path.splitext(multiSearchFilePath)[1] == '.csv'):
-            try:
-                f = open(multiSearchFilePath, 'r', encoding='utf-8')
-            except OSError:
-                #print('cannot open : ', multiSearchFilePath)   # Debuging Point
-                ePopup.loadWrongPath(multiSearchFilePath)
-                pass
-            else:
-                lineCnt = 0
-                reading = csv.reader(f)
-                for line in reading:
-                    try:
-                        if (line[0] == 'URL') & (line[1] == 'KEYWORD'):
-                            continue
-                    except:
-                        ePopup.loadWrongForm(multiSearchFilePath)
-                        break
-                    else:
-                        lineCnt += 1
-                        searchUrl = line[0]
-                        keyword = line[1]
-
-                        # URL 주소와 Keyword 를 매개변수로 크롤링하는 외부 함수 호출
-                        urlResult, keywordResult, rankingResult = urlParser.PowerLinkPaser(
-                            searchUrl, keyword)
-                        url_col2.extend(urlResult)
-                        keyword_col2.extend(keywordResult)
-                        ranking_col2.extend(rankingResult)
-                #print(lineCnt)     # Debuging Point
-
-                PageCntStr = '1 '
-                if((lineCnt//25) > 0):
-                    for i in range(2, lineCnt//25+2):
-                        PageCntStr += str(i)
-                        PageCntStr += str(' ')
-                #print(PageCntStr)  # Debuging Point
-                self.pageLabel2.setText(PageCntStr)
-
-                tableTempData = {
-                    'url_col': url_col2,
-                    'keyword_col': keyword_col2,
-                    'ranking_col': ranking_col2
-                }
-                column_idx_lookup = {'url_col': 0,
-                                     'keyword_col': 1, 'ranking_col': 2}
-
-                for k, v in tableTempData.items():
-                    col = column_idx_lookup[k]
-                    for row, val in enumerate(v):
-                        item = QTableWidgetItem(val)
-                        print(row, col, item)
-                        self.ResultTable2.setItem(row, col, item)
-
-                self.ResultTable2.resizeColumnsToContents()
-                self.ResultTable2.resizeRowsToContents()
-
-                f.close()
-        '''       
             
         ProgressApp = tkApp()   # 진행도 현황을 보여주기 위한 화면 객체 생성
         ProgressApp.mainloop()
@@ -454,10 +394,12 @@ class Ui_Dialog(object):
         if(lineCnt == 0):
             ePopup.NoneTableData()
         else:
-            output_file_name = download_path + '\MultiSearchResults' + \
+            output_file_name = download_path + '\MultiSearchResults_' + \
                 str(time.strftime('%y'+'-'+'%m'+'-'+'%d'+'_' +
                                   '%H'+'-'+'%M'+'-'+'%S')) + quote_plus(".csv")
             MakeCSV.MakeDownloadCSV(output_file_name, tableTempData)
+        
+        # 다운로드 파일로 결과 값들을 출력하고 난 뒤 남아 있는 데이터 초기화
         url_col2.clear()
         keyword_col2.clear()
         ranking_col2.clear()
@@ -488,7 +430,7 @@ class Ui_Dialog(object):
                         self.ResultTable.setItem(row-PageCnt*25, col, item)
             self.ResultTable.resizeColumnsToContents()
             self.ResultTable.resizeRowsToContents()
-            PageCnt += 1
+            PageCnt += 1    # 페이지의 카운터를 증가
         else:
             ePopup.PageBtnError()
 
@@ -524,7 +466,7 @@ class Ui_Dialog(object):
     def PreviousBtnClicked(self):
         global PageCnt
         if(PageCnt != 1):
-            PageCnt -= 1
+            PageCnt -= 1    # 페이지의 카운터를 감소
             self.ResultTable.setRowCount(0)
             self.ResultTable.setRowCount(25)
             tableTempData = {
@@ -663,7 +605,7 @@ class tkApp(Tk):
 
     def PgChanger(self):
         wrongFormError = 0
-        startTime = time.time()
+        startTime = time.time()     # 크롤링해오는 시간을 측정
         global lineCnt, multiSearchFilePath
         try:
             load_wb = load_workbook(multiSearchFilePath, data_only=True)
@@ -730,8 +672,3 @@ if __name__ == "__main__":
     Dialog.show()
     
     sys.exit(app.exec_())
-
-'''
-t = threading.Thread(target=main)
-t.start()
-'''
