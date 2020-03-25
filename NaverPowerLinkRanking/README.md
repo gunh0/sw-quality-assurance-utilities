@@ -32,7 +32,7 @@
 
 ### Multi Search Tab (using by .xlsx)
 
-![image-20200325103004107](C:\Users\123\AppData\Roaming\Typora\typora-user-images\image-20200325103004107.png)
+![image](https://user-images.githubusercontent.com/41619898/77493092-8a680500-6e85-11ea-80bb-a29bf0b363f3.png)
 
 
 
