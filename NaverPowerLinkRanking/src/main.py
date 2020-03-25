@@ -1,21 +1,22 @@
 # pyinstaller
-# pyinstaller --clean --onefile --noconsole --icon=icon.ico main.py
+# pyinstaller --clean --onefile --noconsole --icon=icon/icon.ico main.py
 
 ''' 
 [.spec]
 import sys
-sys.setrecursionlimit(5000)
+sys.setrecursionlimit(1500)
 
 [compt.py]
 out = out.decode(encoding, errors='ignore')
 '''
 
-# pyinstaller --clean --onefile --noconsole --icon=icon.ico main.spec
+# pyinstaller --clean --onefile --noconsole --icon=icon/icon.ico main.spec
 
 import sys
 import os
 import json
 import re
+import csv
 import chardet
 import time
 import threading
@@ -280,10 +281,12 @@ class Ui_Dialog(object):
         absPath = fopen.OpenWinFileExplorer()
         fileExtension = os.path.splitext(absPath)[1]
         #print(fileExtension)   # 선택한 파일의 확장자명 확인
+        '''
         if (fileExtension == '.csv'):
             print("Load Ok!")
             pass
-        elif (fileExtension == '.xlsx'):
+        '''
+        if (fileExtension == '.xlsx'):
             print("Load Ok!")
             pass
         else:
@@ -302,6 +305,8 @@ class Ui_Dialog(object):
         global multiSearchFilePath
         multiSearchFilePath = self.LocalPath.text()
         global lineCnt
+
+        '''
         if (os.path.splitext(multiSearchFilePath)[1] == '.csv'):
             try:
                 f = open(multiSearchFilePath, 'r', encoding='utf-8')
@@ -359,33 +364,34 @@ class Ui_Dialog(object):
                 self.ResultTable2.resizeRowsToContents()
 
                 f.close()
-        else:
-            ProgressApp = tkApp()
-            ProgressApp.mainloop()
+        '''       
+            
+        ProgressApp = tkApp()   # 진행도 현황을 보여주기 위한 화면 객체 생성
+        ProgressApp.mainloop()
 
-            PageCntStr = '1 '
-            if((lineCnt//25) > 0):
-                for i in range(2, lineCnt//25+2):
-                    PageCntStr += str(i)
-                    PageCntStr += str(' ')
-            #print(PageCntStr)  # Debuging Point
-            self.pageLabel2.setText(PageCntStr)
+        PageCntStr = '1 '
+        if((lineCnt//25) > 0):
+            for i in range(2, lineCnt//25+2):
+                PageCntStr += str(i)
+                PageCntStr += str(' ')
+        #print(PageCntStr)  # Debuging Point
+        self.pageLabel2.setText(PageCntStr)
 
-            tableTempData = {
-                'url_col': url_col2,
-                'keyword_col': keyword_col2,
-                'ranking_col': ranking_col2
-            }
-            column_idx_lookup = {'url_col': 0,
-                                 'keyword_col': 1, 'ranking_col': 2}
+        tableTempData = {
+            'url_col': url_col2,
+            'keyword_col': keyword_col2,
+            'ranking_col': ranking_col2
+        }
+        column_idx_lookup = {'url_col': 0,
+                                'keyword_col': 1, 'ranking_col': 2}
 
-            for k, v in tableTempData.items():
-                col = column_idx_lookup[k]
-                for row, val in enumerate(v):
-                    item = QTableWidgetItem(val)
-                    self.ResultTable2.setItem(row, col, item)
-            self.ResultTable2.resizeColumnsToContents()
-            self.ResultTable2.resizeRowsToContents()
+        for k, v in tableTempData.items():
+            col = column_idx_lookup[k]
+            for row, val in enumerate(v):
+                item = QTableWidgetItem(val)
+                self.ResultTable2.setItem(row, col, item)
+        self.ResultTable2.resizeColumnsToContents()
+        self.ResultTable2.resizeRowsToContents()
 
     # '기본' 탭의 '다운로드' 버늩이 눌렸을 때 반응하는 함수
     def DownloadBtnClicked(self):
@@ -614,6 +620,7 @@ class Ui_Dialog(object):
             net_checker = threading.Timer(1, self.net_checker)  # 네트워크 연결 상태를 1초마다 확인한다.
             net_checker.start()
 
+    # 프로그램이 닫히기 직전 수행해야 하는 작업들 지정
     def closeEvent(self):
         global net_checker
         print('EXIT')
@@ -689,7 +696,7 @@ class tkApp(Tk):
             global progress_var
             for i, dt in enumerate(xlData):
                 lineCnt = i
-                #print(i+1, dt[0], dt[1])    # check
+                print(i+1, dt[0], dt[1])    # check
 
                 # URL 주소와 Keyword 를 매개변수로 크롤링하는 외부 함수 호출
                 urlResult, keywordResult, rankingResult = urlParser.PowerLinkPaser(

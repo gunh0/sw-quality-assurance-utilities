@@ -1,4 +1,4 @@
-# PowerLinkRanking v2.0
+# PowerLinkRanking v2.3
 
 ![image](https://user-images.githubusercontent.com/41619898/75845179-b01c6400-5e1b-11ea-8497-76099d395573.png)
 
@@ -22,13 +22,13 @@
 
 ### Basic Search Tab
 
-
+![image](https://user-images.githubusercontent.com/41619898/77491961-8dadc180-6e82-11ea-8557-2e1c03a30157.png)
 
 
 
 ### Multi Search Tab (using by .xlsx)
 
-
+![image-20200325103004107](C:\Users\123\AppData\Roaming\Typora\typora-user-images\image-20200325103004107.png)
 
 
 
@@ -51,9 +51,9 @@
 
 ### Multi Search Form
 
-- .csv : only utf-8
+- .csv : Not supported
 - .xls : Not supported
-- .xlsx : Support
+- **.xlsx : Support**
 
 
 
@@ -67,15 +67,15 @@
 
 ### Make .exe File
 
-1. pyinstaller --clean --onefile --noconsole --icon=icon.ico main.py
+1. pyinstaller --clean --onefile --noconsole --icon=icon/icon.ico main.py
 
 2. ```
    [.spec]
    import sys
-   sys.setrecursionlimit(5000)
+   sys.setrecursionlimit(2000)
    
    [compt.py]
    out = out.decode(encoding, errors='ignore')
    ```
 
-3. pyinstaller --clean --onefile --noconsole --icon=icon.ico main.spec
+3. pyinstaller --clean --onefile --noconsole --icon=icon/icon.ico main.spec
