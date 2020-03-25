@@ -1,6 +1,6 @@
 /.vscode
+/Django_JWT
 
-/Local_Dir
 /NaverPowerLinkRanking/src/SearchResults
 /NaverPowerLinkRanking/src/MultiSearchResults
 /NaverPowerLinkRanking/src/__pycache__

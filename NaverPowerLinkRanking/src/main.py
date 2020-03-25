@@ -279,19 +279,18 @@ class Ui_Dialog(object):
     # '대량조회' 탭의 '열기' 버튼이 눌렸을 때 반응하는 함수
     def FileOpenBtnClicked(self):
         absPath = fopen.OpenWinFileExplorer()
-        fileExtension = os.path.splitext(absPath)[1]
-        #print(fileExtension)   # 선택한 파일의 확장자명 확인
-        '''
-        if (fileExtension == '.csv'):
-            print("Load Ok!")
-            pass
-        '''
-        if (fileExtension == '.xlsx'):
-            print("Load Ok!")
-            pass
+        try:
+            fileExtension = os.path.splitext(absPath)[1]
+        except:
+            ePopup.loadWrongPath(str(absPath))
         else:
-            ePopup.FileLoadError()  # 선택한 파일의 확장자명이 다른 확장자일 경우 에러 출력
-        self.LocalPath.setText(absPath)
+            #print(fileExtension)   # 선택한 파일의 확장자명 확인
+            if (fileExtension == '.xlsx'):
+                print("Load Ok!")
+            else:
+                ePopup.FileLoadError()  # 선택한 파일의 확장자명이 다른 확장자일 경우 에러 출력
+        finally:
+            self.LocalPath.setText(absPath)
 
     # '대량조회' 탭의 '검색' 버튼이 눌렸을 때 반응하는 함수
     def Search2BtnClicked(self):
@@ -579,10 +578,12 @@ class tkApp(Tk):
 
     def __init__(self):
         super().__init__()
+        self.stopFlag = 0        # '대량조회' 검색 진행중 중지 탐지
+
         self.title("진행상황")
         self.geometry('{}x{}'.format(400, 150))
         self.cautionText = tkinter.StringVar()
-        self.cautionText.set("\n검색 진행 중 종료하지 마세요.\n")
+        self.cautionText.set("\n검색 진행 중 강제로 종료하지 마세요.\n")
         self.cautionLabel = Label(self, textvariable=self.cautionText)
         self.cautionLabel.pack()
         self.pgText = tkinter.StringVar()
@@ -595,13 +596,18 @@ class tkApp(Tk):
         self.timeLabel.pack()
         self.checkBtn = Button(
             self, text='확인', state='disabled', takefocus=False, command=self.destroy)
-        self.checkBtn.pack()
-
+        self.stopBtn = Button(
+            self, text='중지', takefocus=False, command=self.stop_command)
+        self.stopBtn.pack()
+        self.checkBtn.pack(side=RIGHT)
         self.progress = tkinter.ttk.Progressbar(
             self, variable=progress_var, mode="determinate")
         self.progress.pack(fill=X, expand=1)
-
         self.PgChanger()
+
+    def stop_command(self):     # 중지 버튼이 눌려진 경우 동작하는 함수
+        if self.stopFlag == 0:
+            self.stopFlag=1
 
     def PgChanger(self):
         wrongFormError = 0
@@ -610,8 +616,8 @@ class tkApp(Tk):
         try:
             load_wb = load_workbook(multiSearchFilePath, data_only=True)
         except:
-            #print('cannot open : ', multiSearchFilePath)
-            ePopup.loadWrongPath(multiSearchFilePath)
+            print('cannot open : ', multiSearchFilePath)
+            ePopup.SearchDisable()
         else:
             sheet = load_wb.worksheets[0]
             lineCnt = 0
@@ -635,10 +641,10 @@ class tkApp(Tk):
             if(totalLines != 0):
                 self.progress['maximum'] = totalLines-1
 
-            global progress_var
+            global progress_var, stopFlag
             for i, dt in enumerate(xlData):
                 lineCnt = i
-                print(i+1, dt[0], dt[1])    # check
+                #print(i+1, dt[0], dt[1])    # check
 
                 # URL 주소와 Keyword 를 매개변수로 크롤링하는 외부 함수 호출
                 urlResult, keywordResult, rankingResult = urlParser.PowerLinkPaser(
@@ -657,6 +663,9 @@ class tkApp(Tk):
                 self.timeText.set(tempTimeText)
                 self.pgText.set(progressText)
                 self.progress.update()
+                if(self.stopFlag==1):   # 중지 버튼이 눌려진 경우 크롤링 중지
+                    self.stopFlag=0
+                    break;
             load_wb.close()
             if(wrongFormError != 1):
                 self.checkBtn['takefocus'] = TRUE

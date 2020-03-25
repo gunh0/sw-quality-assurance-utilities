@@ -73,3 +73,16 @@ def FileLoadError():
     btn.grid(row=3, column=1)
 
     win.mainloop()
+
+def SearchDisable():
+    win = Tk()
+    win.title("오류")
+
+    errorText = "검색을 시작할 수 없습니다."
+    lbl = Label(win, text=errorText)
+    lbl.grid(row=2, column=1)
+
+    btn = Button(win, text="확인", width=8, command=win.destroy)
+    btn.grid(row=3, column=1)
+
+    win.mainloop()
