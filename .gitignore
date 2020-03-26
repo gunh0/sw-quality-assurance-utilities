@@ -1,5 +1,8 @@
 /.vscode
-/Django_JWT
+/venv
+
+/Django_JWT/Django_JWT/__pycache__
+/Django_JWT/board/__pycache__
 
 /NaverPowerLinkRanking/src/SearchResults
 /NaverPowerLinkRanking/src/MultiSearchResults
