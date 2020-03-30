@@ -1,0 +1,120 @@
+{% extends "extern/base.html" %}
+
+{% block exterstyle %}
+	{% load static %}
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() { $('#load').hide(); });
+	</script>
+	<style>
+		#load {
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			position: fixed;
+			display: block;
+			opacity: 0.8;
+			background: white;
+			z-index: 99;
+			text-align: center;
+		}
+
+		#load > img {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			z-index: 100;
+		}
+	</style>
+{% endblock exterstyle %}
+
+{% block content %}
+<div id="load">
+	<img src="{{ MEDIA_URL }}/report/pictures/loading.gif" alt="loading">
+</div>
+<h1>로그 모니터링</h1>
+<div class="contents">
+	<p>
+		<h3>모니터링 제품 등록</h3>
+		<form method="post">
+			{% csrf_token %}
+			id : <input name="id">
+			host : <input name="host">
+			pw : <input type="password" name="pw">
+			product : <select name="product">
+				<option value="SecuMS">SecuMS</option>
+				<option value="OmniGuardUnix">OmniGuard Unix</option>
+				<option value="OmniGuardWindows">OmniGuard Windows</option>
+				<option value="FOSSGuard">FOSSGuard</option>
+				<option value="Athena">Athena</option>
+			</select>
+			os : <select name="ostype">
+				<option value="Windows">Windows</option>
+				<option value="Unix/Linux">Unix/Linux</option>
+			</select>
+			logpath : <input name="logpath">
+			logname : <input name="logname">
+			<input type="submit" name="create" value="등록">
+		</form>
+	</p>
+	<p>
+		<h3>로그파일 확인</h3>
+		<p class="nowproduct">현재 모니터링 중인 제품 : {{ product.product }} {{ product.ostype }} {{ product.user }}@{{ product.host }} {{ product.logpath }}{{ product.logname }}</p>
+		<form method="post">
+			{% csrf_token %}
+			<input type="submit" name="check" value="확인">
+		</form>
+	</p>
+	<p>
+		<h3>결함 로그 등록</h3>
+		<form method="post">
+			{% csrf_token %}
+			등록할 로그 : <input name="reglog">
+			<input type="submit" name="register" value="확인">
+		</form>	
+	</p>
+	<p>
+		<h3>모니터링 할 문구 선택</h3>
+		<form method="post">
+			{% csrf_token %}
+			<select name="defectlist">
+				{% for defectword in defectwords %}
+					<option value="{{ defectword.word }}">{{ defectword.word }}</option>
+				{% endfor %}
+			</select>
+			<input type="submit" name="log" value="등록">
+		</form>
+	<p>
+		<h3>등록된 결함 문구</h3>
+		<table class="regiedlist">
+			<tr>
+				<th>번호</th>
+				<th>문구 목록</th>
+				<th>등록 해제</th>
+			</tr>
+			{% for regedword in regedwords %}
+			<tr>
+				<form method="post">
+					{% csrf_token %}
+					<td>{{ forloop.counter }}</td>
+					<td><input type="hidden" name="id" value="{{ regedword.id }}">{{ regedword.word }}</td>
+					<td><input name="unmark" type="submit" value="해제"></td>
+				</form>
+			</tr>
+			{% endfor %}
+		</table>
+	</p>
+	<p>
+		<h3>로그 모니터링</h3>
+		<form method="post">{% csrf_token %}<input name="update" type="submit" value="업데이트"></form>
+		<ul class="monitoringlogs">
+			{% autoescape off %}
+			{% for defectlog in defectlogs %}
+			<li> {{ defectlog }} <li>
+			{% endfor %}
+			{% endautoescape %}
+		</ul>
+	</p>
+</div>
+{% endblock content %}

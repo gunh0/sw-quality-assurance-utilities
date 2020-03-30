@@ -1,0 +1,2 @@
+Mar 25 19:42:04 rhel55 kernel: login[15869]: segfault at 0000000000000000 rip 00002b0b506614a8 rsp 00007fff02041a50 error 4
+Error, Db regclnt.ldb

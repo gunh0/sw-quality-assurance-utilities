@@ -1,0 +1,14 @@
+<script>
+	console.log(typeof({{ return }}))
+	if ({{ return }} == "0")
+	{
+		window.alert('메일 전송 완료');
+		history.back();
+	}
+	else {
+		window.alert('메일 주소를 입력해주세요');
+		history.back();
+		}
+</script>
+
+<!-- {{ return }} -->

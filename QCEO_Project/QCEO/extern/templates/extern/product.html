@@ -1,0 +1,261 @@
+{% extends "extern/base.html" %}
+
+{% block exterstyle %}
+	{% load static %}
+	<script type="text/javascript" src="{% static './js/fusioncharts.js' %}"></script>
+		<script type="text/javascript" src="{% static './js/themes/fusioncharts.theme.fint.js' %}"></script>
+		<script type="text/javascript" src="{% static './js/themes/fusioncharts.theme.zune.js' %}"></script>
+		<script type="text/javascript" src="{% static './js/themes/fusioncharts.theme.carbon.js' %}"></script>
+		<script type="text/javascript" src="{% static './js/themes/fusioncharts.theme.ocean.js' %}"></script>
+		<script>
+		FusionCharts.ready(function() {
+		var Chart = new FusionCharts({
+			"type": "stackedColumn2DLine",
+			"renderAt": "quality",
+			"width": "100%",
+			"height": "300",
+			"dataFormat": "json",
+			"dataSource": {
+				"chart": {
+					"xAxisName": "{{ product }}",
+					"yAxisName": "품질(%)",
+					"theme": "fint",
+					"yAxisMaxValue": "100",
+				},		
+				"categories": [{
+					"category": [
+						{% for quality in qualities %}
+						{
+							"label": "{{ quality.date }}"
+						},
+						{% endfor %}
+					]
+
+				}],
+				"dataset": [{
+					"data": [
+						{% for quality in qualities %}
+						{
+							"value": "{{ quality.value }}"
+						},
+						{% endfor %}
+					]
+				}, {
+					"anchorBgColor": "#F5828E",
+					"renderas": "Line",
+					"data":  [
+						{% for quality in qualities %}
+						{
+							"value": "{{ quality.value }}"
+						},
+						{% endfor %}
+					]
+				}],
+			}
+
+		});
+		Chart.render();
+	})
+		FusionCharts.ready(function() {
+				var Chart = new FusionCharts({
+					"type": "column2d",
+					"renderAt": "client",
+					"width": "100%",
+					"height": "300",
+					"dataFormat": "json",
+					"dataSource": {
+						"chart": {
+							"xAxisName": "기업명",
+							"yAxisName": "결함 수",
+							"theme": "fint"
+						},					
+						"data": 		
+						[
+							{% for data in clientdatas %}
+								{
+									"label": "{{ data.client }}",
+									"value": "{{ data.num }}"
+								},
+							{% endfor %}
+						]
+					}
+
+				});
+				Chart.render();
+			})
+			FusionCharts.ready(function() {
+				var Chart = new FusionCharts({
+					"type": "line",
+					"renderAt": "eachProduct",
+					"width": "100%",
+					"height": "300",
+					"dataFormat": "json",
+					"dataSource": {
+						"chart": {
+							"xAxisName": "{{ product }}",
+							"yAxisName": "결함 수",
+							"theme": "fint"
+						},					
+						"data": 		
+						[
+							{% for defect in defects %}
+								{
+									"label": "{{ defect.date }}",
+									"value": "{{ defect.value }}"
+								},
+							{% endfor %}
+						]
+					}
+
+				});
+				Chart.render();
+			})
+		FusionCharts.ready(function() {
+				var Chart = new FusionCharts({
+					"type": "column2d",
+					"renderAt": "programmer",
+					"width": "100%",
+					"height": "300",
+					"dataFormat": "json",
+					"dataSource": {
+						"chart": {
+							"xAxisName": "이름",
+							"yAxisName": "결함 수",
+							"theme": "ocean"
+						},					
+						"data": 		
+						[
+							{% for programmer in programmers %}
+								{
+									"label": "{{ programmer.charge }}",
+									"value": "{{ programmer.num }}"
+								},
+							{% endfor %}
+						]
+					}
+
+				});
+				Chart.render();
+			})
+		FusionCharts.ready(function() {
+				var Chart = new FusionCharts({
+					"type": "column2d",
+					"renderAt": "manager",
+					"width": "100%",
+					"height": "300",
+					"dataFormat": "json",
+					"dataSource": {
+						"chart": {
+							"xAxisName": "이름",
+							"yAxisName": "결함 수",
+							"theme": "carbon"
+						},					
+						"data": 		
+						[
+							{% for manager in managers %}
+								{
+									"label": "{{ manager.name }}",
+									"value": "{{ manager.num }}"
+								},
+							{% endfor %}
+						]
+					}
+
+				});
+				Chart.render();
+			})
+		</script>
+{% endblock exterstyle %}
+
+{% block content %}
+	<h1>Product {{ product }}</h1>
+	<div class="contents">
+		<h2>{{ product }} 품질 현황</h2>
+		<div class="search">
+			<form action="" method="post" class="searchdate">
+				{% csrf_token %}
+				<input type="date" name="sdate" value="{{ sdate }}">
+				<input type="date" name="edate" value="{{ edate }}">
+				<input type="submit" value="검색">
+			</form>
+			<form action="/product/{{product_id}}/sendmail" method="post" class="sendemail">
+				{% csrf_token %}
+				<input type="text" name="email">
+				<input type="hidden" name="sdate" value="{{ sdate }}">
+				<input type="hidden" name="edate" value="{{ edate }}">
+				<input type="submit" value="이메일 보내기">
+			</form>
+		</div>
+		<div id="quality"></div>
+	</div>
+	<div class="contents">
+		<h2>고객사 결함 현황 (진행중)</h2>
+		<div id="client"></div>
+	</div>
+	<div class="contents">
+		<h2>진행중인 프로세스</h2>
+		<div class="processes">
+			{% for processbar in processbars %}
+				{% if processbar.is_deleted %}
+				<div class="process">
+					<div class="project_head">
+						<span class="project_name">{{ processbar.project }}</span>
+						<span class="project_version">{{ processbar.version }}</span>
+					</div>
+					<div class="project_body">
+						<div class="steps">
+							<div class="step" style="width:{{ processbar.fdays }}%">
+								개발(~{{ processbar.firststep|date:"n/d" }})
+							</div>
+							<div class="step" style="width:{{ processbar.sdays }}%">
+								품질점검(~{{ processbar.secondstep|date:"n/d" }})
+							</div>
+							<div class="step" style="width:{{ processbar.tdays }}%">
+								패키징(~{{ processbar.thirdstep|date:"n/d" }})
+							</div>
+							<div class="step" style="width:{{ processbar.edays }}%">
+								설치(~{{ processbar.end|date:"n/d" }})
+							</div>
+						</div>
+						<div class="process_bar" style="width:{{ processbar.nowper }}%;background-color:#a0a0a0;">	
+						</div>
+					</div>
+					<div class="project_tail">
+						<span class="project_repoart"><a href="/report/{{ processbar.file }}">품질 점검 결과</a></span>
+					</div>
+				</div>	
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+	<div class="contents">
+		<h2>{{ product }} 결함 수</h2>
+		<div id="eachProduct"></div>
+	</div>
+	<div class="halfcontents">
+		<h2>결함 수정중인 담당자 현황</h2>
+		<div id="programmer"></div>
+		<div class="state" class="halfchart">
+			<h3>장기간 미처리</h3>
+			<ul>
+				{% for handling in handlings %}
+					<li>{{ handling.id }} {{ handling.name }} {{ handling.days }} 일</li>
+				{% endfor %}
+			<ul>
+		</div>
+	</div>
+	<div class="halfcontents">
+		<h2>수정 확인중인 담당자 현황</h2>
+		<div id="manager" class="halfchart"></div>
+		<div class="state">
+			<h3>장기간 미정리</h3>
+			<ul>
+				{% for arrange in arranges %}
+					<li>{{ arrange.id }} {{ arrange.name }} {{ arrange.days }} 일</li>
+				{% endfor %}
+			<ul>
+		</div>
+	</div>
+
+{% endblock content %}
+	

@@ -1,0 +1,92 @@
+{% extends "extern/base.html" %}
+
+{% block exterstyle %}
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		//$("#id_starttime").val("0000-00-00 00:00:00");
+		$(".UpdateTest").click(function(){
+			$.ajax({
+				type: "POST",
+				url: "{% url 'functionauto:processbars' %}",
+				data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+				dataType: "json", 
+				success: function(response){
+					{% for test in datas %}
+						$(".autotest{{test.num}} .testing_bar").css('width', Math.floor(response.datas[{{ test.num }}].dirlen/{{ test.total }}*100) + "%");
+						$(".autotest{{test.num}} .testing_bar").html(Math.floor(response.datas[{{ test.num }}].dirlen/{{ test.total }}*100) + "%");
+					{% endfor %}
+				},
+				error:function(request,status,error){
+					console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				}
+			});
+		})
+	})
+</script>
+{% endblock exterstyle %}
+
+{% block content %}
+	<h1>기능자동화</h1>
+	<div class="contents">
+		<h2>자동테스트 예약</h2>
+		<form action="" method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<input type="submit" name="reserve" value="예약">
+		</form>
+	</div>
+	<div class="contents">
+		<h2>예약자 현황</h2>
+		<table class="reserve">
+			<colgroup>
+				<col style="width:20%">
+				<col style="width:10%">
+				<col style="width:10%">
+				<col style="width:30%">
+				<col style="width:30%">
+			</colgroup>
+			<thead>
+				<tr>
+					<th>프로젝트</th>
+					<th>예약자</th>
+					<th>상태</th>
+					<th>희망 테스트 시간</th>
+					<th>예약 등록 시간</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for reserve in reserves %}
+				<tr>
+					<td>{{ reserve.project }}</td>
+					<td>{{ reserve.name }}</td>
+					<td>{{ reserve.state }}</td>
+					<td>{{ reserve.starttime|date:"m/d h:s" }}</td>
+					<td>{{ reserve.reservetime|date:"m/d h:s" }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="contents">
+		<h2>자동테스트 알림</h2>
+		<form method="post" class="sharemount">
+			{% csrf_token %}
+			<input type="submit" name="mount" value="공유폴더 마운트">
+		</form>
+		<input type="button" class="UpdateTest" value="현재 상황 새로고침">
+		{% for test in datas %}
+			<div class="autotest{{test.num}} autotest">
+				<h3 class="project">{{ test.project }}</h3>
+				<div class="project_info">
+					<span class="testname"><b>테스트명</b> {{ test.testname }}</span>
+					<span class="starttime"><b>테스트 시작시간</b> {{ test.starttime }}</span>
+					<span class="project_repoart"><a href="{% if test.file %}/report/{{ test.file }} {% else %} {% url 'functionauto:noreport' %}  {% endif %}">자동테스트 결과</a></span>
+				</div>
+				<div class="testing_bar" style="width:{{ test.dirlen }}%;"></div>
+			</div>
+		{% endfor %}
+	</div>	
+	
+{% endblock content %}
+	

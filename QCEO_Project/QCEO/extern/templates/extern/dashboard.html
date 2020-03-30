@@ -1,0 +1,241 @@
+{% extends "extern/base.html" %}
+
+{% block exterstyle %}
+	{% load static %}
+	<script type="text/javascript" src="{% static './js/fusioncharts.js' %}"></script>
+	<script type="text/javascript" src="{% static './js/themes/fusioncharts.theme.fint.js' %}"></script>
+	<script type="text/javascript" src="{% static './js/themes/fusioncharts.theme.ocean.js' %}"></script>
+	<script>
+	var today = new Date();
+	FusionCharts.ready(function() {
+		var Chart = new FusionCharts({
+			"type": "stackedColumn2DLine",
+			"renderAt": "quality",
+			"width": "100%",
+			"height": "300",
+			"dataFormat": "json",
+			"dataSource": {
+				"chart": {
+					/*"caption": "고객사 결함현황",*/
+					/*"subCaption": "기간 3/13 ~ 3/19",*/
+					"xAxisName": "LSware",
+					"yAxisName": "품질(%)",
+					"theme": "fint",
+					"yAxisMaxValue": "100",
+				},		
+				"categories": [{
+					"category": [
+						{% for quality in qualities %}
+						{
+							"label": "{{ quality.date }}"
+						},
+						{% endfor %}
+					]
+
+				}],
+				"dataset": [{
+					"data": [
+						{% for quality in qualities %}
+						{
+							"value": "{{ quality.value }}"
+						},
+						{% endfor %}
+					]
+				}, {
+					"anchorBgColor": "#F5828E",
+					"renderas": "Line",
+					"data":  [
+						{% for quality in qualities %}
+						{
+							"value": "{{ quality.value }}"
+						},
+						{% endfor %}
+					]
+				}],
+			}
+
+		});
+		Chart.render();
+	})
+	FusionCharts.ready(function() {
+		var Chart = new FusionCharts({
+			"type": "line",
+			"renderAt": "total",
+			"width": "100%",
+			"height": "300",
+			"dataFormat": "json",
+			"dataSource": {
+				"chart": {
+					/*"caption": "전체 결함 수",*/
+					/*"subCaption": "기간 {{ sdate }} ~ {{ edate }}",*/
+					"xAxisName": "LSware",
+					"yAxisName": "결함 수",
+					"theme": "ocean"
+				},
+				
+				"data": 		
+				[
+					{% for data in datas %}
+						{
+							"label": "{{ data.date }}",
+							"value": "{{ data.value }}"
+						},
+					{% endfor %}
+				]
+			}
+		});
+		Chart.render();
+	});
+	FusionCharts.ready(function() {
+		var revenueChart = new FusionCharts({
+			type: 'mscolumn2d',
+			renderAt: 'eachProduct',
+			width: '100%',
+			height: '350',
+			dataFormat: 'json',
+			dataSource: {
+					"chart": {
+					/*"caption": "제품별 결함",*/
+					/*"subCaption": "기간 "+(today.getMonth()+1)+"/"+(today.getDate()-6)+" ~ "+(today.getMonth()+1)+"/"+(today.getDate()),*/
+					"xAxisName": "LSware",
+					"yAxisName": "결함 수",
+					"formatnumberscale": "0",
+					"showvalues":"0",
+					"theme": "ocean"
+					},
+			  
+				"categories": [{
+					"category": [
+						{% for data in datas %}
+							{
+							  "label": "{{ data.date }}"
+							}, 
+						{% endfor %}
+					]
+				}],
+				"dataset": [{
+					"seriesname": "SecuMS",
+					"data": [
+						{% for p1 in p1s %}
+						{
+							"value": "{{p1.value}}"
+						},
+						{% endfor %}
+					]}, {
+					"seriesname": "OmniGuard Unix",
+					"data": [
+						{% for p2 in p2s %}
+						{
+							"value": "{{p2.value}}"
+						},
+						{% endfor %}
+					]}, {
+					"seriesname": "OmniGuard Windows",
+					"data": [
+						{% for p3 in p3s %}
+						{
+							"value": "{{p3.value}}"
+						},
+						{% endfor %}
+					]}, {
+					"seriesname": "FOSSGuard",
+					"data": [
+						{% for p4 in p4s %}
+						{
+							"value": "{{p4.value}}"
+						},
+						{% endfor %}
+					]}, {
+					"seriesname": "Athena",
+					"data": [
+						{% for p5 in p5s %}
+						{
+							"value": "{{p5.value}}"
+						},
+						{% endfor %}
+					]}
+			]}
+		});
+		revenueChart.render();
+	});
+	</script>
+{% endblock exterstyle %}
+
+
+{% block content %}
+
+	<h1>대시보드</h1>
+	
+	<div class="contents">
+		<h2>품질이 곧 매출이다</h2>
+		<div class="search">
+			<form action="" method="post" class="searchdate">
+				{% csrf_token %}
+				<input type="date" name="sdate" value="{{ sdate }}">
+				<input type="date" name="edate" value="{{ edate }}">
+				<input type="submit" value="검색">
+			</form>
+			<form action="/dashboard/sendmail" method="post" class="sendemail">
+				{% csrf_token %}
+				<input type="text" name="email">
+				<input type="hidden" name="sdate" value="{{ sdate }}">
+				<input type="hidden" name="edate" value="{{ edate }}">
+				<input type="submit" value="이메일 보내기">
+			</form>
+		</div>
+		<br />
+		<div id="quality" class="graphs"></div>
+	</div>
+	
+	<div class="contents">
+		<h2>프로세스가 곧 품질이다</h2>
+		<div class="processes">
+			{% for processbar in processbars %}
+				{% if processbar.is_deleted %}
+				<div class="process">
+					<div class="project_head">
+						<span class="project_name">{{ processbar.project }}</span>
+						<span class="project_version">{{ processbar.version }}</span>
+					</div>
+					<div class="project_body">
+						<div class="steps">
+							<div class="step" style="width:{{ processbar.fdays }}%">
+								개발(~{{ processbar.firststep|date:"n/d" }})
+							</div>
+							<div class="step" style="width:{{ processbar.sdays }}%">
+								품질점검(~{{ processbar.secondstep|date:"n/d" }})
+							</div>
+							<div class="step" style="width:{{ processbar.tdays }}%">
+								패키징(~{{ processbar.thirdstep|date:"n/d" }})
+							</div>
+							<div class="step" style="width:{{ processbar.edays }}%">
+								설치(~{{ processbar.end|date:"n/d" }})
+							</div>
+						</div>
+						<div class="process_bar" style="width:{{ processbar.nowper }}%;background-color:#a0a0a0;">	
+						</div>
+					</div>
+					<div class="project_tail">
+						<span class="project_repoart"><a href="/report/{{ processbar.file }}">품질 점검 결과</a></span>
+					</div>
+				</div>	
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+
+	<div class="contents">
+		<h2>전체 결함</h2>
+		<div id="total" class="graphs"></div>
+	</div>
+
+	<div class="contents">
+		<h2>제품별 결함</h2>
+		<div id="eachProduct" class="graphs"></div>
+	</div>
+	<ul>
+
+	</ul>
+
+{% endblock content %}
+	

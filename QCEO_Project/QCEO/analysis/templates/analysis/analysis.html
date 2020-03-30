@@ -1,0 +1,130 @@
+{% extends "extern/base.html" %}
+
+{% block exterstyle %}
+	{% load static %}
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$(".tab_content").hide();
+			$(".tab_content:first").show();
+
+			$("ul.tabs li").click(function () {
+				$("ul.tabs li").removeClass("active").css("color", "#333");
+				//$(this).addClass("active").css({"color": "darkred","font-weight": "bolder"});
+				$(this).addClass("active").css("color", "darkred");
+				$(".tab_content").hide()
+				var activeTab = $(this).attr("rel");
+				$("#" + activeTab).fadeIn()
+			});
+			
+			
+		});
+		swch=1;
+		function openstatus() {
+			if(swch == 0){
+				$("span.status").css("display", "none");
+				$("#ocbtnimg").attr("src", "{{ MEDIA_URL }}/report/pictures/triangle1.png");
+				swch = 1;
+			}
+			else {
+				$("span.status").css("display", "block");
+				$("#ocbtnimg").attr("src", "{{ MEDIA_URL }}/report/pictures/triangle2.png");
+				swch = 0;
+			}
+		}
+	</script>
+
+{% endblock exterstyle %}
+
+{% block content %}
+<h1>품질 분석실</h1>
+<div class="contents">
+	<h2>품질 추적</h2>
+	<ul class="tabs">
+		<li class="active" rel="tab1">SecuMS</li>
+        <li rel="tab2">OmniGuard Unix</li>
+        <li rel="tab3">OmniGuard Window</li>
+        <li rel="tab4">FOSSGuard</li>
+        <li rel="tab5">Athena</li>
+    </ul>
+	<div class="tab_container">
+		{% for tracking in trackings %}
+		<div id="tab{{ forloop.counter }}" class="tab_content">
+			<table class="tracking">
+				<colgroup>
+					<col width="15%"></col>
+					<col width="10%"></col>
+					<col width="15%"></col>
+					<col width="20%"></col>
+					<col width="20%"></col>
+					<col width="20%"></col>
+				</colgroup>
+				<tbody>
+					<tr>
+						<th>제품명</th>
+						<th>버전</th>
+						<th>고객사</th>
+						<th>결함현황{% load static%}<br /><a id="ocbtn" onclick="openstatus()"><img id="ocbtnimg" src="{{ MEDIA_URL }}/report/pictures/triangle1.png"></a></th>
+						<th>점검시놓침</th>
+						<th>점검시불가</th>
+					</tr>
+					{% for track in tracking %}
+					<tr>
+						<td>{{ track.product }}</td>
+						<td>{{ track.version }}</td>
+						<td>{{ track.client }}</td>
+						<td>{{ track.content }}
+							<span class="status" style="display:none">
+								{% autoescape off %}{{track.list}}{% endautoescape %}
+							</span>
+						</td>
+						<td>{{ track.miss }}</td>
+						<td>{{ track.impossible }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+<div class="contents">
+	<h2>결함 Best 10</h2>
+	<table class="bestdefact">
+		<colgroup>
+			<col width="5%"></col>
+			<col width="5%"></col>
+			<col width="10%"></col>
+			<col width="10%"></col>
+			<col width="40%"></col>
+			<col width="20%"></col>
+			<col width="10%"></col>
+		</colgroup>
+		<tbody>
+			<tr>
+				<th>No.</th>
+				<th>대항목</th>
+				<th>중항목</th>
+				<th>소항목</th>
+				<th>내용</th>
+				<th>참고항목</th>
+				<th>케이스생성</th>
+			</tr>
+			{% for defact in bestdefacts %}
+			<tr>
+				<td>{{ defact.num }}</td>
+				<td>{{ defact.item }}</td>
+				<td>{{ defact.miditem }}</td>
+				<td>{{ defact.subitem }}</td>
+				<td>{{ defact.content }}</td>
+				<td>{{ defact.reference }}</td>
+				<td><a href="/report/{{ defact.case }}">케이스 바로가기</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+
+{% endblock content %}

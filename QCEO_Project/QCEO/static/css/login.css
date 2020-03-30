@@ -1,0 +1,2 @@
+#login {display:table; width:500px; height:500px; border:1px solid #000; margin:100px auto; text-align:center;}
+.logininner {display: table-cell; vertical-align: middle; margin: 0 auto}

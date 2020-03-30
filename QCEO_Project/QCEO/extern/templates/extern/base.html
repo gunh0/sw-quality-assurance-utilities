@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+	<head>
+		<title>QCEO</title>
+		{% load static %}
+		<link rel="stylesheet" type="text/css" href="{% static './css/layout.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static './css/default.css' %}">
+		{% block exterstyle %}
+		{% endblock exterstyle %}
+	</head>
+	<body>
+		<div id="header">
+			<div class="brand">
+				<a href="/dashboard">QCEO</a>
+			</div>
+			<p>
+				<span class="motto">{{ add.motto }}</span>
+			</p>
+			<p>
+				{% load humanize %}
+				목표매출 : {{ add.goal|intcomma }} 원<br />현재매출 : {{ add.currnet|intcomma }} 원
+			</p>
+			<div class="user-nav">
+				환영합니다, {{ user.username }}
+				<a href="/logout">로그아웃</a>
+			</div>
+		</div>
+		<div id="gnb">
+			<ul>
+				{% for menu in gnb_menus %}
+					<li>
+						<a {% if menu.url %}href="{{ menu.url }}"{% endif %}>{{ menu.name }}</a>
+						<ul>
+							{% for sub_menu in menu.sub_menus %}
+								<li><a {% if sub_menu.url %}href="{{ sub_menu.url }}"{% endif %}>{{ sub_menu.name }}</a></li>
+							{% endfor %}
+						</ul>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div id="container">
+			{% block content %}
+			{% endblock content %}
+		</div>
+		<div id="footer">
+		</div>
+	</body>
+</html>

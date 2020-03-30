@@ -1,0 +1,221 @@
+{% extends "extern/base.html" %}
+
+{% block exterstyle %}
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static './css/jquery.jqplot.css' %}" />
+	<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript">
+	window.onload = function() {
+		var act;
+		$(function () {
+			$(".tab_content").hide();
+			$(".tab_content:first").show();
+			$("ul.tabs li:first").addClass("active")
+			act = $("ul.tabs li.active").html();
+			$("ul.tabs li").click(function () {
+				$("ul.tabs li").removeClass("active").css("color", "#333");
+				//$(this).addClass("active").css({"color": "darkred","font-weight": "bolder"});
+				$(this).addClass("active").css("color", "darkred");
+				act = $("ul.tabs li.active").html();
+				$(".tab_content").hide()
+				var activeTab = $(this).attr("rel");
+				$("#" + activeTab).fadeIn()
+			});
+		});
+		var agents = [{% for agent in agents %}"{{agent.agentname}}",{% endfor %}];
+		function makegraph (agt){
+			$(function () {
+				var dataPointsCPUs = [[],[],[],[],[],[]];
+				var dataPointsMemorys = [[],[],[],[],[],[]];
+				var chart1;
+				var firstlength;
+				var title;
+				$.getJSON("{% url 'logperform:performdata' %}", function(data) {  
+					$.each(data, function(key, value){
+						firstlength = value.length;
+						title = agt;
+						for(var i=0; i<value.length; i++) {
+							if (agt == value[i]['agent']) {
+								var timestamp = (value[i]['timestamp']+32400) * 1000
+								var date = new Date(timestamp);
+								for(var j=0; j<6; j++) {
+									dataPointsCPUs[j].push({x: date, y: Number(value[i]['cpus'][j])});
+									dataPointsMemorys[j].push({x: date, y: Number(value[i]['mems'][j])});
+								}
+							}
+						}
+					});
+					var render1 = agt + "cpuchart";
+					chart1 = new CanvasJS.Chart(render1,{
+						zoomEnabled: true,
+						toolTip: {
+							shared: true
+						},
+						axisY: {
+							title: "CPU",
+							suffix : " %",
+							tickColor: "#4F81BC"
+						},
+						data: [{
+							type: "line",
+							xValueType: "dateTime",
+							name: "CPU",
+							dataPoints : dataPointsCPUs[0],
+						}, {
+							type: "line",
+							xValueType: "dateTime",
+							name: "P1CPU",
+							dataPoints : dataPointsCPUs[1],
+						}, {
+							type: "line",
+							xValueType: "dateTime",
+							name: "P2CPU",
+							dataPoints : dataPointsCPUs[2],
+						}, {
+							type: "line",
+							xValueType: "dateTime",
+							name: "P3CPU",
+							dataPoints : dataPointsCPUs[3],
+						}, {
+							type: "line",
+							xValueType: "dateTime",
+							name: "P4CPU",
+							dataPoints : dataPointsCPUs[4],
+						}, {
+							type: "line",
+							xValueType: "dateTime",
+							name: "P5CPU",
+							dataPoints : dataPointsCPUs[5],
+						}]
+					});
+					chart1.render();
+					var render2 = agt + "memchart";
+					chart2 = new CanvasJS.Chart(render2,{
+						zoomEnabled: true,
+						toolTip: {
+							shared: true
+						},
+						axisY: {
+							title: "Memory",
+							suffix : " %",
+							tickColor: "#4F81BC"
+						},
+						data: [{
+							type: "line",
+							xValueType: "dateTime",
+							name: "Memory",
+							dataPoints : dataPointsMemorys[0],
+						}, {
+							type: "line",
+							xValueType: "dateTime",
+							name: "P1Memory",
+							dataPoints : dataPointsMemorys[1],
+						}, {
+							type: "line",
+							xValueType: "dateTime",
+							name: "P2Memory",
+							dataPoints : dataPointsMemorys[2],
+						}, {
+							type: "line",
+							xValueType: "dateTime",
+							name: "P3Memory",
+							dataPoints : dataPointsMemorys[3],
+						}, {
+							type: "line",
+							xValueType: "dateTime",
+							name: "P4Memory",
+							dataPoints : dataPointsMemorys[4],
+						}, {
+							type: "line",
+							xValueType: "dateTime",
+							name: "P5Memory",
+							dataPoints : dataPointsMemorys[5],
+						}]
+					});
+					chart2.render();
+					updateChart();
+				});
+
+				function updateChart() {
+					$.getJSON("http://192.168.120.166:8000/logperform/ajax", function(data) {
+						$.each(data, function(key, value) {
+							for(var i=firstlength; i<value.length; i++) {
+								if (agt == value[i]['agent']) {
+									var timestamp = (value[i]['timestamp']+32400) * 1000
+									var date = new Date(timestamp);
+									for(var j=0; j<6; j++) {
+										dataPointsCPUs[j].push({x: date, y: Number(value[i]['cpus'][j])});
+										dataPointsMemorys[j].push({x: date, y: Number(value[i]['mems'][j])});
+									}
+								}
+								firstlength = value.length;
+							}
+							});
+						chart1.render();
+						chart2.render();
+						setTimeout(function(){updateChart()}, 5000);
+					});
+				}
+			});
+		}
+		for (var i=0; i<agents.length; i++)	makegraph(agents[i]);
+	}
+	</script>
+
+
+{% endblock exterstyle %}
+
+{% block content %}
+<h1>성능 모니터링</h1>
+<div class="contents">
+	<h2>CPU/Memory 모니터링</h2>
+	<a href="datadelete/">데이터 삭제하기</a>
+	<ul class="tabs">
+		{% for agent in agents %}
+		<li rel="tab{{ forloop.counter }}">{{ agent.agentname }}</li>
+		{% endfor %}
+    </ul>
+	<div class="tab_container">
+		{% for agent in agents %}
+		<div id="tab{{ forloop.counter }}" class="tab_content">
+			<h3>CPU</h3>
+			<div id="{{ agent.agentname }}cpuchart" style="height: 300px; width: 100%;"></div>
+			<h3>Memory</h3>
+			<div id="{{ agent.agentname }}memchart" style="height: 300px; width: 100%;"></div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+<div class="contents">
+	<h2>에이전트 관리</h2>
+	<ul>
+		<li><a href="/report/agents/aixagent">aixagent 다운로드</a></li>
+		<li><a href="/report/agents/linuxagent">linuxagent 다운로드</a></li>
+		<li><a href="/report/agents/solarisagent">solarisagent(11) 다운로드</a></li>
+	</ul>
+	<form action="" method="post">
+		{% csrf_token %}
+		{{ form.as_table}}
+		<input type="submit" value="생성">
+	</form>
+		<table class="agents">
+			<tr>
+				<th>운영체제 이름</th>
+				<th>프로세스</th>
+				<th>삭제</th>
+			</tr>
+			{% for agent in agents %}
+			<form action="delete/" method="post">
+				<tr>		
+					{% csrf_token %}
+					<td>{{agent.agentname}}</td>
+					<td>{{agent.process1}} {{agent.process2}} {{agent.process3}} {{agent.process4}} {{agent.process4}}</td>
+					<td><input type="hidden" name="ostype" value="{{agent.agentname}}"><input type="submit" value="삭제"></td>
+				</tr>
+			</form>
+			{% endfor %}
+		</table>
+</div>
+{% endblock content %}

@@ -1,0 +1,10 @@
+<script>
+	console.log(typeof({{ return }}))
+	if ({{ return }} == "0")
+	{
+		window.alert('로그가 중복입니다.');
+		window.location.href='/logmonitor/';
+	}
+</script>
+
+<h1> {{ return }} </h1>

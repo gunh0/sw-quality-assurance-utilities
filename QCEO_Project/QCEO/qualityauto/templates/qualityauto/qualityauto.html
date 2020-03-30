@@ -1,0 +1,149 @@
+{% extends "extern/base.html" %}
+
+{% block exterstyle %}
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static './css/jquery.jqplot.css' %}" />
+	<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script>
+	window.onload = function() {
+		{% for data in testcolors %}
+		var passper{{ forloop.counter }} = {{ data.1 }}/{{ data.3 }}*100
+		var failper{{ forloop.counter }} = {{ data.2 }}/{{ data.3 }}*100
+		var charts{{ forloop.counter }} = new CanvasJS.Chart("chartContainers{{ forloop.counter }}", {
+			animationEnabled: true,
+			title: {
+				text: "SecuMS 정책정합성 ({{ data.0 }})"
+			},
+			data: [{
+				type: "pie",
+				startAngle: 240,
+				yValueFormatString: "##\"%\"",
+				indexLabel: "{label} {y}",
+				dataPoints: [
+					{y: passper{{ forloop.counter }}, label: "PASS"},
+					{y: failper{{ forloop.counter }}, label: "FAIL"},
+				]
+			}]
+		});
+		{% endfor %}
+		
+		{% for data in testcolora %}
+		var passper{{ forloop.counter }} = {{ data.1 }}/{{ data.3 }}*100
+		var failper{{ forloop.counter }} = {{ data.2 }}/{{ data.3 }}*100
+		var charta{{ forloop.counter }} = new CanvasJS.Chart("chartContainera{{ forloop.counter }}", {
+			animationEnabled: true,
+			title: {
+				text: "Athena 정책정합성 ({{ data.0 }})"
+			},
+			data: [{
+				type: "pie",
+				startAngle: 240,
+				yValueFormatString: "##\"%\"",
+				indexLabel: "{label} {y}",
+				dataPoints: [
+					{y: passper{{ forloop.counter }}, label: "PASS"},
+					{y: failper{{ forloop.counter }}, label: "FAIL"},
+				]
+			}]
+		});
+		{% endfor %}
+		{% for data in testcolors %}
+		charts{{ forloop.counter }}.render();
+		{% endfor %}
+		{% for data in testcolora %}
+		charta{{ forloop.counter }}.render();
+		{% endfor %}
+
+
+		  /*탭메뉴*/
+		$( "#row-1 .title li a" ).first().addClass("show");
+		$( "#row-2 .title li a" ).first().addClass("show");
+		$('.tab').each(function(i) {
+			var oTab = $(this);
+			var tabIndex = $(this).find('.show').attr('id').match(/\d+$/);
+
+			$(this).find('.panel').find('#content-' + tabIndex[0]).show();
+
+			$(this).find('.title li a').click(function() {
+			/*선택색인*/
+
+			var tabIndex = $(this).attr('id').match(/\d+$/);
+			/*타이틀*/
+			oTab.find('.title li a').removeClass('show');
+			$(this).addClass('show');
+
+			/*패널*/
+			oTab.find('.panel li').hide();
+			oTab.find('.panel').find('#content-' + tabIndex[0]).show();
+			console.log(tabIndex)
+			return false;
+		});
+
+  });
+	}
+	</script>
+{% endblock exterstyle %}
+
+{% block content %}
+<h1>품질 자동화</h1>
+
+<div class="halfcontents">
+	<div  id="row-1" class="container">
+		<div class="tab">
+			<ul class="title">	
+				{% for data in testcolors %}
+					<li><a href="#" id="tab-{{ forloop.counter }}">{{ data.0 }}</a></li>
+				{% endfor %}
+			</ul>
+			<ul class="panel">
+			{% for data in testcolors %}
+				<li id="content-{{ forloop.counter }}">
+					<div class="onegraph">
+						<div id="chartContainers{{ forloop.counter }}" style="height:500px; width: 100%;"></div>
+						<p class="retdown"><a href="/report/{{ data.4 }}">결과 다운로드</a></p>	
+					</div>
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+	</div>
+	
+</div>
+
+
+<div class="halfcontents">
+	<div id="row-2" class="container">
+		<div class="tab">
+			<ul class="title">	
+				{% for data in testcolora %}
+					<li><a href="#" id="tab-{{ aidx }}{{ forloop.counter }}">{{ data.0 }}</a></li>
+				{% endfor %}
+			</ul>
+			<ul class="panel">
+			{% for data in testcolora %}
+				<li id="content-{{ aidx }}{{ forloop.counter }}">
+					<div class="onegraph">
+						<div id="chartContainera{{ forloop.counter }}" style="height:500px; width: 100%;"></div>
+						<p class="retdown"><a href="/report/{{ data.4 }}" class="retdown">결과 다운로드</a></p>	
+					</div>
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="programs">
+	<h2>자동화 프로그램 목록</h2>
+	<ul>
+		{% for program in programset %}
+			<li>
+				<span class="pgtitle">{{ program.name }}</span>
+				<a href="/report/{{ program.program }}">다운로드</a>
+			</li>
+		{% endfor %}
+	</ul>
+</div>
+{% endblock content %}
