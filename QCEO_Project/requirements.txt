@@ -1,0 +1,5 @@
+django
+djangorestframework
+scrapy
+scrapyd
+python-scrapyd-api
