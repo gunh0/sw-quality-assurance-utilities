@@ -2,21 +2,4 @@
 
 ### 1st. NaverPowerLinkRanking Program
 
-
-
-### 2nd. Django JWT
-
-- JSON Web Token
-
-
-
-### 3th. QCEO Project
-
-
-
-### 4th. Spring
-
-- Spring
-
-- SpringBoot
-
+### 2nd. QCEO Project
