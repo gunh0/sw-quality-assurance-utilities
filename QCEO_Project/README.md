@@ -1,5 +1,8 @@
 ```powershell
-> python3 -m pip3 install -r requirements.txt
+> pip install virtualenv
+> virtualenv venv		// virtualenv 'name'
+
+> python -m pip install -r requirements.txt
 ```
 
 
@@ -26,10 +29,6 @@
 
 - None
   - http://project.lsware.co.kr/redmine/projects/test1/issues
-
-
-
-### Redmine_Scraper
 
 
 

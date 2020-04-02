@@ -29,4 +29,4 @@ class RedmineDefects(models.Model):
         return data
 
     def __str__(self):
-        return self.number
+        return self.title

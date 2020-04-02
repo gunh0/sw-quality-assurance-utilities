@@ -1,5 +1,3 @@
 django
-djangorestframework
-scrapy
-scrapyd
-python-scrapyd-api
+numpy
+openpyxl
