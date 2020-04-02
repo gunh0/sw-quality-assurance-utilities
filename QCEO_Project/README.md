@@ -20,14 +20,14 @@
 
 ### Redmine_TestSupport
 
-- None
+- Implement real-time updates with DRF | Building Redmine API
   - http://project.lsware.co.kr/redmine/projects/olis/issues
 
 
 
 ### Redmine_QualityInspection
 
-- None
+- Implement real-time updates with DRF | Building Redmine API
   - http://project.lsware.co.kr/redmine/projects/test1/issues
 
 
