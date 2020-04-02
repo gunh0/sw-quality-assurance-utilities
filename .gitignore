@@ -1,5 +1,5 @@
 /.vscode
-/venv
+/QCEO_Project/venv
 
 /Django_JWT/Django_JWT/__pycache__
 /Django_JWT/board/__pycache__

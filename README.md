@@ -12,8 +12,6 @@
 
 ### 3th. QCEO Project
 
-- Redmine
-
 
 
 ### 4th. Spring
