@@ -45,8 +45,6 @@ INSTALLED_APPS = [
 	'logperform',
 	'logmonitor',
 	'qualityauto',
-
-    'Redmine_Defects'   # Real-Time Updates with DRF - API
 ]
 
 MIDDLEWARE = [
