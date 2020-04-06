@@ -10,9 +10,9 @@ from dataproc.models import Data
 
 
 matrix = []
-#secums
+
 filename = 'issues' + datetime.datetime.now().strftime('%m%d') + '.csv'
-f = open('/home/qceo/issues/secums/'+filename, 'r') #웹에서 직접 다운받은 것은 인코딩 필요 , encoding='euc-kr')
+f = open('/home/qceo/issues/secums/'+filename, 'r')
 rdr = csv.reader(f)
 for line in rdr:
 	matrix.append(line)

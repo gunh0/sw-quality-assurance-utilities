@@ -26,4 +26,5 @@ urlpatterns = [
 	path('logperform/', include('logperform.urls', namespace='logperform')),
 	path('logmonitor/', include('logmonitor.urls', namespace='logmonitor')),
 	path('qualityauto/', include('qualityauto.urls', namespace='qualityauto')),
+    path('defectapi/', include('Redmine_Parser.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

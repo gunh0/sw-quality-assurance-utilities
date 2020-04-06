@@ -39,14 +39,6 @@ def gnb_menus(request):
 		{
 			'name': '품질 자동화',
 			'url': '/qualityauto/'
-		},
-		{
-			'name': '품질 자동화',
-			'url': '/logperform/'
-		},
-		{
-			'name': '품질 자동화',
-			'url': '/logperform/'
 		}
 	]
 	return {'gnb_menus': menus}
