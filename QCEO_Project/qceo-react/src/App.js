@@ -17,8 +17,10 @@ class App extends Component {
     }
 
     render() {
-        return (<Dashboard/>);
+        return (<div>
+          <Dashboard/>
+          </div>);
     }
-}
+  }
 
-export default App;
+  export default App;
