@@ -1,39 +1,24 @@
-import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
+import React, {Component} from 'react';
+import Dashboard from './components/Dashboard'
 
 class App extends Component {
-  state = {
-    posts: []
-  };
+    state = {
+        posts: []
+    };
 
-  async componentDidMount() {
-    try {
-      const res = await fetch('http://127.0.0.1:8000/defectapi/');
-      const posts = await res.json();
-      this.setState({
-        posts
-      });
-    } catch (e) {
-      console.log(e);
+    async componentDidMount() {
+        try {
+            const res = await fetch('http://127.0.0.1:8000/defectapi/');
+            const posts = await res.json();
+            this.setState({posts});
+        } catch (e) {
+            console.log(e);
+        }
     }
-  }
 
-  render() {
-    return (
-      <div>
-        {this.state.posts.map(item => (
-          <div key={item.num}>
-            <h3>{item.num}</h3>
-            <h3>{item.title}</h3>
-            <Button variant="contained" color="primary">
-                Check
-            </Button>
-          </div>
-        ))}
-        
-      </div>
-    );
-  }
+    render() {
+        return (<Dashboard/>);
+    }
 }
 
 export default App;
