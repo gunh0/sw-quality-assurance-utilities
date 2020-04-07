@@ -19,7 +19,7 @@ class App extends Component {
 
     async componentDidMount() {
         try {
-            const res = await fetch('http://127.0.0.1:8000/defectapi/');
+            const res = await fetch('http://127.0.0.1:8000/api/defect/');
             const posts = await res.json();
             this.setState({posts});
         } catch (e) {

@@ -167,13 +167,12 @@ export default function Dashboard() {
                         QCEO
                     </Typography>
                     <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        color="inherit">
+                        <AccountCircle/>
+                    </IconButton>
                 </Toolbar>
             </AppBar>
             <Drawer
