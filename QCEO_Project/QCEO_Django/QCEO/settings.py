@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'Redmine_Parser',   # Redmine Parser Model
     'rest_framework',   # Redmine Parser API
     'corsheaders',      # CORS : Cross-Origin Resource Sharing
+    'knox',
+    'Accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -119,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'ko-kr'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'Asia/Seoul'
 
@@ -144,9 +146,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'report')
 
 # DRF
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
+    #'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],  # remove
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
 }
 
 CORS_ORIGIN_WHITELIST = [
