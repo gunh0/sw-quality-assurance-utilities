@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
-import { Router, Route, Switch } from 'react-router-dom';
+import {Router, Route, Switch} from 'react-router-dom';
 
+import history from './history';
 import Dashboard from './components/Dashboard'
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
-import PrivateRoute from './common/PrivateRoute';
 
-import { loadUser } from './actions/auth';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
+import {loadUser} from './actions/auth';
 
 import store from './store';
-import history from './history';
 
 class App extends Component {
     state = {
@@ -33,10 +32,9 @@ class App extends Component {
             <Provider store={store}>
                 <Router history={history}>
                     <Switch>
-                        <PrivateRoute exact="exact" path='/' component={Dashboard}/>
-                        <Route exact="exact" path='/dashboard' component={Dashboard}/>
-                        <Route exact="exact" path='/login' component={LoginForm}/>
-                        <Route exact="exact" path='/register' component={RegisterForm}/>
+                        <Route exact="exact" path='/' component={Dashboard}/>
+                        <Route path='/login' component={LoginForm}/>
+                        <Route path='/register' component={RegisterForm}/>
                     </Switch>
                 </Router>
             </Provider>
