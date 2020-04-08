@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Router, Route, Switch} from 'react-router-dom';
+import {Link, Router, Route, Switch} from 'react-router-dom';
 
 import history from './history';
 import Dashboard from './components/Dashboard'
@@ -12,18 +12,8 @@ import {loadUser} from './actions/auth';
 import store from './store';
 
 class App extends Component {
-    state = {
-        posts: []
-    };
 
-    async componentDidMount() {
-        try {
-            const res = await fetch('http://127.0.0.1:8000/api/defect/');
-            const posts = await res.json();
-            this.setState({posts});
-        } catch (e) {
-            console.log(e);
-        }
+    componentDidMount() {
         store.dispatch(loadUser());
     }
 
@@ -31,11 +21,24 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <Router history={history}>
-                    <Switch>
-                        <Route exact="exact" path='/' component={Dashboard}/>
-                        <Route path='/login' component={LoginForm}/>
-                        <Route path='/register' component={RegisterForm}/>
-                    </Switch>
+                    <header>
+                        <Link to="/">
+                            <button>Home</button>
+                        </Link>
+                        <Link to="/login">
+                            <button>login</button>
+                        </Link>
+                        <Link to="/register">
+                            <button>register</button>
+                        </Link>
+                    </header>
+                    <main>
+                        <Switch>
+                            <Route exact="exact" path='/' component={Dashboard}/>
+                            <Route path='/login' component={LoginForm}/>
+                            <Route path='/register' component={RegisterForm}/>
+                        </Switch>
+                    </main>
                 </Router>
             </Provider>
         );
