@@ -12,7 +12,6 @@ import {loadUser} from './actions/auth';
 import store from './store';
 
 class App extends Component {
-
     componentDidMount() {
         store.dispatch(loadUser());
     }
@@ -21,7 +20,7 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <Router history={history}>
-                    <header>
+                    <header>  
                         <Link to="/">
                             <button>Home</button>
                         </Link>
@@ -32,6 +31,7 @@ class App extends Component {
                             <button>register</button>
                         </Link>
                     </header>
+
                     <main>
                         <Switch>
                             <Route exact="exact" path='/' component={Dashboard}/>
