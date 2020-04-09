@@ -9,9 +9,8 @@ function AuthRoute({ isAuthenticated, component: Component, render, ...rest }) {
         isAuthenticated ? (
           render ? render(props) : <Component {...props} />
         ) : (
-            <Redirect
-              to={{ pathname: '/login', state: { from: props.location } }}
-            />
+            //<Redirect to={{ pathname: '/login', state: { from: props.location } }}/>
+            <div>Login 필요</div>
           )
       }
     />
