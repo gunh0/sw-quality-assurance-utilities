@@ -215,7 +215,7 @@ function App() {
                                 QCEO
                             </Typography>
                             <Link
-                                to="/Home"
+                                to="/home"
                                 style={{
                                     textDecoration: 'none'
                                 }}>
@@ -224,7 +224,7 @@ function App() {
                                 </ColorButton>
                             </Link>
                             <Link
-                                to="/Profile"
+                                to="/profile"
                                 style={{
                                     textDecoration: 'none'
                                 }}>
@@ -323,7 +323,7 @@ function App() {
                         <Container className={classes.container}>
                             <Switch>
                                 <Route exact path="/" component={About} />
-                                <Route path="/Home" component={Home} />
+                                <Route path="/home" component={Home} />
                                 <Route
                                     path="/login"
                                     render={props => (<LoginForm isAuthenticated={isAuthenticated} login={login} {...props} />)} />

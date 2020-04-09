@@ -53,11 +53,9 @@ function LoginForm({ authenticated, login, location }) {
       pathname: "/"
     }
   };
-  
-  if (authenticated){
-    console.log(authenticated);
+
+  if (authenticated)
     return <Redirect to={from} />;
-  }
 
   return (
     <Container component="main" maxWidth="xs">
