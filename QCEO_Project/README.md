@@ -3,6 +3,9 @@
 > virtualenv venv		// virtualenv 'name'
 
 > python -m pip install -r requirements.txt
+QCEO_Django> python manage.py runserver
+
+qceo-frontend-react> yarn start
 ```
 
 
@@ -39,9 +42,3 @@
 ![image](https://user-images.githubusercontent.com/41619898/78620531-3b759300-78bb-11ea-8b02-60212d509d38.png)
 
 
-
----
-
-
-
-Yarn | Material-UI
