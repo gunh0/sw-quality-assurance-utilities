@@ -2,11 +2,12 @@ import React, {useState} from 'react';
 import {Link, Route, Switch, BrowserRouter as Router} from 'react-router-dom';
 import clsx from 'clsx';
 
-import {makeStyles} from '@material-ui/core/styles';
+import {makeStyles, createMuiTheme, withStyles, ThemeProvider} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -34,6 +35,33 @@ import LoginForm from './LoginForm';
 import LogoutButton from './LogoutButton';
 
 const drawerWidth = 240;
+
+const outerTheme = createMuiTheme({
+    palette: {
+        primary: {
+            light: '#8187ff',
+            main: '#3d5afe',
+            dark: '#0031ca',
+            contrastText: '#fff'
+        },
+        secondary: {
+            light: '#6effff',
+            main: '#00e5ff',
+            dark: '#00b2cc',
+            contrastText: '#000'
+        }
+    }
+});
+
+const ColorButton = withStyles((theme) => ({
+    root: {
+        color: theme.palette,
+        backgroundColor: '#00b2cc',
+        '&:hover': {
+            backgroundColor: '#6effff'
+        }
+    }
+}))(Button);
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,6 +99,9 @@ const useStyles = makeStyles((theme) => ({
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.enteringScreen
             })
+    },
+    margin: {
+        margin: theme.spacing(1)
     },
     menuButton: {
         marginRight: 36
@@ -127,6 +158,9 @@ const useStyles = makeStyles((theme) => ({
     },
     fixedHeight: {
         height: 240
+    },
+    link: {
+        margin: theme.spacing(1, 1.5)
     }
 }));
 
@@ -134,7 +168,11 @@ function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
+            <Link
+                color="inherit"
+                href="https://material-ui.com/"
+                underline="none"
+                string='inherit'>
                 Your Website
             </Link>{' '}
             {new Date().getFullYear()}
@@ -147,7 +185,7 @@ function App() {
     const classes = useStyles();
     const [user, setUser] = useState(null);
     const [open, setOpen] = React.useState(true);
-    const authenticated = user != null;
+    const isAuthenticated = user != null;
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -161,61 +199,92 @@ function App() {
 
     return (
         <div className={classes.root}>
-            <Router>
-                <CssBaseline/>
-                <AppBar
-                    position="absolute"
-                    className={clsx(classes.appBar, open && classes.appBarShift)}>
-                    <Toolbar className={classes.toolbar}>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={handleDrawerOpen}
-                            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}>
-                            <MenuIcon/>
-                        </IconButton>
-                        <Typography
-                            component="h1"
-                            variant="h6"
-                            color="inherit"
-                            noWrap="noWrap"
-                            className={classes.title}>
-                            QCEO
-                        </Typography>
-                        <Link to="/">
-                            <button>Home</button>
-                        </Link>
-                        <Link to="/about">
-                            <button>About</button>
-                        </Link>
-                        <Link to="/profile">
-                            <button>Profile</button>
-                        </Link>
-                        {
-                            authenticated
-                                ? (<LogoutButton logout={logout}/>)
-                                : (
-                                    <Link to="/login">
-                                        <button>Login</button>
-                                    </Link>
-                                )
-                        }
-                    </Toolbar>
-                </AppBar>
-                <Drawer
-                    variant="permanent"
-                    classes={{
-                        paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
-                    }}
-                    open={open}>
-                    <div className={classes.toolbarIcon}>
-                        <IconButton onClick={handleDrawerClose}>
-                            <ChevronLeftIcon/>
-                        </IconButton>
-                    </div>
-                    <Divider/>
-                    <div>
+            <ThemeProvider theme={outerTheme}>
+                <Router>
+                    <CssBaseline/>
+                    <AppBar
+                        position="absolute"
+                        className={clsx(classes.appBar, open && classes.appBarShift)}>
+                        <Toolbar className={classes.toolbar}>
+                            <IconButton
+                                edge="start"
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                className={clsx(classes.menuButton, open && classes.menuButtonHidden)}>
+                                <MenuIcon/>
+                            </IconButton>
+                            <Typography
+                                component="h1"
+                                variant="h6"
+                                color="inherit"
+                                noWrap="noWrap"
+                                className={classes.title}>
+                                QCEO
+                            </Typography>
+                            <Link
+                                to="/Home"
+                                style={{
+                                    textDecoration: 'none'
+                                }}>
+                                <ColorButton variant="contained" color="primary" className={classes.margin}>
+                                    {'Home'}
+                                </ColorButton>
+                            </Link>
+                            <Link
+                                to="/About"
+                                style={{
+                                    textDecoration: 'none'
+                                }}>
+                                <ColorButton variant="contained" color="primary" className={classes.margin}>
+                                    {'About'}
+                                </ColorButton>
+                            </Link>
+                            <Link
+                                to="/Profile"
+                                style={{
+                                    textDecoration: 'none'
+                                }}>
+                                <ColorButton variant="contained" color="primary" className={classes.margin}>
+                                    {'Profile'}
+                                </ColorButton>
+                            </Link>
+                            {
+                                isAuthenticated
+                                    ? (<LogoutButton logout={logout}/>)
+                                    : (
+                                        <Link
+                                            to="/login"
+                                            style={{
+                                                textDecoration: 'none'
+                                            }}>
+                                            <ColorButton variant="contained" color="primary" className={classes.margin}>
+                                                {'Login'}
+                                            </ColorButton>
+                                        </Link>
+                                    )
+                            }
+                        </Toolbar>
+                    </AppBar>
+                    <Drawer
+                        variant="permanent"
+                        classes={{
+                            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
+                        }}
+                        open={open}>
+                        <div className={classes.toolbarIcon}>
+                            <IconButton onClick={handleDrawerClose}>
+                                <ChevronLeftIcon/>
+                            </IconButton>
+                        </div>
+                        <Divider/>
+                        <ListItem button="button">
+                            <ListItemIcon>
+                                <AssignmentIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="품질점검"/>
+                        </ListItem>
+                        <Divider/>
                         <ListItem button="button">
                             <ListItemIcon>
                                 <DashboardIcon/>
@@ -246,50 +315,50 @@ function App() {
                             </ListItemIcon>
                             <ListItemText primary="Integrations"/>
                         </ListItem>
-                    </div>
-                    <Divider/>
-                    <ListItem button="button">
-                        <ListItemIcon>
-                            <AssignmentIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Current month"/>
-                    </ListItem>
-                    <ListItem button="button">
-                        <ListItemIcon>
-                            <AssignmentIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Last quarter"/>
-                    </ListItem>
-                    <ListItem button="button">
-                        <ListItemIcon>
-                            <AssignmentIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Year-end sale"/>
-                    </ListItem>
-                </Drawer>
-                <main className={classes.content}>
-                    <div className={classes.appBarSpacer}/>
-                    <Container className={classes.container}>
-                        <Switch>
-                            <Route exact="exact" path="/" component={Home}/>
-                            <Route path="/about" component={About}/>
-                            <Route
-                                path="/login"
-                                render={props => (<LoginForm authenticated={authenticated} login={login} {...props}/>)}/>
-                            <AuthRoute
-                                authenticated={authenticated}
-                                path="/profile"
-                                render={props => <Profile user={user} {...props}/>
-                                }
-                            />
-                            <Route component={NotFound}/>
-                        </Switch>
-                        <Box pt={4}>
-                            <Copyright/>
-                        </Box>
-                    </Container>
-                </main>
-            </Router>
+                        <Divider/>
+                        <ListItem button="button">
+                            <ListItemIcon>
+                                <AssignmentIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Current month"/>
+                        </ListItem>
+                        <ListItem button="button">
+                            <ListItemIcon>
+                                <AssignmentIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Last quarter"/>
+                        </ListItem>
+                        <ListItem button="button">
+                            <ListItemIcon>
+                                <AssignmentIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Year-end sale"/>
+                        </ListItem>
+                    </Drawer>
+                    <main className={classes.content}>
+                        <div className={classes.appBarSpacer}/>
+                        <Container className={classes.container}>
+                            <Switch>
+                                <Route exact="exact" path="/" component={Home}/>
+                                <Route path="/about" component={About}/>
+                                <Route
+                                    path="/login"
+                                    render={props => (<LoginForm isAuthenticated={isAuthenticated} login={login} {...props}/>)}/>
+                                <AuthRoute
+                                    isAuthenticated={isAuthenticated}
+                                    path="/profile"
+                                    render={props => <Profile user={user} {...props}/>
+                                    }
+                                />
+                                <Route component={NotFound}/>
+                            </Switch>
+                            <Box pt={4}>
+                                <Copyright/>
+                            </Box>
+                        </Container>
+                    </main>
+                </Router>
+            </ThemeProvider>
         </div>
     );
 }
