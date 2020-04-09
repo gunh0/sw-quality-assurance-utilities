@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import {Link, Route, Switch, BrowserRouter as Router} from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import clsx from 'clsx';
 
-import {makeStyles, createMuiTheme, withStyles, ThemeProvider} from '@material-ui/core/styles';
+import { makeStyles, createMuiTheme, withStyles, ThemeProvider } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import BarChartIcon from '@material-ui/icons/BarChart';
@@ -14,7 +14,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@material-ui/core/IconButton' ;
 import LayersIcon from '@material-ui/icons/Layers';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -25,14 +25,14 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import {signIn} from './auth';
-import AuthRoute from './AuthRoute';
+import { signIn } from './Authentication/AuthInfo';
+import AuthRoute from './Authentication/AuthRoute';
 import Home from './Home';
 import About from './About';
 import Profile from './Profile';
 import NotFound from './NotFound';
-import LoginForm from './LoginForm';
-import LogoutButton from './LogoutButton';
+import LoginForm from './Authentication/LoginForm';
+import LogoutButton from './Authentication/LogoutButton';
 
 const drawerWidth = 240;
 
@@ -187,14 +187,14 @@ function App() {
         setOpen(false);
     };
 
-    const login = ({email, password}) => setUser(signIn({email, password}));
+    const login = ({ username, password }) => setUser(signIn({ username, password }));
     const logout = () => setUser(null);
 
     return (
         <div className={classes.root}>
             <ThemeProvider theme={outerTheme}>
                 <Router>
-                    <CssBaseline/>
+                    <CssBaseline />
                     <AppBar
                         position="absolute"
                         className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -205,7 +205,7 @@ function App() {
                                 aria-label="open drawer"
                                 onClick={handleDrawerOpen}
                                 className={clsx(classes.menuButton, open && classes.menuButtonHidden)}>
-                                <MenuIcon/>
+                                <MenuIcon />
                             </IconButton>
                             <Typography
                                 component="h1"
@@ -234,7 +234,7 @@ function App() {
                             </Link>
                             {
                                 isAuthenticated
-                                    ? (<LogoutButton logout={logout}/>)
+                                    ? (<LogoutButton logout={logout} />)
                                     : (
                                         <Link
                                             to="/login"
@@ -257,86 +257,84 @@ function App() {
                         open={open}>
                         <div className={classes.toolbarIcon}>
                             <IconButton onClick={handleDrawerClose}>
-                                <ChevronLeftIcon/>
+                                <ChevronLeftIcon />
                             </IconButton>
                         </div>
-                        <Divider/>
+                        <Divider />
                         <ListItem button>
                             <ListItemIcon>
-                                <AssignmentIcon/>
+                                <AssignmentIcon />
                             </ListItemIcon>
-                            <ListItemText primary="품질점검"/>
+                            <ListItemText primary="품질점검" />
                         </ListItem>
-                        <Divider/>
+                        <Divider />
                         <ListItem button>
                             <ListItemIcon>
-                                <DashboardIcon/>
+                                <DashboardIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Dashboard"/>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <ShoppingCartIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Orders"/>
+                            <ListItemText primary="Dashboard" />
                         </ListItem>
                         <ListItem button>
                             <ListItemIcon>
-                                <PeopleIcon/>
+                                <ShoppingCartIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Customers"/>
+                            <ListItemText primary="Orders" />
                         </ListItem>
                         <ListItem button>
                             <ListItemIcon>
-                                <BarChartIcon/>
+                                <PeopleIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Reports"/>
+                            <ListItemText primary="Customers" />
                         </ListItem>
                         <ListItem button>
                             <ListItemIcon>
-                                <LayersIcon/>
+                                <BarChartIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Integrations"/>
-                        </ListItem>
-                        <Divider/>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <AssignmentIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Current month"/>
+                            <ListItemText primary="Reports" />
                         </ListItem>
                         <ListItem button>
                             <ListItemIcon>
-                                <AssignmentIcon/>
+                                <LayersIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Last quarter"/>
+                            <ListItemText primary="Integrations" />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemIcon>
+                                <AssignmentIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Current month" />
                         </ListItem>
                         <ListItem button>
                             <ListItemIcon>
-                                <AssignmentIcon/>
+                                <AssignmentIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Year-end sale"/>
+                            <ListItemText primary="Last quarter" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <AssignmentIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Year-end sale" />
                         </ListItem>
                     </Drawer>
                     <main className={classes.content}>
-                        <div className={classes.appBarSpacer}/>
+                        <div className={classes.appBarSpacer} />
                         <Container className={classes.container}>
                             <Switch>
-                                <Route exact path="/" component={About}/>   
-                                <Route path="/Home" component={Home}/>
+                                <Route exact path="/" component={About} />
+                                <Route path="/Home" component={Home} />
                                 <Route
                                     path="/login"
-                                    render={props => (<LoginForm isAuthenticated={isAuthenticated} login={login} {...props}/>)}/>
+                                    render={props => (<LoginForm isAuthenticated={isAuthenticated} login={login} {...props} />)} />
                                 <AuthRoute
                                     isAuthenticated={isAuthenticated}
                                     path="/profile"
-                                    render={props => <Profile user={user} {...props}/>
-                                    }
-                                />
-                                <Route component={NotFound}/>
+                                    render={props => (<Profile user={user} {...props} />)} />
+                                <Route component={NotFound} />
                             </Switch>
                             <Box pt={4}>
-                                <Copyright/>
+                                <Copyright />
                             </Box>
                         </Container>
                     </main>
