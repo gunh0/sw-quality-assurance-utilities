@@ -1,119 +1,119 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
-import { makeStyles, withStyles} from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 const drawerWidth = 240;
 
 const ColorButton = withStyles((theme) => ({
   root: {
-      color: theme.palette,
-      backgroundColor: '#ff80ab',
-      '&:hover': {
-          backgroundColor: '#6effff'
-      }
+    color: theme.palette,
+    backgroundColor: '#ff80ab',
+    '&:hover': {
+      backgroundColor: '#6effff'
+    }
   }
 }))(Button);
 
 const useStyles = makeStyles((theme) => ({
   root: {
-      display: 'flex'
+    display: 'flex'
   },
   toolbar: {
-      paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: 24, // keep right padding when drawer closed
   },
   toolbarIcon: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-      padding: '0 8px',
-      ...theme.mixins.toolbar
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar
   },
   appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-      transition: theme
-          .transitions
-          .create([
-              'width', 'margin'
-          ], {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.leavingScreen
-          })
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme
+      .transitions
+      .create([
+        'width', 'margin'
+      ], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+      })
   },
   appBarShift: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme
-          .transitions
-          .create([
-              'width', 'margin'
-          ], {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.enteringScreen
-          })
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme
+      .transitions
+      .create([
+        'width', 'margin'
+      ], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen
+      })
   },
   margin: {
-      margin: theme.spacing(1)
+    margin: theme.spacing(1)
   },
   menuButton: {
-      marginRight: 36
+    marginRight: 36
   },
   menuButtonHidden: {
-      display: 'none'
+    display: 'none'
   },
   title: {
-      flexGrow: 1
+    flexGrow: 1
   },
   drawerPaper: {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
-      transition: theme
-          .transitions
-          .create('width', {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.enteringScreen
-          })
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    width: drawerWidth,
+    transition: theme
+      .transitions
+      .create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen
+      })
   },
   drawerPaperClose: {
-      overflowX: 'hidden',
-      transition: theme
-          .transitions
-          .create('width', {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.leavingScreen
-          }),
-      width: theme.spacing(7),
-      [
-          theme
-              .breakpoints
-              .up('sm')
-      ]: {
-          width: theme.spacing(9)
-      }
+    overflowX: 'hidden',
+    transition: theme
+      .transitions
+      .create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+      }),
+    width: theme.spacing(7),
+    [
+      theme
+        .breakpoints
+        .up('sm')
+    ]: {
+      width: theme.spacing(9)
+    }
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
-      flexGrow: 1,
-      height: '100vh',
-      overflow: 'auto'
+    flexGrow: 1,
+    height: '100vh',
+    overflow: 'auto'
   },
   container: {
-      paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4)
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4)
   },
   paper: {
-      padding: theme.spacing(2),
-      display: 'flex',
-      overflow: 'auto',
-      flexDirection: 'column'
+    padding: theme.spacing(2),
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column'
   },
   fixedHeight: {
-      height: 240
+    height: 240
   },
   link: {
-      margin: theme.spacing(1, 1.5)
+    margin: theme.spacing(1, 1.5)
   }
 }));
 
@@ -125,14 +125,14 @@ function LogoutButton({ logout, history }) {
   }
   //return <button >Logout</button>;
   return <Link
-  to="/home"
-  style={{
+    to="/"
+    style={{
       textDecoration: 'none'
-  }}>
-  <ColorButton variant="contained" color="primary" className={classes.margin} onClick={handleClick}>
+    }}>
+    <ColorButton variant="contained" color="primary" className={classes.margin} onClick={handleClick}>
       {'Logout'}
-  </ColorButton>
-</Link>
+    </ColorButton>
+  </Link>
 }
 
 export default withRouter(LogoutButton);

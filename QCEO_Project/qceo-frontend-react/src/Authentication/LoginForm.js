@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function LoginForm({ authenticated, login, location }) {
+function LoginForm({ IsAauthenticated, login, location }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const classes = useStyles();
@@ -40,6 +40,7 @@ function LoginForm({ authenticated, login, location }) {
   const handleClick = () => {
     try {
       login({ username, password });
+      console.log("Login Success!")
     } catch (e) {
       console.log(username, password);
       alert('Failed to login');
@@ -54,7 +55,7 @@ function LoginForm({ authenticated, login, location }) {
     }
   };
 
-  if (authenticated)
+  if (IsAauthenticated)
     return <Redirect to={from} />;
 
   return (

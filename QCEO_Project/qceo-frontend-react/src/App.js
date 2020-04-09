@@ -14,7 +14,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
-import IconButton from '@material-ui/core/IconButton' ;
+import IconButton from '@material-ui/core/IconButton';
 import LayersIcon from '@material-ui/icons/Layers';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -28,7 +28,6 @@ import Typography from '@material-ui/core/Typography';
 import { signIn } from './Authentication/AuthInfo';
 import AuthRoute from './Authentication/AuthRoute';
 import Home from './Home';
-import About from './About';
 import Profile from './Profile';
 import NotFound from './NotFound';
 import LoginForm from './Authentication/LoginForm';
@@ -215,7 +214,7 @@ function App() {
                                 QCEO
                             </Typography>
                             <Link
-                                to="/home"
+                                to="/"
                                 style={{
                                     textDecoration: 'none'
                                 }}>
@@ -322,11 +321,13 @@ function App() {
                         <div className={classes.appBarSpacer} />
                         <Container className={classes.container}>
                             <Switch>
-                                <Route exact path="/" component={About} />
-                                <Route path="/home" component={Home} />
+                                <Route exact path="/" component={Home} />
                                 <Route
                                     path="/login"
-                                    render={props => (<LoginForm isAuthenticated={isAuthenticated} login={login} {...props} />)} />
+                                    render={props => (
+                                        <LoginForm isAuthenticated={isAuthenticated} login={login} {...props} />
+                                    )}
+                                />
                                 <AuthRoute
                                     isAuthenticated={isAuthenticated}
                                     path="/profile"
