@@ -168,15 +168,8 @@ function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
-            <Link
-                color="inherit"
-                href="https://material-ui.com/"
-                underline="none"
-                string='inherit'>
-                Your Website
-            </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {' by devgun@github.io All rights reserved.'}
         </Typography>
     );
 }
@@ -218,7 +211,6 @@ function App() {
                                 component="h1"
                                 variant="h6"
                                 color="inherit"
-                                noWrap="noWrap"
                                 className={classes.title}>
                                 QCEO
                             </Typography>
@@ -229,15 +221,6 @@ function App() {
                                 }}>
                                 <ColorButton variant="contained" color="primary" className={classes.margin}>
                                     {'Home'}
-                                </ColorButton>
-                            </Link>
-                            <Link
-                                to="/About"
-                                style={{
-                                    textDecoration: 'none'
-                                }}>
-                                <ColorButton variant="contained" color="primary" className={classes.margin}>
-                                    {'About'}
                                 </ColorButton>
                             </Link>
                             <Link
@@ -278,57 +261,57 @@ function App() {
                             </IconButton>
                         </div>
                         <Divider/>
-                        <ListItem button="button">
+                        <ListItem button>
                             <ListItemIcon>
                                 <AssignmentIcon/>
                             </ListItemIcon>
                             <ListItemText primary="품질점검"/>
                         </ListItem>
                         <Divider/>
-                        <ListItem button="button">
+                        <ListItem button>
                             <ListItemIcon>
                                 <DashboardIcon/>
                             </ListItemIcon>
                             <ListItemText primary="Dashboard"/>
                         </ListItem>
-                        <ListItem button="button">
+                        <ListItem button>
                             <ListItemIcon>
                                 <ShoppingCartIcon/>
                             </ListItemIcon>
                             <ListItemText primary="Orders"/>
                         </ListItem>
-                        <ListItem button="button">
+                        <ListItem button>
                             <ListItemIcon>
                                 <PeopleIcon/>
                             </ListItemIcon>
                             <ListItemText primary="Customers"/>
                         </ListItem>
-                        <ListItem button="button">
+                        <ListItem button>
                             <ListItemIcon>
                                 <BarChartIcon/>
                             </ListItemIcon>
                             <ListItemText primary="Reports"/>
                         </ListItem>
-                        <ListItem button="button">
+                        <ListItem button>
                             <ListItemIcon>
                                 <LayersIcon/>
                             </ListItemIcon>
                             <ListItemText primary="Integrations"/>
                         </ListItem>
                         <Divider/>
-                        <ListItem button="button">
+                        <ListItem button>
                             <ListItemIcon>
                                 <AssignmentIcon/>
                             </ListItemIcon>
                             <ListItemText primary="Current month"/>
                         </ListItem>
-                        <ListItem button="button">
+                        <ListItem button>
                             <ListItemIcon>
                                 <AssignmentIcon/>
                             </ListItemIcon>
                             <ListItemText primary="Last quarter"/>
                         </ListItem>
-                        <ListItem button="button">
+                        <ListItem button>
                             <ListItemIcon>
                                 <AssignmentIcon/>
                             </ListItemIcon>
@@ -339,8 +322,8 @@ function App() {
                         <div className={classes.appBarSpacer}/>
                         <Container className={classes.container}>
                             <Switch>
-                                <Route exact="exact" path="/" component={Home}/>
-                                <Route path="/about" component={About}/>
+                                <Route exact path="/" component={About}/>   
+                                <Route path="/Home" component={Home}/>
                                 <Route
                                     path="/login"
                                     render={props => (<LoginForm isAuthenticated={isAuthenticated} login={login} {...props}/>)}/>
