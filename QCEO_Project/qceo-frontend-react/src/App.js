@@ -25,14 +25,17 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
+import Home from './Home';
+
 import { signIn } from './Authentication/AuthInfo';
 import AuthRoute from './Authentication/AuthRoute';
-import Home from './Home';
 import Profile from './Authentication/Profile';
 import NotFound from './NotFound';
 import LoginForm from './Authentication/LoginForm';
 import LogoutButton from './Authentication/LogoutButton';
 import SignUp from './Authentication/SignUp';
+
+import QIBoard from './RedmineBase_QualityInspection/index'
 
 const drawerWidth = 240;
 
@@ -261,12 +264,14 @@ function App() {
                             </IconButton>
                         </div>
                         <Divider />
-                        <ListItem button>
-                            <ListItemIcon>
-                                <AssignmentIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="품질점검" />
-                        </ListItem>
+                        <Link to='/qiboard' style={{ textDecoration: 'none' }}>
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <AssignmentIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="품질점검" />
+                            </ListItem>
+                        </Link>
                         <Divider />
                         <ListItem button>
                             <ListItemIcon>
@@ -333,7 +338,8 @@ function App() {
                                     isAuthenticated={isAuthenticated}
                                     path="/profile"
                                     render={props => (<Profile user={user} {...props} />)} />
-                                <Route exact path="/signup" component={SignUp}/>
+                                <Route exact path="/signup" component={SignUp} />
+                                <Route exact path="/qiboard" component={QIBoard} />
                                 <Route component={NotFound} />
                             </Switch>
                             <Box pt={4}>

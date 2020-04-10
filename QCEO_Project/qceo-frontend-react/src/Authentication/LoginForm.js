@@ -103,7 +103,7 @@ function LoginForm({ isAuthenticated, login, location }) {
           Sign In
                 </Button>
         <Grid item>
-          <Link to="#">
+          <Link href="/signup">
             {"Don't have an account? Sign Up"}
           </Link>
         </Grid>
