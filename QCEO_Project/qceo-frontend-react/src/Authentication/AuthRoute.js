@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
+import Typography from '@material-ui/core/Typography';
+
 function AuthRoute({ isAuthenticated, component: Component, render, ...rest }) {
   return (
     <Route
@@ -9,8 +11,9 @@ function AuthRoute({ isAuthenticated, component: Component, render, ...rest }) {
         isAuthenticated ? (
           render ? render(props) : <Component {...props} />
         ) : (
-            //<Redirect to={{ pathname: '/login', state: { from: props.location } }}/>
-            <div>Login 필요</div>
+            <Typography component="h1" variant="h5">
+              로그인이 필요합니다.
+            </Typography>
           )
       }
     />

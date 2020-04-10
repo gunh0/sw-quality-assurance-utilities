@@ -28,10 +28,11 @@ import Typography from '@material-ui/core/Typography';
 import { signIn } from './Authentication/AuthInfo';
 import AuthRoute from './Authentication/AuthRoute';
 import Home from './Home';
-import Profile from './Profile';
+import Profile from './Authentication/Profile';
 import NotFound from './NotFound';
 import LoginForm from './Authentication/LoginForm';
 import LogoutButton from './Authentication/LogoutButton';
+import SignUp from './Authentication/SignUp';
 
 const drawerWidth = 240;
 
@@ -332,6 +333,7 @@ function App() {
                                     isAuthenticated={isAuthenticated}
                                     path="/profile"
                                     render={props => (<Profile user={user} {...props} />)} />
+                                <Route exact path="/signup" component={SignUp}/>
                                 <Route component={NotFound} />
                             </Switch>
                             <Box pt={4}>

@@ -48,8 +48,8 @@ function LoginForm({ isAuthenticated, login, location }) {
     }
   };
 
-  const { from } = location.state || {from: {pathname: "/profile"}};
-  if (isAuthenticated){
+  const { from } = location.state || { from: { pathname: "/profile" } };
+  if (isAuthenticated) {
     return <Redirect to={from} />;
   }
 
@@ -103,7 +103,7 @@ function LoginForm({ isAuthenticated, login, location }) {
           Sign In
                 </Button>
         <Grid item>
-          <Link href="#" variant="body2">
+          <Link to="#">
             {"Don't have an account? Sign Up"}
           </Link>
         </Grid>

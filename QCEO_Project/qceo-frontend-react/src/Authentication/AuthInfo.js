@@ -1,5 +1,6 @@
+// Saving temporary user information
 const users = [
-  { username: 'qwer', email: 'Kim@lsware.com', password: '1234' },
+  { username: 'qwer', email: 'kim@lsware.com', password: '1234' },
   { username: 'Lee', email: 'lee@test.com', password: '456' },
   { username: 'Park', email: 'park@test.com', password: '789' },
 ]
