@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function LoginForm({ IsAauthenticated, login, location }) {
+function LoginForm({ isAuthenticated, login, location }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const classes = useStyles();
@@ -40,23 +40,20 @@ function LoginForm({ IsAauthenticated, login, location }) {
   const handleClick = () => {
     try {
       login({ username, password });
-      console.log("Login Success!")
     } catch (e) {
       console.log(username, password);
-      alert('Failed to login');
+      alert('로그인에 실패하였습니다.');
       setUsername('');
       setPassword('');
     }
   };
 
-  const { from } = location.state || {
-    from: {
-      pathname: "/"
-    }
-  };
-
-  if (IsAauthenticated)
+  const { from } = location.state || {from: {pathname: "/profile"}};
+  if (isAuthenticated){
     return <Redirect to={from} />;
+  }
+
+
 
   return (
     <Container component="main" maxWidth="xs">
