@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
 import MainStatusTable from './MainStatusTable'
+import StepProgress from './StepProgress'
 
 const drawerWidth = 240;
 
@@ -95,8 +96,21 @@ function QIBoard() {
             <Grid container spacing={3}>
                 {/* 품질점검 상태 */}
                 <Grid item xs={12}>
+                    <MainStatusTable />
+                </Grid>
+                <Grid item xs={12}>
                     <Paper className={classes.paper}>
-                        <MainStatusTable />
+                        <StepProgress />
+                    </Paper>
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                    <Paper className={classes.paper}>
+                        <div>SemiMaster</div>
+                    </Paper>
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                    <Paper className={classes.paper}>
+                        <div>FinalMaster</div>
                     </Paper>
                 </Grid>
             </Grid>
