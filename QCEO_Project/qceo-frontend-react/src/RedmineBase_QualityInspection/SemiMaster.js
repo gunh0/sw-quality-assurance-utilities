@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Paper from '@material-ui/core/Paper';
+
 import {
   Chart,
   BarSeries,
@@ -7,8 +7,9 @@ import {
   ArgumentAxis,
   ValueAxis,
 } from '@devexpress/dx-react-chart-material-ui';
-
 import { Animation } from '@devexpress/dx-react-chart';
+import Paper from '@material-ui/core/Paper';
+import ListItem from '@material-ui/core/ListItem';
 
 const data = [
   { year: '1950', population: 2.525 },
@@ -26,16 +27,30 @@ export default class SemiMaster extends React.PureComponent {
 
     this.state = {
       data,
+      redmine: []
     };
+  }
+
+  async componentDidMount() {
+    try {
+      const res = await fetch('http://127.0.0.1:8000/api/defect');
+      const redmine = await res.json();
+      this.setState({
+        redmine
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   render() {
     const { data: chartData } = this.state;
 
     return (
-      <Paper>
+      <div>
         <Chart
           data={chartData}
+          height='250'
         >
           <ArgumentAxis />
           <ValueAxis max={7} />
@@ -47,7 +62,21 @@ export default class SemiMaster extends React.PureComponent {
           <Title text="결함 수정중인 담당자 현황" />
           <Animation />
         </Chart>
-      </Paper>
+        <Paper>
+          {this.state.redmine.map(item => (
+            <ListItem>
+              <div key={item.num}>
+                <div>{item.num}</div>
+                <div>{item.state}</div>
+                <div>{item.author}</div>
+                <div>{item.master}</div>
+                <div>{item.title}</div>
+                <div>{item.start}</div>
+              </div>
+            </ListItem>
+          ))}
+        </Paper>
+      </div>
     );
   }
 }

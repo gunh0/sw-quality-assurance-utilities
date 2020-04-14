@@ -9,6 +9,7 @@ import MainStatusTable from './MainStatusTable'
 import StepProgress from './StepProgress'
 import SemiMaster from './SemiMaster'
 import FinalMaster from './FinalMaster'
+import QIRedmineTable from './RedmineTable'
 
 const drawerWidth = 240;
 
@@ -120,6 +121,11 @@ function QIBoard() {
                     <Paper className={classes.paper}>
                         <FinalMaster />
                     </Paper>
+                </Grid>
+
+                {/* 레드마인 */}
+                <Grid item xs={12}>
+                        <QIRedmineTable />
                 </Grid>
             </Grid>
         </Container>

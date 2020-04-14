@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Paper from '@material-ui/core/Paper';
+
 import {
   Chart,
   BarSeries,
@@ -33,21 +33,19 @@ export default class FinalMaster extends React.PureComponent {
     const { data: chartData } = this.state;
 
     return (
-      <Paper>
-        <Chart
-          data={chartData}
-        >
-          <ArgumentAxis />
-          <ValueAxis max={7} />
+      <Chart
+        data={chartData}
+      >
+        <ArgumentAxis />
+        <ValueAxis max={7} />
 
-          <BarSeries
-            valueField="population"
-            argumentField="year"
-          />
-          <Title text="수정 확인중인 담당자 현황" />
-          <Animation />
-        </Chart>
-      </Paper>
+        <BarSeries
+          valueField="population"
+          argumentField="year"
+        />
+        <Title text="수정 확인중인 담당자 현황" />
+        <Animation />
+      </Chart>
     );
   }
 }
