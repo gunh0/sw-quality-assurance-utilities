@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'corsheaders',      # CORS : Cross-Origin Resource Sharing
     'knox',
     'Accounts.apps.AccountsConfig',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -143,8 +144,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'report')
 
 # DRF
 REST_FRAMEWORK = {
-    #'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],  # remove
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
+    'DEFAULT_AUTHENTICATION_CLASSES': ['knox.auth.TokenAuthentication',
+                                       'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+                                       'rest_framework.authentication.SessionAuthentication',
+                                       'rest_framework.authentication.BasicAuthentication', ],
+
 }
 
 CORS_ORIGIN_WHITELIST = [

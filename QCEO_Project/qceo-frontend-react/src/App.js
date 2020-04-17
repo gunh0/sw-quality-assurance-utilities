@@ -190,7 +190,7 @@ function App() {
         setOpen(false);
     };
 
-    const login = ({ username, password }) => setUser(signIn({ username, password }));
+    const login = ({ username, password }) => setUser(signIn({ id:username, pw:password }));
     const logout = () => setUser(null);
 
     return (
