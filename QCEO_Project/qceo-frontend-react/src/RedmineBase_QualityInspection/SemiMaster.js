@@ -1,5 +1,6 @@
 import * as React from 'react';
-
+import ReactDOM from "react-dom";
+import { equals } from "ramda";
 import {
   Chart,
   BarSeries,
@@ -21,11 +22,17 @@ const data = [
   { year: '2010', population: 6.930 },
 ];
 
+const redmine = [];
+
 export default class SemiMaster extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
+      offsetParent: {
+        offsetLeft: 0,
+        offsetTop: 0,
+      },
       data,
       redmine: []
     };
@@ -41,23 +48,33 @@ export default class SemiMaster extends React.PureComponent {
     } catch (e) {
       console.log(e);
     }
+    this.updateProps();
   }
 
-  render() {
-    const { data: chartData } = this.state;
+  masters=[];
+  masterCnt=[];
 
+  updateProps = () => {
+    console.log(this.state.redmine);
+    console.log(this.state.redmine[0].master);
+    for(let i=0;i<this.state.redmine; i+=1){
+      
+    }
+  }
+  
+  render() {
     return (
       <div>
         <Chart
-          data={chartData}
+          data={this.state.redmine}
           height='250'
         >
           <ArgumentAxis />
           <ValueAxis max={7} />
 
           <BarSeries
-            valueField="population"
-            argumentField="year"
+            valueField="num"
+            argumentField="master"
           />
           <Title text="결함 수정중인 담당자 현황" />
           <Animation />

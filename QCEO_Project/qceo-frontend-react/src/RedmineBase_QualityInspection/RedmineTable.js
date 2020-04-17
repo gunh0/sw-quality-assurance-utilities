@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactDOM from "react-dom";
+import { equals } from "ramda";
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
@@ -38,18 +40,26 @@ const styles = (theme) => ({
 
 class MuiVirtualizedTable extends React.PureComponent {
     state = {
+        offsetParent: {
+            offsetLeft: 0,
+            offsetTop: 0,
+        },
         redmine: []
     }
 
     async componentDidMount() {
-        try {
-            const res = await fetch('http://127.0.0.1:8000/api/defect');
-            const redmine = await res.json();
-            this.setState({
-                redmine
-            });
-        } catch (e) {
-            console.log(e);
+        this.updateProps();
+    }
+
+    componentDidUpdate() {
+        this.updateProps();
+    }
+
+    updateProps = () => {
+        const element = ReactDOM.findDOMNode(this);
+        const offsetParent = { offsetLeft: element.offsetLeft, offsetTop: element.offsetTop };
+        if (!equals(offsetParent, this.state.offsetParent)) {
+            this.setState({ offsetParent });
         }
     }
 
@@ -165,8 +175,20 @@ const sample = [
     ['Gingerbread', 356, 16.0, 49, 3.9],
 ];
 
-function createData(id, dessert, calories, fat, carbs, protein) {
-    return { id, dessert, calories, fat, carbs, protein };
+const apiData =[];
+
+try {
+    const res = fetch('http://127.0.0.1:8000/api/defect');
+    const apiJson = res.json();
+}
+catch (e) {
+    console.log(e);
+}
+
+console.log(sample);
+
+function createData(num, project, category, state, priority, title, author, master, change, start) {
+    return { num, project, category, state, priority, title, author, master, change, start };
 }
 
 const rows = [];
@@ -185,8 +207,8 @@ export default function SemiMaster() {
                 columns={[
                     {
                         width: 200,
-                        label: 'num',
-                        dataKey: 'dessert',
+                        label: 'Num.\u00A0(#)',
+                        dataKey: 'num',
                     },
                     {
                         width: 200,

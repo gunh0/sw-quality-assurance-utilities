@@ -2,7 +2,7 @@
 
 ### 1st. NaverPowerLinkRanking Program
 
-- https://github.com/devgunho/LSware_Project/tree/master/NaverPowerLinkRanking
+- https://github.com/devgunho/PowerLink_Ranking
 
 ### 2nd. QCEO Project
 
