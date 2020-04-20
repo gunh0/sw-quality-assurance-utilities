@@ -1,4 +1,5 @@
 import axios from "axios";
+
 // Saving temporary user information
 const users = [
   { username: 'qwer', email: 'kim@lsware.com', password: '1234' },
@@ -11,14 +12,15 @@ export function signIn({ id, pw }) {
   //if (user === undefined) throw new Error();
   //return user;
 
-  const body = JSON.stringify({ username:id, password:pw });
+  const body = JSON.stringify({ username: id, email: "test1234@example.com", password: pw });
   const config = {
     headers: {
+      Accept: 'application/json',
       'Content-Type': 'application/json'
     }
   };
-  console.log(body)
-  axios.post('http://localhost:8000/api/auth/login/', body, config)
+
+  axios.post('http://localhost:8000/api/auth/logout')
     .then(function (response) {
       console.log("axios : ", response);
     })

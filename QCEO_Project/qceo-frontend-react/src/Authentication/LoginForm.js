@@ -41,7 +41,6 @@ function LoginForm({ isAuthenticated, login, location }) {
     try {
       login({ username, password });
     } catch (e) {
-      console.log(username, password);
       alert('로그인에 실패하였습니다.');
       setUsername('');
       setPassword('');
