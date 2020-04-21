@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'knox',
     'Accounts.apps.AccountsConfig',
     'rest_framework.authtoken',
-    'DB_QualityInfo',
 ]
 
 MIDDLEWARE = [
