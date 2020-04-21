@@ -11,7 +11,7 @@ class Loglist(models.Model):
 	version = models.CharField('버전', max_length=30)
 	whitelist = models.TextField('허용문구', blank=True)
 	blacklist = models.TextField('비허용문구', blank=True)
-
+	
 class Performance(models.Model):
 	timestamp = models.DateTimeField('시간', null=True, blank=True)
 	agent = models.CharField('에이전트', max_length=30, blank=True)

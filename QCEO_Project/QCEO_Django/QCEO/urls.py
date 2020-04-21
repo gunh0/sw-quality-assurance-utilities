@@ -27,7 +27,6 @@ urlpatterns = [
 	path('logmonitor/', include('logmonitor.urls', namespace='logmonitor')),
 	path('qualityauto/', include('qualityauto.urls', namespace='qualityauto')),
     
-    path('api/defect/', include('Redmine_Parser.urls')),
     path("api/",include('Accounts.urls')),
     path('api/auth/', include('knox.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -43,17 +43,15 @@ INSTALLED_APPS = [
    	'logmonitor',
    	'qualityauto',
 
-    'Redmine_Parser',   # Redmine Parser Model
     'rest_framework',   # Redmine Parser API
     'corsheaders',      # CORS : Cross-Origin Resource Sharing
     'knox',
     'Accounts.apps.AccountsConfig',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'DB_QualityInfo',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',        # Add
-    'django.middleware.common.CommonMiddleware',    # Add
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,6 +59,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',        # Add
+    'django.middleware.common.CommonMiddleware',    # Add
 ]
 
 ROOT_URLCONF = 'QCEO.urls'
