@@ -33,13 +33,21 @@ qceo-frontend-react> yarn start
 
 &nbsp;
 
-### Django Basic Functional Architecture
+### Django Basic Functional Architecture![image](https://user-images.githubusercontent.com/41619898/79954230-00c54a80-84b8-11ea-8677-1421949bcc3d.png)
 
-![image](https://user-images.githubusercontent.com/41619898/79935731-99e06b00-8490-11ea-93c4-d655ce98e64b.png)
+##### WSGI
 
-##### REST API | Representational State Transfer Application Programming Interface
+The **Web Server Gateway Interface** (**WSGI**) is a simple calling convention for web servers to forward requests to web applications or frameworks written in the Python programming language
+
+###### Web Framework Benchmarks : https://www.techempower.com/benchmarks/
+
+&nbsp;
+
+### REST API | Representational State Transfer Application Programming Interface
 
 A REST API is a standardized way to provide data to other applications. Those applications can then use the data however they want. Sometimes, APIs also offer a way for other applications to make changes to the data.
+
+![image](https://user-images.githubusercontent.com/41619898/79954685-a24c9c00-84b8-11ea-9f62-d793fa800ad9.png)
 
 &nbsp;
 
@@ -54,6 +62,16 @@ A REST API is a standardized way to provide data to other applications. Those ap
 Typically, an API is a window into a database. The API backend handles querying the database and formatting the response. What you receive is a static response, usually in JSON format, of whatever resource you requested.
 
 REST APIs are so commonplace in software development, it’s an essential skill for a developer to know how they work. APIs are how applications communicate with one another or even within themselves.
+
+&nbsp;
+
+##### Testing API’s using Postman
+
+![image](https://user-images.githubusercontent.com/41619898/79954973-18510300-84b9-11ea-9a3f-5f019e0dd927.png)
+
+Postman is a great tool when trying to dissect RESTful API’s made by others or test ones you have made yourself.
+
+It offers a sleek user interface with which to make HTML request, without the hassle of writing a bunch of code just to test an API’s functionality.
 
 &nbsp;
 
@@ -101,6 +119,12 @@ REST APIs are so commonplace in software development, it’s an essential skill 
 | api/auth/login   | User Login                           |
 | api/auth/logout  | User Logout                          |
 
+&nbsp;
+
+## Asynchronous Operations in React-Redux
+
+##### JavaScript(React) Promises
+
 ```javascript
 import axios from "axios";
 
@@ -122,9 +146,23 @@ export async function signIn (username, password){
     .catch((response) => {
       return response.data;
     });
+
+...
 ```
 
-![image](https://user-images.githubusercontent.com/41619898/79927590-339d1d80-847b-11ea-8988-79c35b9ec019.png)
+![image](https://user-images.githubusercontent.com/41619898/79956028-8944ea80-84ba-11ea-9d1a-0751aff13971.png)
+
+It is hard to conceptualize sending a request then waiting for a response without blocking.
+
+Browsers can put the request behind a callback and continue code execution.
+
+The React-Redux libraries do much of the work for you without compromising simplicity.
+
+Think of React as the library that renders UI components in plain HTML.
+
+Redux is the state management library with asynchronous capabilities.
+
+
 
 
 
