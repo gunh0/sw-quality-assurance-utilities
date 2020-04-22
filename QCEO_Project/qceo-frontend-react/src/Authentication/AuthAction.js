@@ -19,8 +19,16 @@ export async function signIn (username, password){
       return response.data;
     });
 
-  console.log(user);
-  //console.log(user);
-  if (user === undefined) return user;
-  else return body;
+  //console.log('Axios Data Check: ', user);
+
+  if (user === undefined)
+  {
+    alert('로그인에 실패하였습니다.');
+    return await user;
+  }
+  else
+  {
+    alert('로그인에 성공하였습니다.');
+    return await body;
+  }
 }

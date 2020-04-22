@@ -12,6 +12,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { signIn } from './AuthAction';
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -38,13 +40,21 @@ function LoginForm({ isAuthenticated, login, location }) {
   const classes = useStyles();
 
   const handleClick = () => {
+    signIn(username, password)
+    .then((res)=>{
+      console.log(username, password);
+      console.log(res);
+    })
+    .catch(err => console.log(err));
+    /*
     try {
+      console.log(username, password);
       login({ username, password });
     } catch (e) {
-      alert('로그인에 실패하였습니다.');
       setUsername('');
       setPassword('');
     }
+    */
   };
 
   const { from } = location.state || { from: { pathname: "/profile" } };

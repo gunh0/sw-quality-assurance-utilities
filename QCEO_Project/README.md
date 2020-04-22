@@ -33,6 +33,10 @@ qceo-frontend-react> yarn start
 
 &nbsp;
 
+### Django Basic Functional Architecture
+
+![image](https://user-images.githubusercontent.com/41619898/79935731-99e06b00-8490-11ea-93c4-d655ce98e64b.png)
+
 ##### REST API | Representational State Transfer Application Programming Interface
 
 A REST API is a standardized way to provide data to other applications. Those applications can then use the data however they want. Sometimes, APIs also offer a way for other applications to make changes to the data.
