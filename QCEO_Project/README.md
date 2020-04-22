@@ -10,7 +10,7 @@
 
 ##### This project was implemented in the same way.
 
-
+&nbsp;
 
 ## Start Project (Setup)
 
@@ -31,13 +31,13 @@ QCEO_Django> python manage.py runserver
 qceo-frontend-react> yarn start
 ```
 
-
+&nbsp;
 
 ##### REST API | Representational State Transfer Application Programming Interface
 
 A REST API is a standardized way to provide data to other applications. Those applications can then use the data however they want. Sometimes, APIs also offer a way for other applications to make changes to the data.
 
-
+&nbsp;
 
 ##### There are a few key options for a REST API request:
 
@@ -51,13 +51,13 @@ Typically, an API is a window into a database. The API backend handles querying 
 
 REST APIs are so commonplace in software development, it’s an essential skill for a developer to know how they work. APIs are how applications communicate with one another or even within themselves.
 
-
+&nbsp;
 
 ##### A typical Django application that uses React as a front end. It needs an API to allow React to consume data from the database.
 
 ![image](https://user-images.githubusercontent.com/41619898/79838633-461d4580-83ee-11ea-9cfe-22f345764bdb.png)
 
-
+&nbsp;
 
 ## Django startapp
 
@@ -68,21 +68,21 @@ REST APIs are so commonplace in software development, it’s an essential skill 
 
 ![image](https://user-images.githubusercontent.com/41619898/78514741-d142ec80-77ed-11ea-87b9-fe2e8140bc95.png)
 
-
+&nbsp;
 
 ### Redmine_TestSupport
 
 - Implement real-time updates with DRF | Building Redmine API
   - http://project.lsware.co.kr/redmine/projects/olis/issues
 
-
+&nbsp;
 
 ### Redmine_QualityInspection
 
 - Implement real-time updates with DRF | Building Redmine API
   - http://project.lsware.co.kr/redmine/projects/test1/issues
 
-
+&nbsp;
 
 ### Accounts / django-rest-knox
 
