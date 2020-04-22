@@ -52,8 +52,6 @@ function LoginForm({ isAuthenticated, login, location }) {
     return <Redirect to={from} />;
   }
 
-
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

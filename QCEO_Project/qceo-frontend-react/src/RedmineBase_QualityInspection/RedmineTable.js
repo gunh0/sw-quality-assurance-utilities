@@ -175,6 +175,7 @@ const sample = [
     ['Gingerbread', 356, 16.0, 49, 3.9],
 ];
 
+/*
 const apiData =[];
 
 try {
@@ -186,6 +187,7 @@ catch (e) {
 }
 
 console.log(sample);
+*/
 
 function createData(num, project, category, state, priority, title, author, master, change, start) {
     return { num, project, category, state, priority, title, author, master, change, start };

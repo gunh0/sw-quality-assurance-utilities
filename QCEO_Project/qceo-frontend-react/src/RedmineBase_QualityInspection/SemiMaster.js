@@ -1,6 +1,4 @@
 import * as React from 'react';
-import ReactDOM from "react-dom";
-import { equals } from "ramda";
 import {
   Chart,
   BarSeries,
@@ -21,8 +19,6 @@ const data = [
   { year: '2000', population: 6.127 },
   { year: '2010', population: 6.930 },
 ];
-
-const redmine = [];
 
 export default class SemiMaster extends React.PureComponent {
   constructor(props) {
@@ -48,19 +44,10 @@ export default class SemiMaster extends React.PureComponent {
     } catch (e) {
       console.log(e);
     }
-    this.updateProps();
   }
 
   masters=[];
   masterCnt=[];
-
-  updateProps = () => {
-    console.log(this.state.redmine);
-    console.log(this.state.redmine[0].master);
-    for(let i=0;i<this.state.redmine; i+=1){
-      
-    }
-  }
   
   render() {
     return (

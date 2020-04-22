@@ -27,7 +27,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Home from './Home';
 
-import { signIn } from './Authentication/AuthInfo';
+import { signIn } from './Authentication/AuthAction';
 import AuthRoute from './Authentication/AuthRoute';
 import Profile from './Authentication/Profile';
 import NotFound from './NotFound';
@@ -35,7 +35,7 @@ import LoginForm from './Authentication/LoginForm';
 import LogoutButton from './Authentication/LogoutButton';
 import SignUp from './Authentication/SignUp';
 
-import QIBoard from './RedmineBase_QualityInspection/index'
+//import QIBoard from './RedmineBase_QualityInspection/index'
 
 const drawerWidth = 240;
 
@@ -190,7 +190,7 @@ function App() {
         setOpen(false);
     };
 
-    const login = ({ username, password }) => setUser(signIn({ id:username, pw:password }));
+    const login = ({ username, password }) => setUser(signIn({ username, password }));
     const logout = () => setUser(null);
 
     return (
@@ -339,7 +339,6 @@ function App() {
                                     path="/profile"
                                     render={props => (<Profile user={user} {...props} />)} />
                                 <Route exact path="/signup" component={SignUp} />
-                                <Route exact path="/qiboard" component={QIBoard} />
                                 <Route component={NotFound} />
                             </Switch>
                             <Box pt={4}>
