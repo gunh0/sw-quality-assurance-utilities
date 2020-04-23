@@ -62,12 +62,13 @@ class LoginForm extends Component {
                             component={this.hiddenField}
                         />
                         <button className='ui primary button'>Login</button>
+                        <p style={{ marginTop: '1rem' }}>
+                            Don't have an account? <Link to='/register'>Register</Link>
+                        </p>
                     </form>
-                    <p style={{ marginTop: '1rem' }}>
-                        Don't have an account? <Link to='/register'>Register</Link>
-                    </p>
                 </div>
             </Container>
+
         );
     }
 }

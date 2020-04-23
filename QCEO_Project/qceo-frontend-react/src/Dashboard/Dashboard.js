@@ -181,6 +181,7 @@ function Dashboard() {
 
   return (
       <div className={classes.root}>
+          <CssBaseline />
           <ThemeProvider theme={outerTheme}>
               <Router>
                   <CssBaseline />

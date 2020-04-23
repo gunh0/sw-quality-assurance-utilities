@@ -3,14 +3,16 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../actions/auth';
 
+import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 
 class EnterMain extends Component {
   render() {
     const { user, isAuthenticated } = this.props.auth;
     const userLinks = (
+      <Container>
       <div className='right menu'>
-        <div className='ui simple dropdown item'>
+        <div className='ui animated button'>
           {user ? user.username : ''}
           <i className='dropdown icon' />
           <div className='menu'>
@@ -20,28 +22,30 @@ class EnterMain extends Component {
           </div>
         </div>
       </div>
+      </Container>
     );
 
     const guestLinks = (
-      <div className='right menu'>
-        <Link to='/register' className='item'>
-          Sign Up
+
+      <div className='left menu'>
+        <Container>
+        <Button>
+          <Link to='/login' className='header item'>
+            Login
         </Link>
-        <Link to='/login' className='item'>
-          Login
+        </Button>
+        <Button>
+          <Link to='/register' className='header item'>
+            Sign Up
         </Link>
+        </Button>
+        
+        </Container>
       </div>
     );
 
     return (
       <div className='ui inverted menu' style={{ borderRadius: '0' }}>
-        
-        <Link to='/' className='header item'>
-          TodoCRUD
-        </Link>
-        <Link to='/' className='item'>
-          Dashboard
-        </Link>
         {isAuthenticated ? userLinks : guestLinks}
       </div>
     );
