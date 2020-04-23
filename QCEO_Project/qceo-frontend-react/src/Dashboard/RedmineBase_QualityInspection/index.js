@@ -93,43 +93,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function QIBoard() {
-    const classes = useStyles();
     return (
-        <Container maxWidth="lg" className={classes.container}>
-            <Grid container spacing={3}>
-                {/* 품질점검 상태 */}
-                <Grid item xs={12}>
-                    <MainStatusTable />
-                </Grid>
-                
-                {/* 진행 현황 */}
-                <Grid item xs={12}>
-                    <Paper className={classes.paper}>
-                        <StepProgress />
-                    </Paper>
-                </Grid>
-                
-                {/* 결함 수정중인 담당자 현황 */}
-                <Grid item xs={6} sm={6}>
-                    <Paper className={classes.paper}>
-                        <SemiMaster />
-                    </Paper>
-                </Grid>
 
-                {/* 수정 확인중인 담당자 현황 */}
-                <Grid item xs={6} sm={6}>
-                    <Paper className={classes.paper}>
-                        <FinalMaster />
-                    </Paper>
-                </Grid>
-
-                {/* 레드마인 */}
-                <Grid item xs={12}>
-                        <QIRedmineTable />
-                </Grid>
-            </Grid>
-        </Container>
+        <div>hello</div>
+       
     );
+    
 }
 
 export default QIBoard;

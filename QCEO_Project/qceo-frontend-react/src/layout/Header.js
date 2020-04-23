@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { logout } from '../../actions/auth';
+import { logout } from '../actions/auth';
+
+import Button from '@material-ui/core/Button';
 
 class Header extends Component {
   render() {
@@ -13,9 +15,9 @@ class Header extends Component {
           {user ? user.username : ''}
           <i className='dropdown icon' />
           <div className='menu'>
-            <a onClick={this.props.logout} className='item'>
+            <Button onClick={this.props.logout} className='item'>
               Logout
-            </a>
+            </Button>
           </div>
         </div>
       </div>

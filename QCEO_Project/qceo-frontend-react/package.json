@@ -25,7 +25,9 @@
     "react-scripts": "^3.4.1",
     "react-sweet-progress": "^1.1.2",
     "react-virtualized": "^9.21.2",
-    "redux-form": "^8.3.5"
+    "redux-devtools-extension": "^2.13.8",
+    "redux-form": "^8.3.5",
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
