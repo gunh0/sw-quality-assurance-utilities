@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import { login } from '../actions/auth';
+import { register } from '../actions/auth';
 
-class LoginForm extends Component {
+import Container from '@material-ui/core/Container';
+
+class RegisterForm extends Component {
     renderField = ({ input, label, type, meta: { touched, error } }) => {
         return (
             <div className={`field ${touched && error ? 'error' : ''}`}>
@@ -17,17 +19,8 @@ class LoginForm extends Component {
         );
     };
 
-    hiddenField = ({ type, meta: { error } }) => {
-        return (
-            <div className='field'>
-                <input type={type} />
-                {error && <div className='ui red message'>{error}</div>}
-            </div>
-        );
-    };
-
     onSubmit = formValues => {
-        this.props.login(formValues);
+        this.props.register(formValues);
     };
 
     render() {
@@ -35,7 +28,7 @@ class LoginForm extends Component {
             return <Redirect to='/' />;
         }
         return (
-            <div className='ui container'>
+            <Container className='ui container'>
                 <div className='ui segment'>
                     <form
                         onSubmit={this.props.handleSubmit(this.onSubmit)}
@@ -46,38 +39,66 @@ class LoginForm extends Component {
                             type='text'
                             component={this.renderField}
                             label='Username'
+                            validate={[required, minLength3, maxLength15]}
+                        />
+                        <Field
+                            name='email'
+                            type='email'
+                            component={this.renderField}
+                            label='Email'
+                            validate={required}
                         />
                         <Field
                             name='password'
                             type='password'
                             component={this.renderField}
                             label='Password'
+                            validate={required}
                         />
                         <Field
-                            name='non_field_errors'
-                            type='hidden'
-                            component={this.hiddenField}
+                            name='password2'
+                            type='password'
+                            component={this.renderField}
+                            label='Confirm Password'
+                            validate={[required, passwordsMatch]}
                         />
-                        <button className='ui primary button'>Login</button>
+                        <button className='ui primary button'>Register</button>
                     </form>
                     <p style={{ marginTop: '1rem' }}>
-                        Don't have an account? <Link to='/register'>Register</Link>
+                        Already have an account? <Link to='/login'>Login</Link>
                     </p>
                 </div>
-            </div>
+            </Container>
         );
     }
 }
+
+const required = value => (value ? undefined : 'Required');
+
+const minLength = min => value =>
+    value && value.length < min
+        ? `Must be at least ${min} characters`
+        : undefined;
+
+const minLength3 = minLength(3);
+
+const maxLength = max => value =>
+    value && value.length > max ? `Must be ${max} characters or less` : undefined;
+
+const maxLength15 = maxLength(15);
+
+const passwordsMatch = (value, allValues) =>
+    value !== allValues.password ? 'Passwords do not match' : undefined;
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
-LoginForm = connect(
+RegisterForm = connect(
     mapStateToProps,
-    { login }
-)(LoginForm);
+    { register }
+)(RegisterForm);
 
 export default reduxForm({
-    form: 'loginForm'
-})(LoginForm);
+    form: 'registerForm'
+})(RegisterForm);

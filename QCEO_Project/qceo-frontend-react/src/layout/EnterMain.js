@@ -5,10 +5,9 @@ import { logout } from '../actions/auth';
 
 import Button from '@material-ui/core/Button';
 
-class Header extends Component {
+class EnterMain extends Component {
   render() {
     const { user, isAuthenticated } = this.props.auth;
-
     const userLinks = (
       <div className='right menu'>
         <div className='ui simple dropdown item'>
@@ -36,11 +35,12 @@ class Header extends Component {
 
     return (
       <div className='ui inverted menu' style={{ borderRadius: '0' }}>
+        
         <Link to='/' className='header item'>
           TodoCRUD
         </Link>
         <Link to='/' className='item'>
-          Home
+          Dashboard
         </Link>
         {isAuthenticated ? userLinks : guestLinks}
       </div>
@@ -55,4 +55,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { logout }
-)(Header);
+)(EnterMain);

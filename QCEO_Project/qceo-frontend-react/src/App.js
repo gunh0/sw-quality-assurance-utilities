@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 
 import history from './history';
-import Header from './layout/Header';
+import Main from './layout/EnterMain';
 
-import RegisterForm from './auth/RegisterForm';
-import LoginForm from './auth/LoginForm';
+import RegisterForm from './Authentication/RegisterForm';
+import LoginForm from './Authentication/LoginForm';
 
 import { Provider } from 'react-redux';
 import store from './store';
@@ -23,7 +23,7 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <Router history={history}>
-                    <Header />
+                    <Main />
                     <Switch>
                         <PrivateRoute exact path='/' component={Dashboard} />
                         <Route exact path='/register' component={RegisterForm} />

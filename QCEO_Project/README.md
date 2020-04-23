@@ -2,7 +2,7 @@
 
 
 
-# The beginning of QCEO project
+# The Beginning of QCEO Project
 
 ##### Implementing React to work in Django Templates makes the server structure simple, but there are many limitations to the use of React features.
 
@@ -33,9 +33,11 @@ qceo-frontend-react> yarn start
 
 &nbsp;
 
-### Django Basic Functional Architecture![image](https://user-images.githubusercontent.com/41619898/79954230-00c54a80-84b8-11ea-8677-1421949bcc3d.png)
+## Django Basic Functional Architecture
 
-##### WSGI
+## ![image](https://user-images.githubusercontent.com/41619898/79954230-00c54a80-84b8-11ea-8677-1421949bcc3d.png)
+
+### *WSGI
 
 The **Web Server Gateway Interface** (**WSGI**) is a simple calling convention for web servers to forward requests to web applications or frameworks written in the Python programming language
 
@@ -43,15 +45,19 @@ The **Web Server Gateway Interface** (**WSGI**) is a simple calling convention f
 
 &nbsp;
 
-### REST API | Representational State Transfer Application Programming Interface
+## REST API
 
-A REST API is a standardized way to provide data to other applications. Those applications can then use the data however they want. Sometimes, APIs also offer a way for other applications to make changes to the data.
+A **REST API (Representational State Transfer Application Programming Interface)** is a standardized way to provide data to other applications.
+
+Those applications can then use the data however they want.
+
+Sometimes, APIs also offer a way for other applications to make changes to the data.
 
 ![image](https://user-images.githubusercontent.com/41619898/79954685-a24c9c00-84b8-11ea-9f62-d793fa800ad9.png)
 
 &nbsp;
 
-##### There are a few key options for a REST API request:
+### There are a few key options for a REST API request:
 
 - GET — The most common option, returns some data from the API based on the endpoint you visit and any parameters you provide
 - POST — Creates a new record that gets appended to the database
@@ -65,7 +71,7 @@ REST APIs are so commonplace in software development, it’s an essential skill 
 
 &nbsp;
 
-##### Testing API’s using Postman
+### Testing API’s using Postman
 
 ![image](https://user-images.githubusercontent.com/41619898/79954973-18510300-84b9-11ea-9a3f-5f019e0dd927.png)
 
@@ -75,9 +81,11 @@ It offers a sleek user interface with which to make HTML request, without the ha
 
 &nbsp;
 
-##### A typical Django application that uses React as a front end. It needs an API to allow React to consume data from the database.
-
 ![image](https://user-images.githubusercontent.com/41619898/79838633-461d4580-83ee-11ea-9cfe-22f345764bdb.png)
+
+**A typical Django application that uses React as a front end.**
+
+**It needs an API to allow React to consume data from the database.**
 
 &nbsp;
 
@@ -123,7 +131,7 @@ It offers a sleek user interface with which to make HTML request, without the ha
 
 ## Asynchronous Operations in React-Redux
 
-##### JavaScript(React) Promises
+### JavaScript(React) Promises
 
 ```javascript
 import axios from "axios";
