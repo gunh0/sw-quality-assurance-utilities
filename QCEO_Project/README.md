@@ -17,7 +17,8 @@
 ```powershell
 QCEO_Project> pip install virtualenv
 QCEO_Project> virtualenv venv		// virtualenv 'name'
-QCEO_Project> python -m pip install -r requirements.txt
+QCEO_Project> .\venv\Scripts\Activate
+(venv) QCEO_Project> python -m pip install -r requirements.txt
 
 // Initializing DB
 $ find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
