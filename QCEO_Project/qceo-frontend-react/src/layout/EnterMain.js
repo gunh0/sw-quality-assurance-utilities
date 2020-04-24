@@ -11,17 +11,16 @@ class EnterMain extends Component {
     const { user, isAuthenticated } = this.props.auth;
     const userLinks = (
       <Container>
-      <div className='right menu'>
-        <div className='ui animated button'>
-          {user ? user.username : ''}
-          <i className='dropdown icon' />
-          <div className='menu'>
-            <Button onClick={this.props.logout} className='item'>
+        <div className='right menu'>
+          <div className="ui vertical animated button" tabindex="0">
+            <div class="hidden content" onClick={this.props.logout}>
               Logout
-            </Button>
+            </div>
+            <div class="visible content">
+              {user ? user.username : ''}
+            </div>
           </div>
         </div>
-      </div>
       </Container>
     );
 
@@ -29,17 +28,17 @@ class EnterMain extends Component {
 
       <div className='left menu'>
         <Container>
-        <Button>
-          <Link to='/login' className='header item'>
-            Login
+          <Button>
+            <Link to='/login' className='header item'>
+              Login
         </Link>
-        </Button>
-        <Button>
-          <Link to='/register' className='header item'>
-            Sign Up
+          </Button>
+          <Button>
+            <Link to='/register' className='header item'>
+              Sign Up
         </Link>
-        </Button>
-        
+          </Button>
+
         </Container>
       </div>
     );

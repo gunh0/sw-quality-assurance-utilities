@@ -5,3 +5,5 @@ django-cors-headers
 django-rest-knox
 numpy
 openpyxl
+requests
+bs4

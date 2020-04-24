@@ -91,7 +91,7 @@ It offers a sleek user interface with which to make HTML request, without the ha
 
 ## Django startapp
 
-### Redmine_Defects
+### #Redmine_Defects
 
 - Implement real-time updates with DRF | Building Redmine API
   - http://project.lsware.co.kr/redmine/projects/omni-pis-qa/issues
@@ -100,21 +100,76 @@ It offers a sleek user interface with which to make HTML request, without the ha
 
 &nbsp;
 
-### Redmine_TestSupport
+### Automate login using authentication token & Crawling
+
+- http://project.lsware.co.kr/redmine/
+
+![image](https://user-images.githubusercontent.com/41619898/80166020-d9858f00-8617-11ea-8ecc-4b4a0ba011a4.png)
+
+```python
+import requests
+from bs4 import BeautifulSoup as bs
+
+# 로그인할 유저정보
+LOGIN_INFO = {
+    'username': '',
+    'password': ''
+}
+
+# Session 생성, with 구문 안에서 유지
+with requests.Session() as session:
+    first_page = session.get('http://project.lsware.co.kr/redmine')
+    html = first_page.text
+    soup = bs(html, 'html.parser')
+    authenticity_token = soup.find('input', {'name': 'authenticity_token'})
+    print(authenticity_token['value'])
+
+    # {**dict1, **dict2} 으로 dict들을 unpacking
+    LOGIN_INFO = {**LOGIN_INFO, **{'authenticity_token': authenticity_token['value']}}
+    print(LOGIN_INFO)
+
+    # 다시 로그인
+    login_req = session.post('http://project.lsware.co.kr/redmine/login.do', data=LOGIN_INFO)
+    print(login_req.status_code)    # 200 이면 성공
+    login_req.raise_for_status()
+
+    '''
+    urls = [
+        'http://project.lsware.co.kr/redmine/projects/omni-pis-qa/issues',
+        'http://project.lsware.co.kr/redmine/projects/olis/issues',
+        'http://project.lsware.co.kr/redmine/projects/test1',
+        'http://project.lsware.co.kr/redmine/projects/test2/issues'
+    ]
+    '''
+    url = 'http://project.lsware.co.kr/redmine/projects/olis/issues'
+    res = session.get(url)
+    res.raise_for_status()
+    html = res.text
+    soup = bs(html,'html.parser')
+    print(soup)
+    table = soup.find_all('div', class_="autoscroll")
+    print(table)
+
+
+```
+
+&nbsp;
+
+### #Redmine_TestSupport
 
 - Implement real-time updates with DRF | Building Redmine API
   - http://project.lsware.co.kr/redmine/projects/olis/issues
 
 &nbsp;
 
-### Redmine_QualityInspection
+### #Redmine_QualityInspection
 
 - Implement real-time updates with DRF | Building Redmine API
   - http://project.lsware.co.kr/redmine/projects/test1/issues
 
 &nbsp;
 
-### Accounts / django-rest-knox
+### #Accounts / django-rest-knox
 
 - Add Token-based Authentication with Django-rest-knox to an app built with Django and React/Redux
 
@@ -127,11 +182,39 @@ It offers a sleek user interface with which to make HTML request, without the ha
 | api/auth/login   | User Login                           |
 | api/auth/logout  | User Logout                          |
 
+### *Reference material for understanding Knox's certification system
+
+- Apache Knox REST API flow diagrams in Apache Hadoop Ecosystem
+
+  ![image](https://user-images.githubusercontent.com/41619898/80162848-69730b00-860f-11ea-8a47-b3bc9697cb7c.png)
+
 &nbsp;
 
 ## Asynchronous Operations in React-Redux
 
-### JavaScript(React) Promises
+### Understanding Synchronous vs Asynchronous
+
+![image](https://user-images.githubusercontent.com/41619898/80166564-3e8db480-8619-11ea-9d3c-aac3ca408308.png)
+
+---------
+
+![image](https://user-images.githubusercontent.com/41619898/80166578-43526880-8619-11ea-98d3-486a21e9947c.png)
+
+--------
+
+![image](https://user-images.githubusercontent.com/41619898/80166779-b360ee80-8619-11ea-9b6c-0f9b9d3233e5.png)
+
+Async/Await is one of the best things ever reaching the Javascript world.
+
+It is a powerful and expressive way to express asynchronous operations.
+
+With all this greatness, overusing it can hurt performance, readability and creates complexity - a complexity that it's just not worth the effort sometimes.
+
+When creating functions, it is a good idea to **give back the control to the function's caller as fast as possible.**
+
+&nbsp;
+
+### JavaScript(React) Promises In Project Code
 
 ```javascript
 import axios from "axios";
@@ -169,6 +252,14 @@ The React-Redux libraries do much of the work for you without compromising simpl
 Think of React as the library that renders UI components in plain HTML.
 
 Redux is the state management library with asynchronous capabilities.
+
+&nbsp;
+
+# Design
+
+- Semantic UI : https://semantic-ui.com/
+
+- Material-UI : https://material-ui.com/
 
 
 
