@@ -24,6 +24,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+
 import QIBoard from './RedmineBase_QualityInspection';
 
 //import QIBoard from './RedmineBase_QualityInspection/index'

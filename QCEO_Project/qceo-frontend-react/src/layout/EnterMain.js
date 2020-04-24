@@ -25,8 +25,6 @@ class EnterMain extends Component {
     );
 
     const guestLinks = (
-
-      <div className='left menu'>
         <Container>
           <Button>
             <Link to='/login' className='header item'>
@@ -40,7 +38,6 @@ class EnterMain extends Component {
           </Button>
 
         </Container>
-      </div>
     );
 
     return (
