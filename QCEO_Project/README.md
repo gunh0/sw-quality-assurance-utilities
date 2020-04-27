@@ -27,6 +27,7 @@ $ rm db.sqlite3
 
 QCEO_Django> python manage.py makemigrations
 QCEO_Django> python manage.py migrate
+QCEO_Django> python manage.py createsuperuser
 QCEO_Django> python manage.py runserver
 
 qceo-frontend-react> yarn start
