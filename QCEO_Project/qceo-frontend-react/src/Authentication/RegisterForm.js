@@ -5,6 +5,17 @@ import { Field, reduxForm } from 'redux-form';
 import { register } from '../actions/auth';
 
 import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+
+function Copyright() {
+    return (
+      <Typography variant="body2" color="textSecondary" align="center">
+        {'Copyright © '}
+        {new Date().getFullYear()}
+        {' by devgun@github.io All rights reserved.'}
+      </Typography>
+    );
+  }
 
 class RegisterForm extends Component {
     renderField = ({ input, label, type, meta: { touched, error } }) => {
@@ -29,6 +40,9 @@ class RegisterForm extends Component {
         }
         return (
             <Container className='ui container'>
+                <div class="ui inverted divider"></div>
+                <div class="ui inverted divider"></div>
+                <div class="ui inverted divider"></div>
                 <div className='ui segment'>
                     <form
                         onSubmit={this.props.handleSubmit(this.onSubmit)}
@@ -68,6 +82,7 @@ class RegisterForm extends Component {
                         Already have an account? <Link to='/login'>Login</Link>
                     </p>
                 </div>
+                <Copyright/>
             </Container>
         );
     }

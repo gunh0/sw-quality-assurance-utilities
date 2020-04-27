@@ -2,15 +2,14 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../actions/auth';
-import clsx from 'clsx';
 
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, makeStyles, withStyles, ThemeProvider } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
@@ -136,51 +135,80 @@ const useStyles = makeStyles((theme) => ({
 
 function MainBar() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
+  const ColorButton = withStyles((theme) => ({
+    root: {
+      color: theme.palette,
+      backgroundColor: '#00b2cc',
+      '&:hover': {
+        backgroundColor: '#6effff'
+      }
+    }
+  }))(Button);
   return (
     <div className={classes.root}>
       <CssBaseline />
       <ThemeProvider theme={outerTheme}>
         <CssBaseline />
-        <AppBar
-          position="absolute"
-          className={clsx(classes.appBar, open && classes.appBarShift)}>
+        <AppBar position="absolute">
           <Toolbar className={classes.toolbar}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              className={clsx(classes.menuButton, open && classes.menuButtonHidden)}>
-              <MenuIcon />
-            </IconButton>
             <Typography
               component="h1"
               variant="h6"
               color="inherit"
               className={classes.title}>
               QCEO
-                          </Typography>
+            </Typography>
+            <Paper>
+              <Grid container align="center" Itemsspacing={3}>
+                <ThemeProvider theme={outerTheme}>
+                  <Grid item xs={0.1}>
+                    <Button>
+                      <Link
+                        to="/login"
+                        style={{
+                          textDecoration: 'none'
+                        }}>
+                        <ColorButton variant="contained" color="primary">
+                          {'Login'}
+                        </ColorButton>
+                      </Link>
+                    </Button>
+                  </Grid>
+                  <Grid item xs={0.1}>
+                    <Button>
+                      <Link
+                        to="/Register"
+                        style={{
+                          textDecoration: 'none'
+                        }}>
+                        <ColorButton variant="contained" color="primary">
+                          {'Register'}
+                        </ColorButton>
+                      </Link>
+                    </Button>
+                  </Grid>
+                </ThemeProvider>
+              </Grid>
+            </Paper>
           </Toolbar>
         </AppBar>
+        <div className={classes.appBarSpacer} />
       </ThemeProvider>
     </div>
   )
 }
 
-class EnterMain extends Component {
+class Main extends Component {
   render() {
     const { user, isAuthenticated } = this.props.auth;
+
     const userLinks = (
       <Container>
+        <div class="ui inverted divider"></div>
+        <div class="ui inverted divider"></div>
+        <div class="ui inverted divider"></div>
+        <div class="ui inverted divider"></div>
+        <div class="ui inverted divider"></div>
         <div className='right menu'>
           <div className="ui vertical animated button" tabindex="0">
             <div class="hidden content" onClick={this.props.logout}>
@@ -195,24 +223,11 @@ class EnterMain extends Component {
     );
 
     const guestLinks = (
-      <Container>
-        <Button>
-          <Link to='/login' className='header item'>
-            Login
-        </Link>
-        </Button>
-        <Button>
-          <Link to='/register' className='header item'>
-            Sign Up
-        </Link>
-        </Button>
-
-      </Container>
+      <MainBar />
     );
 
     return (
-      <div className='ui inverted menu' style={{ borderRadius: '0' }}>
-        <MainBar />
+      <div>
         {isAuthenticated ? userLinks : guestLinks}
       </div>
     );
@@ -226,4 +241,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { logout }
-)(EnterMain);
+)(Main);

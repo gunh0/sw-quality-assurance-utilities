@@ -170,158 +170,154 @@ function Copyright() {
 }
 
 function Dashboard() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(true);
 
-  const handleDrawerOpen = () => {
-      setOpen(true);
-  };
-  const handleDrawerClose = () => {
-      setOpen(false);
-  };
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
 
-  return (
-      <div className={classes.root}>
-          <CssBaseline />
-          <ThemeProvider theme={outerTheme}>
-              <Router>
-                  <CssBaseline />
-                  <AppBar
-                      position="absolute"
-                      className={clsx(classes.appBar, open && classes.appBarShift)}>
-                      <Toolbar className={classes.toolbar}>
-                          <IconButton
-                              edge="start"
-                              color="inherit"
-                              aria-label="open drawer"
-                              onClick={handleDrawerOpen}
-                              className={clsx(classes.menuButton, open && classes.menuButtonHidden)}>
-                              <MenuIcon />
-                          </IconButton>
-                          <Typography
-                              component="h1"
-                              variant="h6"
-                              color="inherit"
-                              className={classes.title}>
-                              QCEO
+    return (
+        <div className={classes.root}>
+            <CssBaseline />
+            <ThemeProvider theme={outerTheme}>
+                <Router>
+                    <CssBaseline />
+                    <AppBar
+                        position="absolute"
+                        className={clsx(classes.appBar, open && classes.appBarShift)}>
+                        <Toolbar className={classes.toolbar}>
+                            <IconButton
+                                edge="start"
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                className={clsx(classes.menuButton, open && classes.menuButtonHidden)}>
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography
+                                component="h1"
+                                variant="h6"
+                                color="inherit"
+                                className={classes.title}>
+                                QCEO
                           </Typography>
-                          <Link
-                              to="/"
-                              style={{
-                                  textDecoration: 'none'
-                              }}>
-                              <ColorButton variant="contained" color="primary" className={classes.margin}>
-                                  {'Home'}
-                              </ColorButton>
-                          </Link>
-                          <Link
-                              to="/profile"
-                              style={{
-                                  textDecoration: 'none'
-                              }}>
-                              <ColorButton variant="contained" color="primary" className={classes.margin}>
-                                  {'Profile'}
-                              </ColorButton>
-                          </Link>
-
-                              
-                                      <Link
-                                          to="/login"
-                                          style={{
-                                              textDecoration: 'none'
-                                          }}>
-                                          <ColorButton variant="contained" color="primary" className={classes.margin}>
-                                              {'Login'}
-                                          </ColorButton>
-                                      </Link>
-  
-
-                      </Toolbar>
-                  </AppBar>
-                  <Drawer
-                      variant="permanent"
-                      classes={{
-                          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
-                      }}
-                      open={open}>
-                      <div className={classes.toolbarIcon}>
-                          <IconButton onClick={handleDrawerClose}>
-                              <ChevronLeftIcon />
-                          </IconButton>
-                      </div>
-                      <Divider />
-                      <Link to='/qiboard' style={{ textDecoration: 'none' }}>
-                          <ListItem button>
-                              <ListItemIcon>
-                                  <AssignmentIcon />
-                              </ListItemIcon>
-                              <ListItemText primary="품질점검" />
-                          </ListItem>
-                      </Link>
-                      <Divider />
-                      <ListItem button>
-                          <ListItemIcon>
-                              <DashboardIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Dashboard" />
-                      </ListItem>
-                      <ListItem button>
-                          <ListItemIcon>
-                              <ShoppingCartIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Orders" />
-                      </ListItem>
-                      <ListItem button>
-                          <ListItemIcon>
-                              <PeopleIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Customers" />
-                      </ListItem>
-                      <ListItem button>
-                          <ListItemIcon>
-                              <BarChartIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Reports" />
-                      </ListItem>
-                      <ListItem button>
-                          <ListItemIcon>
-                              <LayersIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Integrations" />
-                      </ListItem>
-                      <Divider />
-                      <ListItem button>
-                          <ListItemIcon>
-                              <AssignmentIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Current month" />
-                      </ListItem>
-                      <ListItem button>
-                          <ListItemIcon>
-                              <AssignmentIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Last quarter" />
-                      </ListItem>
-                      <ListItem button>
-                          <ListItemIcon>
-                              <AssignmentIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Year-end sale" />
-                      </ListItem>
-                  </Drawer>
-                  <main className={classes.content}>
-                      <div className={classes.appBarSpacer} />
-                      <Container className={classes.container}>
-                          <QIBoard/>
-                          <Box pt={4}>
-                              <Copyright />
-                          </Box>
-                      </Container>
-                  </main>
-              </Router>
-          </ThemeProvider>
-      </div>
-  );
+                            <Link
+                                to="/"
+                                style={{
+                                    textDecoration: 'none'
+                                }}>
+                                <ColorButton variant="contained" color="primary" className={classes.margin}>
+                                    {'Home'}
+                                </ColorButton>
+                            </Link>
+                            <Link
+                                to="/profile"
+                                style={{
+                                    textDecoration: 'none'
+                                }}>
+                                <ColorButton variant="contained" color="primary" className={classes.margin}>
+                                    {'Profile'}
+                                </ColorButton>
+                            </Link>
+                            <Link
+                                to="/login"
+                                style={{
+                                    textDecoration: 'none'
+                                }}>
+                                <ColorButton variant="contained" color="primary" className={classes.margin}>
+                                    {'Login'}
+                                </ColorButton>
+                            </Link>
+                        </Toolbar>
+                    </AppBar>
+                    <Drawer
+                        variant="permanent"
+                        classes={{
+                            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
+                        }}
+                        open={open}>
+                        <div className={classes.toolbarIcon}>
+                            <IconButton onClick={handleDrawerClose}>
+                                <ChevronLeftIcon />
+                            </IconButton>
+                        </div>
+                        <Divider />
+                        <Link to='/qiboard' style={{ textDecoration: 'none' }}>
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <AssignmentIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="품질점검" />
+                            </ListItem>
+                        </Link>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemIcon>
+                                <DashboardIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Dashboard" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <ShoppingCartIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Orders" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <PeopleIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Customers" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <BarChartIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Reports" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <LayersIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Integrations" />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button>
+                            <ListItemIcon>
+                                <AssignmentIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Current month" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <AssignmentIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Last quarter" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <AssignmentIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Year-end sale" />
+                        </ListItem>
+                    </Drawer>
+                    <main className={classes.content}>
+                        <div className={classes.appBarSpacer} />
+                        <Container className={classes.container}>
+                            <QIBoard />
+                            <Box pt={4}>
+                                <Copyright />
+                            </Box>
+                        </Container>
+                    </main>
+                </Router>
+            </ThemeProvider>
+        </div>
+    );
 }
 
 export default Dashboard;

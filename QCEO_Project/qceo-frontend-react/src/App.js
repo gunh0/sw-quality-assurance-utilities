@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 
 import history from './history';
-import Main from './layout/EnterMain';
+import Main from './layout/Main';
 
 import RegisterForm from './Authentication/RegisterForm';
 import LoginForm from './Authentication/LoginForm';

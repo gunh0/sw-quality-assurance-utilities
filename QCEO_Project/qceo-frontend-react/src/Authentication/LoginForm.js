@@ -4,8 +4,20 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 
 import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 
 import { login } from '../actions/auth';
+
+function Copyright() {
+    return (
+        <Typography variant="body2" color="textSecondary" align="center">
+            <div class="ui inverted divider"></div>
+            {'Copyright © '}
+            {new Date().getFullYear()}
+            {' by devgun@github.io All rights reserved.'}
+        </Typography>
+    );
+}
 
 class LoginForm extends Component {
     renderField = ({ input, label, type, meta: { touched, error } }) => {
@@ -39,7 +51,14 @@ class LoginForm extends Component {
         }
         return (
             <Container className='ui container'>
+                <div class="ui inverted divider"></div>
+                <div class="ui inverted divider"></div>
+                <div class="ui inverted divider"></div>
                 <div className='ui segment'>
+                    <div class="image-container">
+                        <img src="http://www.lsware.co.kr/resource/images/common/img_logo.png" alt="LSware" />
+                    </div>
+                    <div class="ui inverted divider"></div>
                     <form
                         onSubmit={this.props.handleSubmit(this.onSubmit)}
                         className='ui form'
@@ -67,6 +86,7 @@ class LoginForm extends Component {
                         </p>
                     </form>
                 </div>
+                <Copyright />
             </Container>
 
         );
