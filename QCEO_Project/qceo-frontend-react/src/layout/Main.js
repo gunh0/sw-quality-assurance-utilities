@@ -204,17 +204,13 @@ class Main extends Component {
 
     const userLinks = (
       <Container>
-        <div class="ui inverted divider"></div>
-        <div class="ui inverted divider"></div>
-        <div class="ui inverted divider"></div>
-        <div class="ui inverted divider"></div>
-        <div class="ui inverted divider"></div>
         <div className='right menu'>
-          <div className="ui vertical animated button" tabindex="0">
+          <div className="ui basic vertical animated button" tabindex="0">
             <div class="hidden content" onClick={this.props.logout}>
               Logout
-            </div>
+              </div>
             <div class="visible content">
+              <i class="icon user"></i>
               {user ? user.username : ''}
             </div>
           </div>

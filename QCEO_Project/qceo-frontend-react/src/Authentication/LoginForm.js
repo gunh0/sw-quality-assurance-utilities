@@ -11,7 +11,6 @@ import { login } from '../actions/auth';
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
-            <div class="ui inverted divider"></div>
             {'Copyright © '}
             {new Date().getFullYear()}
             {' by devgun@github.io All rights reserved.'}
@@ -51,12 +50,10 @@ class LoginForm extends Component {
         }
         return (
             <Container className='ui container'>
-                <div class="ui inverted divider"></div>
-                <div class="ui inverted divider"></div>
-                <div class="ui inverted divider"></div>
+                <br/>
                 <div className='ui segment'>
-                    <div class="image-container">
-                        <img src="http://www.lsware.co.kr/resource/images/common/img_logo.png" alt="LSware" />
+                    <div class="image-container" align="center">
+                        <img src="http://www.lsware.co.kr/resource/images/common/img_logo.png" alt="LSware" align="center"/>
                     </div>
                     <div class="ui inverted divider"></div>
                     <form
@@ -86,6 +83,7 @@ class LoginForm extends Component {
                         </p>
                     </form>
                 </div>
+                <br/>
                 <Copyright />
             </Container>
 

@@ -186,54 +186,6 @@ function Dashboard() {
             <ThemeProvider theme={outerTheme}>
                 <Router>
                     <CssBaseline />
-                    <AppBar
-                        position="absolute"
-                        className={clsx(classes.appBar, open && classes.appBarShift)}>
-                        <Toolbar className={classes.toolbar}>
-                            <IconButton
-                                edge="start"
-                                color="inherit"
-                                aria-label="open drawer"
-                                onClick={handleDrawerOpen}
-                                className={clsx(classes.menuButton, open && classes.menuButtonHidden)}>
-                                <MenuIcon />
-                            </IconButton>
-                            <Typography
-                                component="h1"
-                                variant="h6"
-                                color="inherit"
-                                className={classes.title}>
-                                QCEO
-                          </Typography>
-                            <Link
-                                to="/"
-                                style={{
-                                    textDecoration: 'none'
-                                }}>
-                                <ColorButton variant="contained" color="primary" className={classes.margin}>
-                                    {'Home'}
-                                </ColorButton>
-                            </Link>
-                            <Link
-                                to="/profile"
-                                style={{
-                                    textDecoration: 'none'
-                                }}>
-                                <ColorButton variant="contained" color="primary" className={classes.margin}>
-                                    {'Profile'}
-                                </ColorButton>
-                            </Link>
-                            <Link
-                                to="/login"
-                                style={{
-                                    textDecoration: 'none'
-                                }}>
-                                <ColorButton variant="contained" color="primary" className={classes.margin}>
-                                    {'Login'}
-                                </ColorButton>
-                            </Link>
-                        </Toolbar>
-                    </AppBar>
                     <Drawer
                         variant="permanent"
                         classes={{

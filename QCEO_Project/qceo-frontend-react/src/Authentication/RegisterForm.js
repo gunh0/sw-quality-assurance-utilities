@@ -40,10 +40,13 @@ class RegisterForm extends Component {
         }
         return (
             <Container className='ui container'>
-                <div class="ui inverted divider"></div>
-                <div class="ui inverted divider"></div>
-                <div class="ui inverted divider"></div>
+                <br/>
+                
                 <div className='ui segment'>
+                <div class="image-container" align="center">
+                        <img src="http://www.lsware.co.kr/resource/images/common/img_logo.png" alt="LSware" align="center"/>
+                    </div>
+                    <div class="ui inverted divider"></div>
                     <form
                         onSubmit={this.props.handleSubmit(this.onSubmit)}
                         className='ui form'
@@ -82,6 +85,7 @@ class RegisterForm extends Component {
                         Already have an account? <Link to='/login'>Login</Link>
                     </p>
                 </div>
+                <br/>
                 <Copyright/>
             </Container>
         );

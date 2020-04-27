@@ -75,7 +75,7 @@ export const login = ({ username, password }) => async dispatch => {
     });
   } catch (err) {
     dispatch({
-      type: LOGIN_FAIL
+      //type: LOGIN_FAIL
     });
     dispatch(stopSubmit('loginForm', err.response.data));
   }
