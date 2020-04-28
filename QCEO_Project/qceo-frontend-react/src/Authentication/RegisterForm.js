@@ -39,13 +39,14 @@ class RegisterForm extends Component {
             return <Redirect to='/' />;
         }
         return (
-            <Container>
+            <Container className='ui container'>
                 <br/>
+                
                 <div className='ui segment'>
-                <div className="image-container" align="center">
+                <div class="image-container" align="center">
                         <img src="http://www.lsware.co.kr/resource/images/common/img_logo.png" alt="LSware" align="center"/>
                     </div>
-                    <div className="ui inverted divider"></div>
+                    <div class="ui inverted divider"></div>
                     <form
                         onSubmit={this.props.handleSubmit(this.onSubmit)}
                         className='ui form'

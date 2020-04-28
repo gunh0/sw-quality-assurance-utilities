@@ -12,6 +12,7 @@ import store from './store';
 import PrivateRoute from './common/PrivateRoute';
 import { loadUser } from './actions/auth';
 import Dashboard from './Dashboard/Dashboard';
+import Admin from './Administrator/Admin';
 
 class App extends Component {
 
@@ -25,7 +26,8 @@ class App extends Component {
                 <Router history={history}>
                     <Main />
                     <Switch>
-                        <PrivateRoute exact path='/' component={Dashboard} />
+                        <PrivateRoute exact path='/admin' component={Admin} />
+                        <Route exact path='/' component={Dashboard} />
                         <Route exact path='/register' component={RegisterForm} />
                         <Route exact path='/login' component={LoginForm} />
                     </Switch>

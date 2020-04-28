@@ -155,28 +155,33 @@ function MainBar() {
               className={classes.title}>
               QCEO
             </Typography>
-            <Grid>
-              <Link
-                to="/login"
-                style={{
-                  textDecoration: 'none'
-                }}>
-                <ColorButton variant="contained" color="primary">
-                  {'Login'}
-                </ColorButton>
-              </Link>
-            </Grid>
-            <Grid>
-              <Link
-                to="/Register"
-                style={{
-                  textDecoration: 'none'
-                }}>
-                <ColorButton variant="contained" color="primary">
-                  {'Register'}
-                </ColorButton>
-              </Link>
-            </Grid>
+            <Link
+              to="/"
+              style={{
+                textDecoration: 'none'
+              }}>
+              <ColorButton variant="contained" color="primary">
+                {'HOME'}
+              </ColorButton>
+            </Link>
+            <Link
+              to="/login"
+              style={{
+                textDecoration: 'none'
+              }}>
+              <ColorButton variant="contained" color="primary">
+                {'LOGIN'}
+              </ColorButton>
+            </Link>
+            <Link
+              to="/Register"
+              style={{
+                textDecoration: 'none'
+              }}>
+              <ColorButton variant="contained" color="primary">
+                {'REGISTER'}
+              </ColorButton>
+            </Link>
           </Toolbar>
         </AppBar>
         <div className={classes.appBarSpacer} />
