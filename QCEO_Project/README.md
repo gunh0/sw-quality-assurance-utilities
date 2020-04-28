@@ -265,6 +265,11 @@ Redux is the state management library with asynchronous capabilities.
 
 
 
+# Issues
+
+- Warning: Invalid DOM property `class`. Did you mean `className`?
+  - Since JSX is JavaScript, identifiers such as class and for are discouraged as XML attribute names. Instead, React DOM components expect DOM property names like className and htmlFor, respectively.
+
 
 
 

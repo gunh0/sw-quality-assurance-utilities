@@ -33,21 +33,6 @@ export default class SemiMaster extends React.PureComponent {
       redmine: []
     };
   }
-
-  async componentDidMount() {
-    try {
-      const res = await fetch('http://127.0.0.1:8000/api/defect');
-      const redmine = await res.json();
-      this.setState({
-        redmine
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  masters=[];
-  masterCnt=[];
   
   render() {
     return (

@@ -6,10 +6,8 @@ import { logout } from '../actions/auth';
 import { createMuiTheme, makeStyles, withStyles, ThemeProvider } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
@@ -150,46 +148,35 @@ function MainBar() {
       <ThemeProvider theme={outerTheme}>
         <CssBaseline />
         <AppBar position="absolute">
-          <Toolbar className={classes.toolbar}>
+          <Toolbar>
             <Typography
               component="h1"
               variant="h6"
-              color="inherit"
               className={classes.title}>
               QCEO
             </Typography>
-            <Paper>
-              <Grid container align="center" Itemsspacing={3}>
-                <ThemeProvider theme={outerTheme}>
-                  <Grid item xs={0.1}>
-                    <Button>
-                      <Link
-                        to="/login"
-                        style={{
-                          textDecoration: 'none'
-                        }}>
-                        <ColorButton variant="contained" color="primary">
-                          {'Login'}
-                        </ColorButton>
-                      </Link>
-                    </Button>
-                  </Grid>
-                  <Grid item xs={0.1}>
-                    <Button>
-                      <Link
-                        to="/Register"
-                        style={{
-                          textDecoration: 'none'
-                        }}>
-                        <ColorButton variant="contained" color="primary">
-                          {'Register'}
-                        </ColorButton>
-                      </Link>
-                    </Button>
-                  </Grid>
-                </ThemeProvider>
-              </Grid>
-            </Paper>
+            <Grid>
+              <Link
+                to="/login"
+                style={{
+                  textDecoration: 'none'
+                }}>
+                <ColorButton variant="contained" color="primary">
+                  {'Login'}
+                </ColorButton>
+              </Link>
+            </Grid>
+            <Grid>
+              <Link
+                to="/Register"
+                style={{
+                  textDecoration: 'none'
+                }}>
+                <ColorButton variant="contained" color="primary">
+                  {'Register'}
+                </ColorButton>
+              </Link>
+            </Grid>
           </Toolbar>
         </AppBar>
         <div className={classes.appBarSpacer} />
@@ -203,19 +190,21 @@ class Main extends Component {
     const { user, isAuthenticated } = this.props.auth;
 
     const userLinks = (
-      <Container>
-        <div className='right menu'>
-          <div className="ui basic vertical animated button" tabindex="0">
-            <div class="hidden content" onClick={this.props.logout}>
-              Logout
+      <div className="ui container">
+        <div className="ui fixed menu">
+          <div className="right item">
+            <div className="ui blue basic vertical animated button" tabIndex="0">
+              <div className="hidden content" onClick={this.props.logout}>
+                Logout
               </div>
-            <div class="visible content">
-              <i class="icon user"></i>
-              {user ? user.username : ''}
+              <div className="visible content">
+                <i className="icon user"></i>
+                {user ? user.username : ''}
+              </div>
             </div>
           </div>
         </div>
-      </Container>
+      </div>
     );
 
     const guestLinks = (

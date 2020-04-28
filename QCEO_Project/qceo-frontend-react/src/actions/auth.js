@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { stopSubmit } from 'redux-form';
 
 import {
   USER_LOADING,
@@ -48,10 +47,8 @@ export const register = ({ username, email, password }) => async dispatch => {
       payload: res.data
     });
   } catch (err) {
-    dispatch({
-      type: REGISTER_FAIL
-    });
-    dispatch(stopSubmit('registerForm', err.response.data));
+    dispatch({type: REGISTER_FAIL});
+    alert('회원가입에 실패하였습니다.');
   }
 };
 
@@ -74,10 +71,8 @@ export const login = ({ username, password }) => async dispatch => {
       payload: res.data
     });
   } catch (err) {
-    dispatch({
-      //type: LOGIN_FAIL
-    });
-    dispatch(stopSubmit('loginForm', err.response.data));
+    dispatch({type: LOGIN_FAIL});
+    alert('로그인에 실패하였습니다.');
   }
 };
 
