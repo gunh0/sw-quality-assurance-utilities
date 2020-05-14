@@ -7,6 +7,64 @@
 
 <br/>
 
+### telnet
+
+```
+---------------------------TELNET TESTING START---------------------------
+b'\r\nKernel 3.10.0-514.el7.x86_64 on an x86_64\r\nrhel73agent login: '
+None
+b'\r\nhostnamectl\r\nexit\r\nLast login: Thu May 14 01:58:07 from ::ffff:192.168.120.168\r\n-bash-4.2$ hostnamectl\r\n   Static hostname: rhel73agent\r\n         Icon name: computer-vm\r\n           Chassis: vm\r\n        Machine ID: b7bc1e5e2aed476c9efb76e4a7e6acfe\r\n           Boot ID: d4d65f88fe2c4d0897f1f47b959ed955\r\n    Virtualization: vmware\r\n  Operating System: Red Hat Enterprise Linux Server 7.3 (Maipo)\r\n       CPE OS Name: cpe:/o:redhat:enterprise_linux:7.3:GA:server\r\n            Kernel: Linux 3.10.0-514.el7.x86_64\r\n      Architecture: x86-64\r\n-bash-4.2$ exit\r\nlogout\r\n'
+---------------------------TELNET TESTING END---------------------------
+```
+
+```
+---------------------------TELNET TESTING START---------------------------
+b'\r\nKernel 3.10.0-514.el7.x86_64 on an x86_64\r\nrhel73agent login: '
+None
+b''
+---------------------------TELNET TESTING END---------------------------
+```
+
+<br/>
+
+### ftp
+
+```
+---------------------------FTP TESTING START---------------------------
+Anonymous FTP
+drwxr-xr-x    2 0        0               6 Jun 23  2016 pub
+/
+
+User FTP
+/home/test04
+---------------------------FTP TESTING END---------------------------
+```
+
+```
+---------------------------FTP TESTING START---------------------------
+Anonymous FTP
+drwxr-xr-x    2 0        0               6 Jun 23  2016 pub
+/
+
+User FTP
+Traceback (most recent call last):
+  File ".\ftp_test.py", line 19, in <module>
+    uftp.login(userid, pwd)
+  File "c:\python\python38-32\lib\ftplib.py", line 403, in login
+    resp = self.sendcmd('PASS ' + passwd)
+  File "c:\python\python38-32\lib\ftplib.py", line 275, in sendcmd
+    return self.getresp()
+  File "c:\python\python38-32\lib\ftplib.py", line 238, in getresp
+    resp = self.getmultiline()
+  File "c:\python\python38-32\lib\ftplib.py", line 224, in getmultiline
+    line = self.getline()
+  File "c:\python\python38-32\lib\ftplib.py", line 212, in getline
+    raise EOFError
+EOFError
+```
+
+<br/>
+
 ### ssh
 
 ```
@@ -40,3 +98,5 @@ Traceback (most recent call last):
 ...
 paramiko.ssh_exception.AuthenticationException: Authentication failed.
 ```
+
+<br/>
