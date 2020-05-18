@@ -184,11 +184,14 @@ with requests.Session() as session:
 | api/auth/login   | User Login                           |
 | api/auth/logout  | User Logout                          |
 
-### *Reference material for understanding Knox's certification system
+<br/>
 
-- Apache Knox REST API flow diagrams in Apache Hadoop Ecosystem
-
-  ![image](https://user-images.githubusercontent.com/41619898/80162848-69730b00-860f-11ea-8a47-b3bc9697cb7c.png)
+> ### *Reference material for understanding Knox's certification system
+>
+> - Apache Knox REST API flow diagrams in Apache Hadoop Ecosystem
+>
+>   ![image](https://user-images.githubusercontent.com/41619898/80162848-69730b00-860f-11ea-8a47-b3bc9697cb7c.png)
+>
 
 &nbsp;
 
@@ -263,7 +266,7 @@ Redux is the state management library with asynchronous capabilities.
 
 - Material-UI : https://material-ui.com/
 
-
+<br/>
 
 # Issues
 

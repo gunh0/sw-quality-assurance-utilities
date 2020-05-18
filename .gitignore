@@ -9,3 +9,5 @@
 /QCEO_Project/QCEO_Django/report
 
 /UnityManager/venv
+/UnityManager/__pycache__
+/UnityManager/UserInfo.py

@@ -2,11 +2,16 @@ import getpass
 import sys
 import telnetlib
 
+from UserInfo import UserInformation
+
 print('---------------------------TELNET TESTING START---------------------------')
 
+enter = UserInformation()
 HOST = "192.168.155.183"    # Redhat 7.3
-user = "test04"
-password = "1qa2ws3ed$"
+user = enter.username()
+print(user)
+password = enter.password()
+print(password)
 port = "23"
 
 telnet = telnetlib.Telnet(HOST, port)
