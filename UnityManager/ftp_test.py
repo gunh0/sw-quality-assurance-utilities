@@ -1,9 +1,13 @@
 from ftplib import FTP
+from UserInfo import UserInformation
 
 print('---------------------------FTP TESTING START---------------------------')
 target_server = "192.168.155.183"  # Redhat 7.3
-userid = "test04"
-pwd = "1qa2ws3ed$"
+enter = UserInformation()
+userid = str(enter.username())
+print(userid)
+pwd = str(enter.password())
+print(pwd)
 
 # Anonymous
 print('Anonymous FTP ')
