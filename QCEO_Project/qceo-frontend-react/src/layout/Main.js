@@ -7,7 +7,6 @@ import { createMuiTheme, makeStyles, withStyles, ThemeProvider } from '@material
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
@@ -139,7 +138,8 @@ function MainBar() {
       backgroundColor: '#00b2cc',
       '&:hover': {
         backgroundColor: '#6effff'
-      }
+      },
+      margin: theme.spacing(1)
     }
   }))(Button);
   return (

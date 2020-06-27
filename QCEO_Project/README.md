@@ -4,13 +4,21 @@
 
 # The Beginning of QCEO Project
 
-##### Implementing React to work in Django Templates makes the server structure simple, but there are many limitations to the use of React features.
+**Implementing React to work in Django Templates makes the server structure simple, but there are many limitations to the use of React features.**
 
-##### Normally, Frontend(React) and Backend(Django) are implemented separately, and internal communication is implemented using the DRF(Django REST Framework).
+**Normally, Frontend(React) and Backend(Django) are implemented separately, and internal communication is implemented using the DRF(Django REST Framework).**
 
-##### This project was implemented in the same way.
+**This project was implemented in the same way.**
 
-&nbsp;
+**Attached below are the skeletal screens.**
+
+**The technologies(Django, React, etc...) needed for each implementation are arranged separately.**
+
+![Home](README.assets/Home.jpg)
+
+![Login](README.assets/Login.jpg)
+
+![Register](README.assets/Register.jpg)&nbsp;
 
 ## Start Project (Setup)
 
@@ -30,6 +38,9 @@ QCEO_Django> python manage.py migrate
 QCEO_Django> python manage.py createsuperuser
 QCEO_Django> python manage.py runserver
 
+// for Update
+qceo-frontend-react> npm install -g npm-check-updates
+
 qceo-frontend-react> yarn start
 ```
 
@@ -38,6 +49,8 @@ qceo-frontend-react> yarn start
 ## Django Basic Functional Architecture
 
 ## ![image](https://user-images.githubusercontent.com/41619898/79954230-00c54a80-84b8-11ea-8677-1421949bcc3d.png)
+
+<br/>
 
 ### *WSGI
 
@@ -151,7 +164,6 @@ with requests.Session() as session:
     print(soup)
     table = soup.find_all('div', class_="autoscroll")
     print(table)
-
 
 ```
 
@@ -272,8 +284,3 @@ Redux is the state management library with asynchronous capabilities.
 
 - Warning: Invalid DOM property `class`. Did you mean `className`?
   - Since JSX is JavaScript, identifiers such as class and for are discouraged as XML attribute names. Instead, React DOM components expect DOM property names like className and htmlFor, respectively.
-
-
-
-
-
