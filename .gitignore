@@ -1,13 +1,8 @@
-/.vscode
-/QCEO_Project/.vscode
-/QCEO_Project/venv
-
-/Django_JWT/Django_JWT/__pycache__
-/Django_JWT/board/__pycache__
+.vscode/
+__pycache__/
+venv/
 
 /QCEO_Project/issues
 /QCEO_Project/QCEO_Django/report
 
-/UnityManager/venv
-/UnityManager/__pycache__
 /UnityManager/UserInfo.py
