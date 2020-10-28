@@ -1,0 +1,23 @@
+version: "3"
+services:
+    centos7:
+        build:
+            context: .
+        container_name: "qa-tool-env"
+        privileged: true
+        networks:
+            env_network:
+                ipv4_address: 192.168.155.183
+        volumes:
+            - ./src:/home
+        ports:
+            - "22:22"
+        command: tail -f /dev/null
+
+networks:
+    env_network:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 192.168.155.0/24

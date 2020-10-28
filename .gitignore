@@ -1,6 +1,8 @@
-.vscode/
-__pycache__/
-venv/
+.DS_Store
+.vscode
+
+__pycache__
+venv
 
 /QCEO_Project/issues
 /QCEO_Project/QCEO_Django/report
